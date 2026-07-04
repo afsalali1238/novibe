@@ -6,13 +6,13 @@ import { useMapState } from "../hooks/useMapState";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Novibe — The Map" },
+      { title: "Novibe - The Map" },
       {
         name: "description",
         content:
           "A non-linear topic map for AI literacy. Six clusters, thirty nodes, three depths each. Open any node, read as deep as you're curious.",
       },
-      { property: "og:title", content: "Novibe — The Map" },
+      { property: "og:title", content: "Novibe - The Map" },
       {
         property: "og:description",
         content:
@@ -49,7 +49,7 @@ function Home() {
         </h1>
         <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
           A non-linear topic map for AI literacy. Open any node, in any order. Read the
-          60-second plain-English version — or go deeper. No streaks to protect, no XP,
+          60-second plain-English version - or go deeper. No streaks to protect, no XP,
           no locks. Just what you're curious about right now.
         </p>
       </header>
@@ -60,7 +60,7 @@ function Home() {
           <Stat label="Clusters" value={`${clustersTouched}/${CLUSTERS.length}`} />
           <Stat
             label="Streak"
-            value={streak > 0 ? `${streak}d` : "—"}
+            value={streak > 0 ? `${streak}d` : "-"}
             hint={activeThisWeek ? `${activeThisWeek} day${activeThisWeek === 1 ? "" : "s"} this week` : "start today"}
           />
         </div>

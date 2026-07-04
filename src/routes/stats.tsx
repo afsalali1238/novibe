@@ -6,7 +6,7 @@ import { useMapState } from "../hooks/useMapState";
 export const Route = createFileRoute("/stats")({
   head: () => ({
     meta: [
-      { title: "Progress — Novibe" },
+      { title: "Progress - Novibe" },
       { name: "description", content: "Your map coverage and engagement streak." },
     ],
   }),
@@ -39,7 +39,7 @@ function Stats() {
       <section className="mb-5 grid grid-cols-3 gap-2">
         <Tile label="Nodes" value={`${done}/${TOTAL_NODES}`} />
         <Tile label="Clusters" value={`${clustersTouched}/${CLUSTERS.length}`} />
-        <Tile label="Streak" value={streak > 0 ? `${streak}d` : "—"} hint={`${activeThisWeek}/7 this week`} />
+        <Tile label="Streak" value={streak > 0 ? `${streak}d` : "-"} hint={`${activeThisWeek}/7 this week`} />
       </section>
 
       <section className="mb-6 rounded-xl border border-border bg-card p-4">
@@ -76,9 +76,9 @@ function Stats() {
           How streak works
         </div>
         <p className="text-[13px] leading-relaxed text-muted-foreground">
-          A day counts if you mark at least one node "got it" — any node, any depth.
+          A day counts if you mark at least one node "got it" - any node, any depth.
           You get one free skip per rolling 7 days, so a single missed day never breaks
-          the streak. Two missed days in a row resets it — no guilt, pick up anywhere.
+          the streak. Two missed days in a row resets it - no guilt, pick up anywhere.
         </p>
       </section>
 
