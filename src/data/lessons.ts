@@ -10,6 +10,10 @@ export type Lesson = {
   brief: string[]; // paragraphs
   keyPoints: string[];
   tasks: LessonTask[];
+  /** Short "layman analogy first" — plain-English intuition before jargon. */
+  analogy?: string;
+  /** Challenge-first prompt: a question or mini-task the learner attempts BEFORE reading the brief. */
+  challenge?: string;
 };
 
 // Compact but expert lesson pack for all 42 days.
