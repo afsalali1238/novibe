@@ -4,7 +4,7 @@ import { BookOpen, LineChart, Map as MapIcon, StickyNote } from "lucide-react";
 const tabs = [
   { to: "/", label: "Map", Icon: MapIcon },
   { to: "/glossary", label: "Glossary", Icon: BookOpen },
-  { to: "/sandbox", label: "Notes", Icon: StickyNote },
+  { to: "/sandbox", label: "Scratchpad", Icon: StickyNote },
   { to: "/stats", label: "Progress", Icon: LineChart },
 ] as const;
 

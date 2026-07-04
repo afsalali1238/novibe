@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
-import { ArrowLeft, Check, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, ChevronRight } from "lucide-react";
 import { ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CLUSTERS, NODES, findNode, type NodeContent } from "../data/nodes";
@@ -61,6 +61,9 @@ function NodePage() {
   }, [reflection, hydrated, node.id, state.reflections, saveReflection]);
 
   const cluster = CLUSTERS.find((c) => c.id === node.cluster)!;
+  const nodeIndex = NODES.findIndex((n) => n.id === node.id);
+  const prevNode = nodeIndex > 0 ? NODES[nodeIndex - 1] : undefined;
+  const nextNode = nodeIndex >= 0 && nodeIndex < NODES.length - 1 ? NODES[nodeIndex + 1] : undefined;
   const buildsOn = (node.buildsOn as string[])
     .map((id: string) => NODES.find((n) => n.id === id))
     .filter((n): n is (typeof NODES)[number] => Boolean(n));
@@ -163,7 +166,7 @@ function NodePage() {
         </div>
       )}
 
-      <div className="sticky bottom-24 mt-8 flex justify-center">
+      <div className="mt-8 flex justify-center">
         <button
           type="button"
           onClick={() => toggleGot(node.id)}
@@ -198,6 +201,43 @@ function NodePage() {
           spellCheck={false}
           className="w-full resize-none rounded-lg border border-border bg-card px-3 py-2 text-[13px] leading-6 text-foreground caret-primary outline-none placeholder:text-muted-foreground/60 focus:border-primary"
         />
+      </div>
+
+      <div className="mt-8 flex items-stretch gap-2 border-t border-border pt-4">
+        {prevNode ? (
+          <Link
+            to="/node/$nodeId"
+            params={{ nodeId: prevNode.id }}
+            className="flex flex-1 items-center gap-2 rounded-lg border border-border bg-card px-3 py-2.5 text-left transition-colors hover:border-primary"
+          >
+            <ArrowLeft className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            <span className="min-w-0">
+              <span className="block font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground">
+                {prevNode.id.toUpperCase()}
+              </span>
+              <span className="block truncate text-[12px] text-foreground">{prevNode.title}</span>
+            </span>
+          </Link>
+        ) : (
+          <div className="flex-1" />
+        )}
+        {nextNode ? (
+          <Link
+            to="/node/$nodeId"
+            params={{ nodeId: nextNode.id }}
+            className="flex flex-1 items-center justify-end gap-2 rounded-lg border border-border bg-card px-3 py-2.5 text-right transition-colors hover:border-primary"
+          >
+            <span className="min-w-0">
+              <span className="block font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground">
+                {nextNode.id.toUpperCase()}
+              </span>
+              <span className="block truncate text-[12px] text-foreground">{nextNode.title}</span>
+            </span>
+            <ArrowRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+          </Link>
+        ) : (
+          <div className="flex-1" />
+        )}
       </div>
     </article>
   );

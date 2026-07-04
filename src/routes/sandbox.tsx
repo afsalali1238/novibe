@@ -34,10 +34,11 @@ function Sandbox() {
           scratchpad
         </div>
         <h1 className="mt-1 text-xl font-semibold tracking-tight text-foreground">
-          Notes
+          Scratchpad
         </h1>
         <p className="mt-1 text-[13px] text-muted-foreground">
-          Jot down realizations, prompts you're testing, or questions to come back to.
+          One running space for realizations, prompts you're testing, or questions to
+          come back to - separate from the one-line takeaway you can leave on each node.
           Autosaved to this device.
         </p>
       </header>
