@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Check, Shuffle } from "lucide-react";
 import { CLUSTERS, NODES, TOTAL_NODES, nodesInCluster } from "../data/nodes";
 import { useMapState } from "../hooks/useMapState";
 
@@ -25,7 +25,15 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { state, streak, hydrated } = useMapState();
+  const navigate = useNavigate();
   const done = state.gotIt.length;
+
+  const surpriseMe = () => {
+    const notDone = NODES.filter((n) => !state.gotIt.includes(n.id));
+    const pool = notDone.length > 0 ? notDone : NODES;
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    navigate({ to: "/node/$nodeId", params: { nodeId: pick.id } });
+  };
   const clustersTouched = new Set(
     state.gotIt
       .map((id) => NODES.find((n) => n.id === id)?.cluster)
@@ -52,6 +60,14 @@ function Home() {
           60-second plain-English version - or go deeper. No streaks to protect, no XP,
           no locks. Just what you're curious about right now.
         </p>
+        <button
+          type="button"
+          onClick={surpriseMe}
+          className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/[0.06] px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-primary transition-colors hover:bg-primary/10"
+        >
+          <Shuffle className="h-3.5 w-3.5" />
+          Surprise me
+        </button>
       </header>
 
       {hydrated && (
