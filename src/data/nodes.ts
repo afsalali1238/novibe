@@ -8,6 +8,9 @@ export type NodeContent = {
   layer0: string;
   layer1: string;
   layer2: string;
+  diagram?: string; // raw inline SVG markup, rendered directly on node page
+  videoUrl?: string; // optional external explainer link
+  videoTitle?: string; // short label for the video link
 };
 
 export type Cluster = {
