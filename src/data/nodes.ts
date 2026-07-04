@@ -53,23 +53,23 @@ export const NODES: NodeContent[] = [
     layer2:
       "Go to any tokenizer tool (search \"OpenAI tokenizer\" or use Anthropic's docs) and paste a paragraph of your own writing. Count how many tokens vs. words it produces. Then paste something in Arabic or another non-English language and compare the token count for the same amount of meaning - notice non-English text often costs more tokens.",
     diagram: `<svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="30" text-anchor="middle" font-size="13" fill="hsl(var(--muted-foreground))" font-family="ui-monospace, monospace" letter-spacing="0.5">THE MODEL NEVER SEES WORDS - IT SEES TOKENS</text>
-  <rect x="220" y="55" width="160" height="34" rx="6" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="300" y="77" text-anchor="middle" font-size="15" fill="hsl(var(--foreground))" font-family="ui-monospace, monospace">unbelievable</text>
-  <line x1="300" y1="89" x2="300" y2="112" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="330" y="105" font-size="10" fill="hsl(var(--muted-foreground))">tokenizer</text>
+  <text x="300" y="30" text-anchor="middle" font-size="13" fill="var(--muted-foreground)" font-family="ui-monospace, monospace" letter-spacing="0.5">THE MODEL NEVER SEES WORDS - IT SEES TOKENS</text>
+  <rect x="220" y="55" width="160" height="34" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="300" y="77" text-anchor="middle" font-size="15" fill="var(--foreground)" font-family="ui-monospace, monospace">unbelievable</text>
+  <line x1="300" y1="89" x2="300" y2="112" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="330" y="105" font-size="10" fill="var(--muted-foreground)">tokenizer</text>
   <g font-family="ui-monospace, monospace" font-size="14">
-    <rect x="130" y="118" width="60" height="34" rx="6" fill="hsl(var(--primary) / 0.12)" stroke="hsl(var(--primary))"/>
-    <text x="160" y="140" text-anchor="middle" fill="hsl(var(--primary))">un</text>
-    <rect x="200" y="118" width="110" height="34" rx="6" fill="hsl(var(--accent) / 0.12)" stroke="hsl(var(--accent))"/>
-    <text x="255" y="140" text-anchor="middle" fill="hsl(var(--accent))">believ</text>
-    <rect x="320" y="118" width="80" height="34" rx="6" fill="hsl(var(--warning) / 0.12)" stroke="hsl(var(--warning))"/>
-    <text x="360" y="140" text-anchor="middle" fill="hsl(var(--warning))">able</text>
+    <rect x="130" y="118" width="60" height="34" rx="6" fill="color-mix(in oklab, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
+    <text x="160" y="140" text-anchor="middle" fill="var(--primary)">un</text>
+    <rect x="200" y="118" width="110" height="34" rx="6" fill="color-mix(in oklab, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
+    <text x="255" y="140" text-anchor="middle" fill="var(--accent)">believ</text>
+    <rect x="320" y="118" width="80" height="34" rx="6" fill="color-mix(in oklab, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
+    <text x="360" y="140" text-anchor="middle" fill="var(--warning)">able</text>
   </g>
-  <text x="300" y="172" text-anchor="middle" font-size="11" fill="hsl(var(--muted-foreground))">3 tokens, not 1 word - this is what you're billed and limited by</text>
+  <text x="300" y="172" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">3 tokens, not 1 word - this is what you're billed and limited by</text>
   <defs>
     <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
-      <path d="M0,0 L8,4 L0,8 Z" fill="hsl(var(--muted-foreground))"/>
+      <path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/>
     </marker>
   </defs>
 </svg>`,
@@ -98,26 +98,26 @@ export const NODES: NodeContent[] = [
     layer2:
       "Paste a long document into Claude (5,000+ words) along with one specific instruction buried in the middle of it, and one at the very end. Ask a question that requires both. Notice which one it follows more reliably - a live demonstration of context window behavior.",
     diagram: `<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="24" text-anchor="middle" font-size="12" fill="hsl(var(--muted-foreground))" letter-spacing="0.5">CONTEXT WINDOW - ONLY WHAT'S INSIDE THE BOX EXISTS TO THE MODEL</text>
+  <text x="300" y="24" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">CONTEXT WINDOW - ONLY WHAT'S INSIDE THE BOX EXISTS TO THE MODEL</text>
   <g opacity="0.35">
-    <rect x="10" y="70" width="70" height="60" rx="6" fill="hsl(var(--card))" stroke="hsl(var(--border))" stroke-dasharray="3 3"/>
-    <text x="45" y="103" text-anchor="middle" font-size="10" fill="hsl(var(--muted-foreground))">msg 1</text>
-    <rect x="90" y="70" width="70" height="60" rx="6" fill="hsl(var(--card))" stroke="hsl(var(--border))" stroke-dasharray="3 3"/>
-    <text x="125" y="103" text-anchor="middle" font-size="10" fill="hsl(var(--muted-foreground))">msg 2</text>
+    <rect x="10" y="70" width="70" height="60" rx="6" fill="var(--card)" stroke="var(--border)" stroke-dasharray="3 3"/>
+    <text x="45" y="103" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">msg 1</text>
+    <rect x="90" y="70" width="70" height="60" rx="6" fill="var(--card)" stroke="var(--border)" stroke-dasharray="3 3"/>
+    <text x="125" y="103" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">msg 2</text>
   </g>
-  <text x="80" y="150" text-anchor="middle" font-size="10" fill="hsl(var(--destructive))">forgotten</text>
-  <rect x="180" y="55" width="340" height="90" rx="10" fill="none" stroke="hsl(var(--primary))" stroke-width="2"/>
-  <text x="350" y="48" text-anchor="middle" font-size="10" fill="hsl(var(--primary))" letter-spacing="0.5">THE WINDOW (e.g. 200K tokens)</text>
-  <rect x="195" y="70" width="70" height="60" rx="6" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="230" y="103" text-anchor="middle" font-size="10" fill="hsl(var(--foreground))">msg 3</text>
-  <rect x="275" y="70" width="70" height="60" rx="6" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="310" y="103" text-anchor="middle" font-size="10" fill="hsl(var(--foreground))">msg 4</text>
-  <rect x="355" y="70" width="70" height="60" rx="6" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="390" y="103" text-anchor="middle" font-size="10" fill="hsl(var(--foreground))">msg 5</text>
-  <rect x="435" y="70" width="70" height="60" rx="6" fill="hsl(var(--accent) / 0.12)" stroke="hsl(var(--accent))"/>
-  <text x="470" y="98" text-anchor="middle" font-size="10" fill="hsl(var(--accent))">your new</text>
-  <text x="470" y="112" text-anchor="middle" font-size="10" fill="hsl(var(--accent))">message</text>
-  <text x="300" y="175" text-anchor="middle" font-size="11" fill="hsl(var(--muted-foreground))">Once full, the oldest messages drop out to make room - the model never "remembers" them again</text>
+  <text x="80" y="150" text-anchor="middle" font-size="10" fill="var(--destructive)">forgotten</text>
+  <rect x="180" y="55" width="340" height="90" rx="10" fill="none" stroke="var(--primary)" stroke-width="2"/>
+  <text x="350" y="48" text-anchor="middle" font-size="10" fill="var(--primary)" letter-spacing="0.5">THE WINDOW (e.g. 200K tokens)</text>
+  <rect x="195" y="70" width="70" height="60" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="230" y="103" text-anchor="middle" font-size="10" fill="var(--foreground)">msg 3</text>
+  <rect x="275" y="70" width="70" height="60" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="310" y="103" text-anchor="middle" font-size="10" fill="var(--foreground)">msg 4</text>
+  <rect x="355" y="70" width="70" height="60" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="390" y="103" text-anchor="middle" font-size="10" fill="var(--foreground)">msg 5</text>
+  <rect x="435" y="70" width="70" height="60" rx="6" fill="color-mix(in oklab, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
+  <text x="470" y="98" text-anchor="middle" font-size="10" fill="var(--accent)">your new</text>
+  <text x="470" y="112" text-anchor="middle" font-size="10" fill="var(--accent)">message</text>
+  <text x="300" y="175" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Once full, the oldest messages drop out to make room - the model never "remembers" them again</text>
 </svg>`,
   },
   {
@@ -204,28 +204,28 @@ export const NODES: NodeContent[] = [
     layer2:
       "Case example: think about ProvaCV or AfzalOS - any tool where an AI needs to answer using specific documents (a CV, a vault of notes) rather than general knowledge is a RAG-shaped problem, even if it's built simply.",
     diagram: `<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="22" text-anchor="middle" font-size="12" fill="hsl(var(--muted-foreground))" letter-spacing="0.5">RAG - GROUNDING THE MODEL IN YOUR OWN DOCUMENTS</text>
-  <rect x="10" y="70" width="90" height="50" rx="8" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="55" y="99" text-anchor="middle" font-size="11" fill="hsl(var(--foreground))">Your</text>
-  <text x="55" y="112" text-anchor="middle" font-size="11" fill="hsl(var(--foreground))">question</text>
-  <path d="M100 95 L140 95" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#a1)"/>
-  <rect x="145" y="70" width="90" height="50" rx="8" fill="hsl(var(--primary) / 0.12)" stroke="hsl(var(--primary))"/>
-  <text x="190" y="99" text-anchor="middle" font-size="11" fill="hsl(var(--primary))">Search your</text>
-  <text x="190" y="112" text-anchor="middle" font-size="11" fill="hsl(var(--primary))">documents</text>
-  <path d="M235 95 L275 95" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#a1)"/>
-  <rect x="280" y="70" width="90" height="50" rx="8" fill="hsl(var(--accent) / 0.12)" stroke="hsl(var(--accent))"/>
-  <text x="325" y="93" text-anchor="middle" font-size="11" fill="hsl(var(--accent))">Relevant</text>
-  <text x="325" y="106" text-anchor="middle" font-size="11" fill="hsl(var(--accent))">chunks found</text>
-  <path d="M370 95 L410 95" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#a1)"/>
-  <rect x="415" y="70" width="80" height="50" rx="8" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="455" y="99" text-anchor="middle" font-size="11" fill="hsl(var(--foreground))">Model reads</text>
-  <text x="455" y="112" text-anchor="middle" font-size="10" fill="hsl(var(--foreground))">question + chunks</text>
-  <path d="M495 95 L535 95" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#a1)"/>
-  <rect x="540" y="70" width="55" height="50" rx="8" fill="hsl(var(--warning) / 0.12)" stroke="hsl(var(--warning))"/>
-  <text x="567" y="99" text-anchor="middle" font-size="10" fill="hsl(var(--warning))">Grounded</text>
-  <text x="567" y="111" text-anchor="middle" font-size="10" fill="hsl(var(--warning))">answer</text>
-  <text x="300" y="165" text-anchor="middle" font-size="11" fill="hsl(var(--muted-foreground))">Without this, the model answers from memorized training data only - often wrong for anything specific to you</text>
-  <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="hsl(var(--muted-foreground))"/></marker></defs>
+  <text x="300" y="22" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">RAG - GROUNDING THE MODEL IN YOUR OWN DOCUMENTS</text>
+  <rect x="10" y="70" width="90" height="50" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="55" y="99" text-anchor="middle" font-size="11" fill="var(--foreground)">Your</text>
+  <text x="55" y="112" text-anchor="middle" font-size="11" fill="var(--foreground)">question</text>
+  <path d="M100 95 L140 95" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a1)"/>
+  <rect x="145" y="70" width="90" height="50" rx="8" fill="color-mix(in oklab, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
+  <text x="190" y="99" text-anchor="middle" font-size="11" fill="var(--primary)">Search your</text>
+  <text x="190" y="112" text-anchor="middle" font-size="11" fill="var(--primary)">documents</text>
+  <path d="M235 95 L275 95" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a1)"/>
+  <rect x="280" y="70" width="90" height="50" rx="8" fill="color-mix(in oklab, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
+  <text x="325" y="93" text-anchor="middle" font-size="11" fill="var(--accent)">Relevant</text>
+  <text x="325" y="106" text-anchor="middle" font-size="11" fill="var(--accent)">chunks found</text>
+  <path d="M370 95 L410 95" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a1)"/>
+  <rect x="415" y="70" width="80" height="50" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="455" y="99" text-anchor="middle" font-size="11" fill="var(--foreground)">Model reads</text>
+  <text x="455" y="112" text-anchor="middle" font-size="10" fill="var(--foreground)">question + chunks</text>
+  <path d="M495 95 L535 95" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a1)"/>
+  <rect x="540" y="70" width="55" height="50" rx="8" fill="color-mix(in oklab, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
+  <text x="567" y="99" text-anchor="middle" font-size="10" fill="var(--warning)">Grounded</text>
+  <text x="567" y="111" text-anchor="middle" font-size="10" fill="var(--warning)">answer</text>
+  <text x="300" y="165" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Without this, the model answers from memorized training data only - often wrong for anything specific to you</text>
+  <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
   },
   {
@@ -276,26 +276,26 @@ export const NODES: NodeContent[] = [
     layer2:
       "No task needed to grasp this conceptually - but if curious, search \"embedding projector visualization\" to see an actual 3D map of words/sentences clustered by meaning; seeing similar concepts cluster together makes the idea concrete fast.",
     diagram: `<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="20" text-anchor="middle" font-size="12" fill="hsl(var(--muted-foreground))" letter-spacing="0.5">EMBEDDINGS - SIMILAR MEANING = CLOSE TOGETHER</text>
-  <rect x="30" y="35" width="540" height="155" rx="10" fill="none" stroke="hsl(var(--border))"/>
-  <g fill="hsl(var(--primary))">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">EMBEDDINGS - SIMILAR MEANING = CLOSE TOGETHER</text>
+  <rect x="30" y="35" width="540" height="155" rx="10" fill="none" stroke="var(--border)"/>
+  <g fill="var(--primary)">
     <circle cx="120" cy="80" r="4"/>
     <circle cx="145" cy="100" r="4"/>
     <circle cx="110" cy="115" r="4"/>
   </g>
-  <text x="128" y="68" font-size="11" fill="hsl(var(--primary))">dog · puppy · canine</text>
-  <g fill="hsl(var(--accent))">
+  <text x="128" y="68" font-size="11" fill="var(--primary)">dog · puppy · canine</text>
+  <g fill="var(--accent)">
     <circle cx="430" cy="70" r="4"/>
     <circle cx="455" cy="90" r="4"/>
     <circle cx="415" cy="95" r="4"/>
   </g>
-  <text x="410" y="58" font-size="11" fill="hsl(var(--accent))">car · vehicle · truck</text>
-  <g fill="hsl(var(--warning))">
+  <text x="410" y="58" font-size="11" fill="var(--accent)">car · vehicle · truck</text>
+  <g fill="var(--warning)">
     <circle cx="260" cy="150" r="4"/>
     <circle cx="290" cy="165" r="4"/>
     <circle cx="245" cy="170" r="4"/>
   </g>
-  <text x="230" y="190" font-size="11" fill="hsl(var(--warning))">happy · joyful · glad</text>
+  <text x="230" y="190" font-size="11" fill="var(--warning)">happy · joyful · glad</text>
 </svg>`,
   },
   {
@@ -370,21 +370,21 @@ export const NODES: NodeContent[] = [
     layer2:
       "Take something you already automated manually in n8n/Make and ask: at which step did you make the decision vs. the AI? Relabeling your own workflow this way is the fastest way to see the human/agent line clearly.",
     diagram: `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-  <text x="200" y="24" text-anchor="middle" font-size="12" fill="hsl(var(--muted-foreground))" letter-spacing="0.5">THE AGENT LOOP</text>
-  <rect x="150" y="45" width="100" height="46" rx="8" fill="hsl(var(--primary) / 0.12)" stroke="hsl(var(--primary))"/>
-  <text x="200" y="73" text-anchor="middle" font-size="12" fill="hsl(var(--primary))">Observe</text>
-  <rect x="290" y="177" width="100" height="46" rx="8" fill="hsl(var(--accent) / 0.12)" stroke="hsl(var(--accent))"/>
-  <text x="340" y="205" text-anchor="middle" font-size="12" fill="hsl(var(--accent))">Decide</text>
-  <rect x="150" y="309" width="100" height="46" rx="8" fill="hsl(var(--warning) / 0.12)" stroke="hsl(var(--warning))"/>
-  <text x="200" y="337" text-anchor="middle" font-size="12" fill="hsl(var(--warning))">Act (tool)</text>
-  <rect x="10" y="177" width="100" height="46" rx="8" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="60" y="205" text-anchor="middle" font-size="12" fill="hsl(var(--foreground))">Result</text>
-  <path d="M245 88 L320 175" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
-  <path d="M335 224 L245 305" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
-  <path d="M150 328 L75 225" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
-  <path d="M65 176 L155 90" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
-  <text x="200" y="385" text-anchor="middle" font-size="11" fill="hsl(var(--muted-foreground))">Same model, called repeatedly - the "intelligence" is in the loop, not one big prompt</text>
-  <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="hsl(var(--muted-foreground))"/></marker></defs>
+  <text x="200" y="24" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">THE AGENT LOOP</text>
+  <rect x="150" y="45" width="100" height="46" rx="8" fill="color-mix(in oklab, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
+  <text x="200" y="73" text-anchor="middle" font-size="12" fill="var(--primary)">Observe</text>
+  <rect x="290" y="177" width="100" height="46" rx="8" fill="color-mix(in oklab, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
+  <text x="340" y="205" text-anchor="middle" font-size="12" fill="var(--accent)">Decide</text>
+  <rect x="150" y="309" width="100" height="46" rx="8" fill="color-mix(in oklab, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
+  <text x="200" y="337" text-anchor="middle" font-size="12" fill="var(--warning)">Act (tool)</text>
+  <rect x="10" y="177" width="100" height="46" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="60" y="205" text-anchor="middle" font-size="12" fill="var(--foreground)">Result</text>
+  <path d="M245 88 L320 175" stroke="var(--muted-foreground)" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
+  <path d="M335 224 L245 305" stroke="var(--muted-foreground)" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
+  <path d="M150 328 L75 225" stroke="var(--muted-foreground)" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
+  <path d="M65 176 L155 90" stroke="var(--muted-foreground)" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
+  <text x="200" y="385" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Same model, called repeatedly - the "intelligence" is in the loop, not one big prompt</text>
+  <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
   },
   {
@@ -399,25 +399,25 @@ export const NODES: NodeContent[] = [
     layer2:
       "Ask Claude \"what's the weather in Dubai right now\" - you're watching tool use happen live. Notice the model doesn't know this from training; it had to decide to call a tool, and that tool's real result got fed back in before the final answer.",
     diagram: `<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="20" text-anchor="middle" font-size="12" fill="hsl(var(--muted-foreground))" letter-spacing="0.5">TOOL USE - THE MODEL NEVER ACTS DIRECTLY</text>
-  <rect x="20" y="70" width="120" height="55" rx="8" fill="hsl(var(--primary) / 0.12)" stroke="hsl(var(--primary))"/>
-  <text x="80" y="94" text-anchor="middle" font-size="11" fill="hsl(var(--primary))">Model outputs:</text>
-  <text x="80" y="110" text-anchor="middle" font-size="10" fill="hsl(var(--primary))" font-family="ui-monospace, monospace">"call weather_api"</text>
-  <path d="M140 97 L185 97" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#a3)"/>
-  <rect x="190" y="70" width="120" height="55" rx="8" fill="hsl(var(--warning) / 0.12)" stroke="hsl(var(--warning))"/>
-  <text x="250" y="94" text-anchor="middle" font-size="11" fill="hsl(var(--warning))">App actually</text>
-  <text x="250" y="110" text-anchor="middle" font-size="11" fill="hsl(var(--warning))">calls the API</text>
-  <path d="M310 97 L355 97" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#a3)"/>
-  <rect x="360" y="70" width="110" height="55" rx="8" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="415" y="94" text-anchor="middle" font-size="11" fill="hsl(var(--foreground))">Real result</text>
-  <text x="415" y="110" text-anchor="middle" font-size="10" fill="hsl(var(--foreground))">"28°C, sunny"</text>
-  <path d="M415 125 Q415 160 250 160 Q140 160 100 128" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" fill="none" marker-end="url(#a3)"/>
-  <text x="260" y="150" text-anchor="middle" font-size="10" fill="hsl(var(--muted-foreground))">fed back in as new context</text>
-  <rect x="490" y="70" width="90" height="55" rx="8" fill="hsl(var(--accent) / 0.12)" stroke="hsl(var(--accent))"/>
-  <text x="535" y="94" text-anchor="middle" font-size="11" fill="hsl(var(--accent))">Final</text>
-  <text x="535" y="110" text-anchor="middle" font-size="11" fill="hsl(var(--accent))">answer</text>
-  <path d="M470 97 L485 97" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#a3)"/>
-  <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="hsl(var(--muted-foreground))"/></marker></defs>
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">TOOL USE - THE MODEL NEVER ACTS DIRECTLY</text>
+  <rect x="20" y="70" width="120" height="55" rx="8" fill="color-mix(in oklab, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
+  <text x="80" y="94" text-anchor="middle" font-size="11" fill="var(--primary)">Model outputs:</text>
+  <text x="80" y="110" text-anchor="middle" font-size="10" fill="var(--primary)" font-family="ui-monospace, monospace">"call weather_api"</text>
+  <path d="M140 97 L185 97" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a3)"/>
+  <rect x="190" y="70" width="120" height="55" rx="8" fill="color-mix(in oklab, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
+  <text x="250" y="94" text-anchor="middle" font-size="11" fill="var(--warning)">App actually</text>
+  <text x="250" y="110" text-anchor="middle" font-size="11" fill="var(--warning)">calls the API</text>
+  <path d="M310 97 L355 97" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a3)"/>
+  <rect x="360" y="70" width="110" height="55" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="415" y="94" text-anchor="middle" font-size="11" fill="var(--foreground)">Real result</text>
+  <text x="415" y="110" text-anchor="middle" font-size="10" fill="var(--foreground)">"28°C, sunny"</text>
+  <path d="M415 125 Q415 160 250 160 Q140 160 100 128" stroke="var(--muted-foreground)" stroke-width="1.5" fill="none" marker-end="url(#a3)"/>
+  <text x="260" y="150" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">fed back in as new context</text>
+  <rect x="490" y="70" width="90" height="55" rx="8" fill="color-mix(in oklab, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
+  <text x="535" y="94" text-anchor="middle" font-size="11" fill="var(--accent)">Final</text>
+  <text x="535" y="110" text-anchor="middle" font-size="11" fill="var(--accent)">answer</text>
+  <path d="M470 97 L485 97" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a3)"/>
+  <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
   },
   {
@@ -432,23 +432,23 @@ export const NODES: NodeContent[] = [
     layer2:
       "Notice, right now, that this conversation \"knows\" things about your work at Kasper from before - that's long-term memory in action: facts stored elsewhere, silently re-inserted into context, not the model recalling on its own.",
     diagram: `<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="20" text-anchor="middle" font-size="12" fill="hsl(var(--muted-foreground))" letter-spacing="0.5">MEMORY IS ENGINEERING, NOT THE MODEL LEARNING</text>
-  <rect x="30" y="45" width="230" height="130" rx="10" fill="hsl(var(--primary) / 0.06)" stroke="hsl(var(--primary))"/>
-  <text x="145" y="65" text-anchor="middle" font-size="11" fill="hsl(var(--primary))" letter-spacing="0.3">SHORT-TERM (context window)</text>
-  <rect x="50" y="80" width="190" height="24" rx="4" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="145" y="96" text-anchor="middle" font-size="10" fill="hsl(var(--foreground))">this conversation so far</text>
-  <rect x="50" y="112" width="190" height="24" rx="4" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="145" y="128" text-anchor="middle" font-size="10" fill="hsl(var(--foreground))">disappears when chat ends</text>
-  <rect x="340" y="45" width="230" height="130" rx="10" fill="hsl(var(--accent) / 0.06)" stroke="hsl(var(--accent))"/>
-  <text x="455" y="65" text-anchor="middle" font-size="11" fill="hsl(var(--accent))" letter-spacing="0.3">LONG-TERM (database)</text>
-  <rect x="360" y="80" width="190" height="24" rx="4" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="455" y="96" text-anchor="middle" font-size="10" fill="hsl(var(--foreground))">saved facts about you</text>
-  <rect x="360" y="112" width="190" height="24" rx="4" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="455" y="128" text-anchor="middle" font-size="10" fill="hsl(var(--foreground))">persists across sessions</text>
-  <path d="M340 110 L260 110" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#a4)"/>
-  <text x="300" y="150" text-anchor="middle" font-size="9" fill="hsl(var(--muted-foreground))">relevant bits</text>
-  <text x="300" y="162" text-anchor="middle" font-size="9" fill="hsl(var(--muted-foreground))">re-inserted</text>
-  <defs><marker id="a4" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="hsl(var(--muted-foreground))"/></marker></defs>
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">MEMORY IS ENGINEERING, NOT THE MODEL LEARNING</text>
+  <rect x="30" y="45" width="230" height="130" rx="10" fill="color-mix(in oklab, var(--primary) 6%, transparent)" stroke="var(--primary)"/>
+  <text x="145" y="65" text-anchor="middle" font-size="11" fill="var(--primary)" letter-spacing="0.3">SHORT-TERM (context window)</text>
+  <rect x="50" y="80" width="190" height="24" rx="4" fill="var(--card)" stroke="var(--border)"/>
+  <text x="145" y="96" text-anchor="middle" font-size="10" fill="var(--foreground)">this conversation so far</text>
+  <rect x="50" y="112" width="190" height="24" rx="4" fill="var(--card)" stroke="var(--border)"/>
+  <text x="145" y="128" text-anchor="middle" font-size="10" fill="var(--foreground)">disappears when chat ends</text>
+  <rect x="340" y="45" width="230" height="130" rx="10" fill="color-mix(in oklab, var(--accent) 6%, transparent)" stroke="var(--accent)"/>
+  <text x="455" y="65" text-anchor="middle" font-size="11" fill="var(--accent)" letter-spacing="0.3">LONG-TERM (database)</text>
+  <rect x="360" y="80" width="190" height="24" rx="4" fill="var(--card)" stroke="var(--border)"/>
+  <text x="455" y="96" text-anchor="middle" font-size="10" fill="var(--foreground)">saved facts about you</text>
+  <rect x="360" y="112" width="190" height="24" rx="4" fill="var(--card)" stroke="var(--border)"/>
+  <text x="455" y="128" text-anchor="middle" font-size="10" fill="var(--foreground)">persists across sessions</text>
+  <path d="M340 110 L260 110" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a4)"/>
+  <text x="300" y="150" text-anchor="middle" font-size="9" fill="var(--muted-foreground)">relevant bits</text>
+  <text x="300" y="162" text-anchor="middle" font-size="9" fill="var(--muted-foreground)">re-inserted</text>
+  <defs><marker id="a4" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
   },
   {
@@ -463,14 +463,14 @@ export const NODES: NodeContent[] = [
     layer2:
       "Design (on paper, no build needed) an autonomy ladder for one real Kasper task - e.g. \"operator onboarding follow-up\": what would level-1 (approve every message) vs. level-3 (fully autonomous) look like, and where would you personally draw the line?",
     diagram: `<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="20" text-anchor="middle" font-size="12" fill="hsl(var(--muted-foreground))" letter-spacing="0.5">AUTONOMY LADDER - MORE FREEDOM, MORE RISK</text>
-  <rect x="60" y="130" width="480" height="40" rx="6" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="80" y="155" font-size="12" fill="hsl(var(--foreground))">Level 1 - human approves every single step</text>
-  <rect x="60" y="80" width="480" height="40" rx="6" fill="hsl(var(--warning) / 0.1)" stroke="hsl(var(--warning))"/>
-  <text x="80" y="105" font-size="12" fill="hsl(var(--warning))">Level 2 - human sets goal, checks in periodically</text>
-  <rect x="60" y="30" width="480" height="40" rx="6" fill="hsl(var(--destructive) / 0.1)" stroke="hsl(var(--destructive))"/>
-  <text x="80" y="55" font-size="12" fill="hsl(var(--destructive))">Level 3 - fully autonomous, reports only at the end</text>
-  <text x="300" y="200" text-anchor="middle" font-size="11" fill="hsl(var(--muted-foreground))">Higher levels need proportionally stronger guardrails - logging, tool limits, approval gates on irreversible actions</text>
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">AUTONOMY LADDER - MORE FREEDOM, MORE RISK</text>
+  <rect x="60" y="130" width="480" height="40" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="80" y="155" font-size="12" fill="var(--foreground)">Level 1 - human approves every single step</text>
+  <rect x="60" y="80" width="480" height="40" rx="6" fill="color-mix(in oklab, var(--warning) 10%, transparent)" stroke="var(--warning)"/>
+  <text x="80" y="105" font-size="12" fill="var(--warning)">Level 2 - human sets goal, checks in periodically</text>
+  <rect x="60" y="30" width="480" height="40" rx="6" fill="color-mix(in oklab, var(--destructive) 10%, transparent)" stroke="var(--destructive)"/>
+  <text x="80" y="55" font-size="12" fill="var(--destructive)">Level 3 - fully autonomous, reports only at the end</text>
+  <text x="300" y="200" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Higher levels need proportionally stronger guardrails - logging, tool limits, approval gates on irreversible actions</text>
 </svg>`,
   },
   {
@@ -485,20 +485,20 @@ export const NODES: NodeContent[] = [
     layer2:
       "Take one of your own multi-step Claude skills (e.g. cv-tailoring) and map it explicitly as a chain: what's step 1's exact input/output, what feeds into step 2, etc. You'll likely find you've been orchestrating without naming it as such.",
     diagram: `<svg viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="20" text-anchor="middle" font-size="12" fill="hsl(var(--muted-foreground))" letter-spacing="0.5">ORCHESTRATION - SMALL VERIFIABLE JOBS, CHAINED</text>
-  <rect x="30" y="55" width="140" height="55" rx="8" fill="hsl(var(--primary) / 0.12)" stroke="hsl(var(--primary))"/>
-  <text x="100" y="79" text-anchor="middle" font-size="12" fill="hsl(var(--primary))">Classify</text>
-  <text x="100" y="94" text-anchor="middle" font-size="9" fill="hsl(var(--primary))">raw transcript</text>
-  <path d="M170 82 L215 82" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#a5)"/>
-  <rect x="220" y="55" width="140" height="55" rx="8" fill="hsl(var(--accent) / 0.12)" stroke="hsl(var(--accent))"/>
-  <text x="290" y="79" text-anchor="middle" font-size="12" fill="hsl(var(--accent))">Extract</text>
-  <text x="290" y="94" text-anchor="middle" font-size="9" fill="hsl(var(--accent))">key details</text>
-  <path d="M360 82 L405 82" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#a5)"/>
-  <rect x="410" y="55" width="150" height="55" rx="8" fill="hsl(var(--warning) / 0.12)" stroke="hsl(var(--warning))"/>
-  <text x="485" y="79" text-anchor="middle" font-size="12" fill="hsl(var(--warning))">Draft</text>
-  <text x="485" y="94" text-anchor="middle" font-size="9" fill="hsl(var(--warning))">follow-up email</text>
-  <text x="300" y="140" text-anchor="middle" font-size="11" fill="hsl(var(--muted-foreground))">Each box is one narrow, checkable AI call - not one giant prompt trying to do everything</text>
-  <defs><marker id="a5" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="hsl(var(--muted-foreground))"/></marker></defs>
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">ORCHESTRATION - SMALL VERIFIABLE JOBS, CHAINED</text>
+  <rect x="30" y="55" width="140" height="55" rx="8" fill="color-mix(in oklab, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
+  <text x="100" y="79" text-anchor="middle" font-size="12" fill="var(--primary)">Classify</text>
+  <text x="100" y="94" text-anchor="middle" font-size="9" fill="var(--primary)">raw transcript</text>
+  <path d="M170 82 L215 82" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a5)"/>
+  <rect x="220" y="55" width="140" height="55" rx="8" fill="color-mix(in oklab, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
+  <text x="290" y="79" text-anchor="middle" font-size="12" fill="var(--accent)">Extract</text>
+  <text x="290" y="94" text-anchor="middle" font-size="9" fill="var(--accent)">key details</text>
+  <path d="M360 82 L405 82" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a5)"/>
+  <rect x="410" y="55" width="150" height="55" rx="8" fill="color-mix(in oklab, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
+  <text x="485" y="79" text-anchor="middle" font-size="12" fill="var(--warning)">Draft</text>
+  <text x="485" y="94" text-anchor="middle" font-size="9" fill="var(--warning)">follow-up email</text>
+  <text x="300" y="140" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Each box is one narrow, checkable AI call - not one giant prompt trying to do everything</text>
+  <defs><marker id="a5" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
   },
   {
@@ -513,25 +513,25 @@ export const NODES: NodeContent[] = [
     layer2:
       "Take one open decision from your actual Kasper GPS work (e.g. Wialon/Navixy vs. custom build) and explicitly run it through this three-way framework - you'll likely find you've already been reasoning this way intuitively.",
     diagram: `<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="20" text-anchor="middle" font-size="12" fill="hsl(var(--muted-foreground))" letter-spacing="0.5">NEED AN AI CAPABILITY?</text>
-  <rect x="240" y="35" width="120" height="40" rx="8" fill="hsl(var(--card))" stroke="hsl(var(--border))"/>
-  <text x="300" y="60" text-anchor="middle" font-size="11" fill="hsl(var(--foreground))">Decision point</text>
-  <path d="M270 75 L110 130" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#a6)"/>
-  <path d="M300 75 L300 130" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#a6)"/>
-  <path d="M330 75 L490 130" stroke="hsl(var(--muted-foreground))" stroke-width="1.5" marker-end="url(#a6)"/>
-  <rect x="20" y="135" width="180" height="60" rx="8" fill="hsl(var(--primary) / 0.1)" stroke="hsl(var(--primary))"/>
-  <text x="110" y="158" text-anchor="middle" font-size="12" fill="hsl(var(--primary))">Buy</text>
-  <text x="110" y="173" text-anchor="middle" font-size="10" fill="hsl(var(--primary))">existing tool solves it</text>
-  <text x="110" y="186" text-anchor="middle" font-size="10" fill="hsl(var(--primary))">- most common answer</text>
-  <rect x="210" y="135" width="180" height="60" rx="8" fill="hsl(var(--accent) / 0.1)" stroke="hsl(var(--accent))"/>
-  <text x="300" y="158" text-anchor="middle" font-size="12" fill="hsl(var(--accent))">Build</text>
-  <text x="300" y="173" text-anchor="middle" font-size="10" fill="hsl(var(--accent))">API + prompting + RAG</text>
-  <text x="300" y="186" text-anchor="middle" font-size="10" fill="hsl(var(--accent))">- usually the right call</text>
-  <rect x="400" y="135" width="180" height="60" rx="8" fill="hsl(var(--warning) / 0.1)" stroke="hsl(var(--warning))"/>
-  <text x="490" y="158" text-anchor="middle" font-size="12" fill="hsl(var(--warning))">Fine-tune</text>
-  <text x="490" y="173" text-anchor="middle" font-size="10" fill="hsl(var(--warning))">rare - narrow, high-scale,</text>
-  <text x="490" y="186" text-anchor="middle" font-size="10" fill="hsl(var(--warning))">prompting genuinely can't do it</text>
-  <defs><marker id="a6" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="hsl(var(--muted-foreground))"/></marker></defs>
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">NEED AN AI CAPABILITY?</text>
+  <rect x="240" y="35" width="120" height="40" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="300" y="60" text-anchor="middle" font-size="11" fill="var(--foreground)">Decision point</text>
+  <path d="M270 75 L110 130" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a6)"/>
+  <path d="M300 75 L300 130" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a6)"/>
+  <path d="M330 75 L490 130" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a6)"/>
+  <rect x="20" y="135" width="180" height="60" rx="8" fill="color-mix(in oklab, var(--primary) 10%, transparent)" stroke="var(--primary)"/>
+  <text x="110" y="158" text-anchor="middle" font-size="12" fill="var(--primary)">Buy</text>
+  <text x="110" y="173" text-anchor="middle" font-size="10" fill="var(--primary)">existing tool solves it</text>
+  <text x="110" y="186" text-anchor="middle" font-size="10" fill="var(--primary)">- most common answer</text>
+  <rect x="210" y="135" width="180" height="60" rx="8" fill="color-mix(in oklab, var(--accent) 10%, transparent)" stroke="var(--accent)"/>
+  <text x="300" y="158" text-anchor="middle" font-size="12" fill="var(--accent)">Build</text>
+  <text x="300" y="173" text-anchor="middle" font-size="10" fill="var(--accent)">API + prompting + RAG</text>
+  <text x="300" y="186" text-anchor="middle" font-size="10" fill="var(--accent)">- usually the right call</text>
+  <rect x="400" y="135" width="180" height="60" rx="8" fill="color-mix(in oklab, var(--warning) 10%, transparent)" stroke="var(--warning)"/>
+  <text x="490" y="158" text-anchor="middle" font-size="12" fill="var(--warning)">Fine-tune</text>
+  <text x="490" y="173" text-anchor="middle" font-size="10" fill="var(--warning)">rare - narrow, high-scale,</text>
+  <text x="490" y="186" text-anchor="middle" font-size="10" fill="var(--warning)">prompting genuinely can't do it</text>
+  <defs><marker id="a6" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
   },
   {
