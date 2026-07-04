@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { RotateCcw } from "lucide-react";
-import { CLUSTERS, NODES, TOTAL_NODES, nodesInCluster } from "../data/nodes";
+import { CLUSTERS, NODES, TOTAL_NODES, findNode, nodesInCluster } from "../data/nodes";
 import { useMapState } from "../hooks/useMapState";
 
 export const Route = createFileRoute("/stats")({
@@ -24,6 +24,11 @@ function Stats() {
   weekStart.setUTCDate(weekStart.getUTCDate() - 6);
   const weekStartIso = weekStart.toISOString().slice(0, 10);
   const activeThisWeek = state.activityDates.filter((d) => d >= weekStartIso).length;
+
+  const reflectionEntries = state.reflectionOrder
+    .filter((id) => state.gotIt.includes(id) && (state.reflections[id]?.trim().length ?? 0) > 0)
+    .map((id) => ({ id, node: findNode(id), text: state.reflections[id]! }))
+    .filter((e) => e.node);
 
   return (
     <div>
@@ -80,6 +85,41 @@ function Stats() {
           You get one free skip per rolling 7 days, so a single missed day never breaks
           the streak. Two missed days in a row resets it - no guilt, pick up anywhere.
         </p>
+      </section>
+
+      <section className="mb-6 rounded-xl border border-border bg-card p-4">
+        <div className="mb-3 flex items-baseline justify-between gap-2">
+          <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+            Your takeaways
+          </div>
+          {reflectionEntries.length > 0 && (
+            <div className="font-mono text-[10px] tabular-nums text-muted-foreground">
+              {reflectionEntries.length}
+            </div>
+          )}
+        </div>
+        {reflectionEntries.length === 0 ? (
+          <p className="text-[13px] leading-relaxed text-muted-foreground">
+            One-line takeaways you jot on any node page show up here, newest first.
+          </p>
+        ) : (
+          <ul className="space-y-3">
+            {reflectionEntries.map(({ id, node, text }) => (
+              <li key={id} className="border-l-2 border-primary/40 pl-3">
+                <Link
+                  to="/node/$nodeId"
+                  params={{ nodeId: id }}
+                  className="font-mono text-[10px] uppercase tracking-[0.14em] text-primary hover:underline"
+                >
+                  {id.toUpperCase()} · {node!.title}
+                </Link>
+                <p className="mt-1 whitespace-pre-wrap text-[13px] leading-relaxed text-foreground">
+                  {text}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <button
