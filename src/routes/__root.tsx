@@ -79,7 +79,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Novibe — The Map" },
+      { title: "Novibe - The Map" },
       {
         name: "description",
         content:
@@ -87,12 +87,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "Novibe" },
       { name: "theme-color", content: "#ffffff" },
-      { property: "og:title", content: "Novibe — The Map" },
-      { property: "og:description", content: "A non-linear topic map for AI literacy — 30 nodes across 6 clusters." },
+      { property: "og:title", content: "Novibe - The Map" },
+      { property: "og:description", content: "A non-linear topic map for AI literacy. 30 nodes across 6 clusters." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Novibe — The Map" },
+      { name: "twitter:title", content: "Novibe - The Map" },
       { name: "twitter:description", content: "A non-linear topic map for AI literacy." },
     ],
     links: [
@@ -100,7 +100,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", type: "image/png", href: "/novibe-icon.png" },
+      { rel: "apple-touch-icon", href: "/novibe-icon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

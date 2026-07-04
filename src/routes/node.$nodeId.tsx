@@ -12,14 +12,14 @@ export const Route = createFileRoute("/node/$nodeId")({
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
-      return { meta: [{ title: "Not found — Novibe" }, { name: "robots", content: "noindex" }] };
+      return { meta: [{ title: "Not found - Novibe" }, { name: "robots", content: "noindex" }] };
     }
     const { node } = loaderData;
     return {
       meta: [
-        { title: `${node.title} — Novibe` },
+        { title: `${node.title} - Novibe` },
         { name: "description", content: node.layer0.slice(0, 155) },
-        { property: "og:title", content: `${node.title} — Novibe` },
+        { property: "og:title", content: `${node.title} - Novibe` },
         { property: "og:description", content: node.layer0.slice(0, 155) },
       ],
     };
@@ -82,7 +82,7 @@ function NodePage() {
               </Link>
             ))}
             <span className="text-[10px] italic text-muted-foreground/70">
-              (soft — not required)
+              (soft - not required)
             </span>
           </div>
         )}

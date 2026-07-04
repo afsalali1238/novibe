@@ -5,7 +5,7 @@ import { useMapState } from "../hooks/useMapState";
 export const Route = createFileRoute("/sandbox")({
   head: () => ({
     meta: [
-      { title: "Scratchpad — Novibe" },
+      { title: "Scratchpad - Novibe" },
       { name: "description", content: "Free-form notes, autosaved to this device." },
     ],
   }),
