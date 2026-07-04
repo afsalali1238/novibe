@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
 import { ArrowLeft, Check, ChevronRight } from "lucide-react";
-import { CLUSTERS, NODES, findNode } from "../data/nodes";
+import { CLUSTERS, NODES, findNode, type NodeContent } from "../data/nodes";
 import { useMapState } from "../hooks/useMapState";
 
 export const Route = createFileRoute("/node/$nodeId")({
@@ -39,7 +39,7 @@ function NodeNotFound() {
 }
 
 function NodePage() {
-  const { node } = Route.useLoaderData();
+  const { node } = Route.useLoaderData() as { node: NodeContent };
   const { isGot, toggleGot } = useMapState();
   const router = useRouter();
   const got = isGot(node.id);
