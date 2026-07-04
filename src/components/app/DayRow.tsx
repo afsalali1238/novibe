@@ -1,65 +1,70 @@
-import { ExternalLink } from "lucide-react";
-import { useState } from "react";
-import { resourceUrl, type Day } from "../../data/curriculum";
+import { Link } from "@tanstack/react-router";
+import { ChevronRight } from "lucide-react";
+import type { Day } from "../../data/curriculum";
 import { useCourseState } from "../../hooks/useCourseState";
 
 export function DayRow({ day, index }: { day: Day; index: number }) {
-  const { isDayDone, toggleDay } = useCourseState();
+  const { isDayDone, isQuizDone, state } = useCourseState();
   const done = isDayDone(day.id);
-  const [pulseKey, setPulseKey] = useState(0);
+  const quizDone = isQuizDone(day.id);
+  const hasAttempt = !!state.dayLogs[day.id]?.result;
 
   return (
-    <div
+    <Link
+      to="/day/$dayId"
+      params={{ dayId: day.id }}
       className={
-        "flex items-start gap-3 rounded-lg border border-border/60 bg-background/40 p-3 transition-colors " +
-        (done ? "border-accent/40 bg-accent/[0.04]" : "hover:border-primary/40")
+        "group flex items-start gap-3 rounded-lg border p-3 transition-colors " +
+        (done
+          ? "border-accent/40 bg-accent/5 hover:bg-accent/10"
+          : "border-border bg-background hover:border-primary hover:bg-primary/5")
       }
     >
-      <button
-        key={pulseKey}
-        type="button"
-        onClick={() => {
-          toggleDay(day.id);
-          setPulseKey((k) => k + 1);
-        }}
-        aria-pressed={done}
-        aria-label={done ? `Mark ${day.topic} incomplete` : `Mark ${day.topic} complete`}
+      <div
+        aria-hidden
         className={
-          "pulse-once mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded border font-mono text-[11px] transition-colors " +
+          "mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded border font-mono text-[11px] " +
           (done
             ? "border-accent bg-accent text-accent-foreground"
-            : "border-border bg-background text-muted-foreground hover:border-primary")
+            : "border-border bg-background text-muted-foreground")
         }
       >
-        {done ? "\u2713" : ""}
-      </button>
+        {done ? "\u2713" : index + 1}
+      </div>
 
       <div className="min-w-0 flex-1">
-        <div className="flex items-baseline gap-2">
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
           <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
             Day {index + 1}
           </span>
-          <span className="text-[10px] text-muted-foreground">+15 XP</span>
+          {quizDone && (
+            <span className="rounded-sm bg-accent/15 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-accent">
+              quiz
+            </span>
+          )}
+          {hasAttempt && (
+            <span className="rounded-sm bg-primary/15 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-primary">
+              logged
+            </span>
+          )}
+          {!done && (
+            <span className="text-[10px] text-muted-foreground">+15 XP</span>
+          )}
         </div>
         <div
           className={
             "mt-0.5 text-sm font-medium leading-snug " +
-            (done ? "text-muted-foreground line-through" : "text-foreground")
+            (done ? "text-muted-foreground" : "text-foreground")
           }
         >
           {day.topic}
         </div>
-        <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">{day.concept}</p>
-        <a
-          href={resourceUrl(day.resourceQuery)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-2 inline-flex items-center gap-1 font-mono text-[11px] text-primary hover:text-secondary"
-        >
-          <ExternalLink className="h-3 w-3" />
-          {day.resourceQuery}
-        </a>
+        <p className="mt-1 line-clamp-2 text-[12.5px] leading-relaxed text-muted-foreground">
+          {day.concept}
+        </p>
       </div>
-    </div>
+
+      <ChevronRight className="mt-1 h-4 w-4 flex-none text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+    </Link>
   );
 }
