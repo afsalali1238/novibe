@@ -9,38 +9,82 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StatsRouteImport } from './routes/stats'
+import { Route as SandboxRouteImport } from './routes/sandbox'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PlaygroundWeekIdRouteImport } from './routes/playground.$weekId'
 
+const StatsRoute = StatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SandboxRoute = SandboxRouteImport.update({
+  id: '/sandbox',
+  path: '/sandbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlaygroundWeekIdRoute = PlaygroundWeekIdRouteImport.update({
+  id: '/playground/$weekId',
+  path: '/playground/$weekId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sandbox': typeof SandboxRoute
+  '/stats': typeof StatsRoute
+  '/playground/$weekId': typeof PlaygroundWeekIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sandbox': typeof SandboxRoute
+  '/stats': typeof StatsRoute
+  '/playground/$weekId': typeof PlaygroundWeekIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/sandbox': typeof SandboxRoute
+  '/stats': typeof StatsRoute
+  '/playground/$weekId': typeof PlaygroundWeekIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/sandbox' | '/stats' | '/playground/$weekId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/sandbox' | '/stats' | '/playground/$weekId'
+  id: '__root__' | '/' | '/sandbox' | '/stats' | '/playground/$weekId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SandboxRoute: typeof SandboxRoute
+  StatsRoute: typeof StatsRoute
+  PlaygroundWeekIdRoute: typeof PlaygroundWeekIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/stats': {
+      id: '/stats'
+      path: '/stats'
+      fullPath: '/stats'
+      preLoaderRoute: typeof StatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sandbox': {
+      id: '/sandbox'
+      path: '/sandbox'
+      fullPath: '/sandbox'
+      preLoaderRoute: typeof SandboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +92,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/playground/$weekId': {
+      id: '/playground/$weekId'
+      path: '/playground/$weekId'
+      fullPath: '/playground/$weekId'
+      preLoaderRoute: typeof PlaygroundWeekIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SandboxRoute: SandboxRoute,
+  StatsRoute: StatsRoute,
+  PlaygroundWeekIdRoute: PlaygroundWeekIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
