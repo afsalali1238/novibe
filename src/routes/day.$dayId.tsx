@@ -157,12 +157,6 @@ function DayPage() {
                 completeTask(day.id, i, log);
                 if (!isDayDone(day.id)) toggleDay(day.id);
               }}
-              onSaveDraft={(log) => {
-                // saving without completion just updates the log locally
-                // reuse completeTask only on complete; drafts stored per-task via completeTask idempotency
-                // simplest: only complete has persistence — drafts stay in component state
-                void log;
-              }}
             />
           ))}
         </section>
