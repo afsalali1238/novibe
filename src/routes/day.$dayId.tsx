@@ -1,7 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Check, ExternalLink, Sparkles } from "lucide-react";
+import { ArrowLeft, BookOpen, Check, ExternalLink, ListChecks, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 import { resourceUrl, WEEKS, type Day, type Week } from "../data/curriculum";
+import { lessonFor, type LessonTask } from "../data/lessons";
 import { quizFor, type QuizQuestion } from "../data/quizzes";
 import { useCourseState } from "../hooks/useCourseState";
 
@@ -42,27 +43,19 @@ const TOOLS = [
   { id: "other", label: "Other", hint: "your pick" },
 ] as const;
 
-function suggestedPrompt(day: Day): string {
-  return `You are helping me learn: "${day.topic}".
-
-Explain the core idea in 3 bullet points, then give me ONE concrete example I could use in a real workflow today. End with a single follow-up question that tests my understanding.`;
-}
-
 function DayPage() {
   const { week, day, index } = Route.useLoaderData();
   const {
     state,
-    saveDayLog,
     submitQuiz,
     isQuizDone,
     isDayDone,
     toggleDay,
+    completeTask,
+    isTaskDone,
   } = useCourseState();
 
-  const savedLog = state.dayLogs[day.id];
-  const [tool, setTool] = useState<string>(savedLog?.tool ?? "");
-  const [result, setResult] = useState<string>(savedLog?.result ?? "");
-  const [copied, setCopied] = useState(false);
+  const lesson = useMemo(() => lessonFor(day.id), [day.id]);
 
   const quiz = useMemo(() => quizFor(day.id), [day.id]);
   const quizDone = isQuizDone(day.id);
@@ -72,23 +65,11 @@ function DayPage() {
   );
   const [submitted, setSubmitted] = useState(quizDone);
 
-  const prompt = suggestedPrompt(day);
-  const canSaveLog = tool && result.trim().length > 0;
   const allAnswered = answers.every((a) => a >= 0);
   const correctCount = answers.reduce(
     (n, a, i) => (a === quiz[i]?.answer ? n + 1 : n),
     0,
   );
-
-  const copyPrompt = async () => {
-    try {
-      await navigator.clipboard.writeText(prompt);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1400);
-    } catch {
-      /* ignore */
-    }
-  };
 
   return (
     <div className="space-y-5">
@@ -120,91 +101,79 @@ function DayPage() {
         </a>
       </header>
 
-      {/* Try it with an AI */}
-      <section className="rounded-xl border border-border bg-card p-4">
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-primary" />
-          <h2 className="text-sm font-semibold text-foreground">Try it with an AI</h2>
-        </div>
-        <p className="mt-1 text-[12.5px] text-muted-foreground">
-          Pick a tool, run the prompt below, then paste the result. This gets saved locally.
-        </p>
+      {/* Expert Brief */}
+      {lesson && (
+        <section className="rounded-xl border border-border bg-card p-4">
+          <div className="flex items-center gap-2">
+            <BookOpen className="h-4 w-4 text-primary" />
+            <h2 className="text-sm font-semibold text-foreground">Brief</h2>
+          </div>
+          <div className="mt-2 space-y-2.5">
+            {lesson.brief.map((p, i) => (
+              <p key={i} className="text-[13.5px] leading-relaxed text-foreground/90">
+                {p}
+              </p>
+            ))}
+          </div>
+          {lesson.keyPoints.length > 0 && (
+            <div className="mt-3 rounded-lg border border-border bg-background p-3">
+              <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                Key takeaways
+              </div>
+              <ul className="mt-1.5 space-y-1">
+                {lesson.keyPoints.map((k, i) => (
+                  <li
+                    key={i}
+                    className="flex items-start gap-2 text-[12.5px] leading-relaxed text-foreground"
+                  >
+                    <span className="mt-1 h-1 w-1 flex-none rounded-full bg-primary" />
+                    <span>{k}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+      )}
 
-        <div className="mt-3 rounded-lg border border-border bg-background p-3">
-          <div className="mb-2 flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-              Prompt
-            </span>
-            <button
-              type="button"
-              onClick={copyPrompt}
-              className="rounded-md border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary hover:text-primary"
-            >
-              {copied ? "Copied" : "Copy"}
-            </button>
+      {/* Hands-on tasks */}
+      {lesson && lesson.tasks.length > 0 && (
+        <section className="space-y-3">
+          <div className="flex items-center gap-2">
+            <ListChecks className="h-4 w-4 text-primary" />
+            <h2 className="text-sm font-semibold text-foreground">
+              Tasks · run these with an AI
+            </h2>
           </div>
-          <pre className="whitespace-pre-wrap break-words font-mono text-[12px] leading-relaxed text-foreground">
-            {prompt}
-          </pre>
-        </div>
+          {lesson.tasks.map((t, i) => (
+            <TaskCard
+              key={i}
+              dayId={day.id}
+              index={i}
+              task={t}
+              done={isTaskDone(day.id, i)}
+              savedLog={state.taskLogs[`${day.id}#${i}`]}
+              onComplete={(log) => {
+                completeTask(day.id, i, log);
+                if (!isDayDone(day.id)) toggleDay(day.id);
+              }}
+            />
+          ))}
+        </section>
+      )}
 
-        <div className="mt-3">
-          <div className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-            Which AI did you use?
+      {!lesson && (
+        <section className="rounded-xl border border-dashed border-border bg-card p-4 text-[12.5px] text-muted-foreground">
+          <div className="flex items-center gap-2 text-foreground">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="font-semibold">Lesson pack coming soon</span>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {TOOLS.map((t) => {
-              const active = tool === t.id;
-              return (
-                <button
-                  key={t.id}
-                  type="button"
-                  onClick={() => setTool(t.id)}
-                  className={
-                    "rounded-md border px-2.5 py-1 text-xs transition-colors " +
-                    (active
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border bg-background text-muted-foreground hover:border-primary hover:text-foreground")
-                  }
-                >
-                  <span className="font-medium">{t.label}</span>
-                  <span className="ml-1 font-mono text-[10px] opacity-70">{t.hint}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="mt-3">
-          <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-            Paste the AI's response
-          </label>
-          <textarea
-            value={result}
-            onChange={(e) => setResult(e.target.value)}
-            placeholder="Paste what the model gave you. You can also add your own reflection."
-            className="min-h-[140px] w-full rounded-lg border border-border bg-background p-3 font-mono text-[12.5px] leading-relaxed text-foreground outline-none focus:border-primary"
-          />
-          <div className="mt-2 flex items-center justify-between">
-            <span className="text-[11px] text-muted-foreground">
-              {savedLog ? "Saved locally · updates on save" : "Saved to this browser"}
-            </span>
-            <button
-              type="button"
-              disabled={!canSaveLog}
-              onClick={() => saveDayLog(day.id, { tool, result })}
-              className={
-                "rounded-md px-3 py-1.5 text-xs font-semibold transition-colors " +
-                (canSaveLog
-                  ? "bg-primary text-primary-foreground hover:opacity-90"
-                  : "cursor-not-allowed bg-muted text-muted-foreground")
-              }
-            >
-              Save attempt
-            </button>
-          </div>
-        </div>
-      </section>
+          <p className="mt-1.5">
+            The expert brief for this day is being written. Use the syllabus concept above and
+            take the quiz below.
+          </p>
+        </section>
+      )}
 
       {/* Quiz */}
       {quiz.length > 0 && (
@@ -343,5 +312,168 @@ function QuizItem({
         </p>
       )}
     </li>
+  );
+}
+
+function TaskCard({
+  dayId,
+  index,
+  task,
+  done,
+  savedLog,
+  onComplete,
+}: {
+  dayId: string;
+  index: number;
+  task: LessonTask;
+  done: boolean;
+  savedLog: { tool: string; result: string } | undefined;
+  onComplete: (log: { tool: string; result: string }) => void;
+}) {
+  const [tool, setTool] = useState<string>(savedLog?.tool ?? task.suggestedTool ?? "");
+  const [result, setResult] = useState<string>(savedLog?.result ?? "");
+  const [copied, setCopied] = useState(false);
+  const canSubmit = tool && result.trim().length > 0;
+
+  const copyPrompt = async () => {
+    try {
+      await navigator.clipboard.writeText(task.prompt);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1400);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  return (
+    <div
+      className={
+        "rounded-xl border bg-card p-4 " +
+        (done ? "border-accent/40" : "border-border")
+      }
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            <span>Task {index + 1}</span>
+            {task.suggestedTool && (
+              <>
+                <span>·</span>
+                <span>try with {task.suggestedTool}</span>
+              </>
+            )}
+            {done && (
+              <span className="inline-flex items-center gap-1 rounded-full border border-accent/40 bg-accent/10 px-1.5 py-0.5 text-accent">
+                <Check className="h-3 w-3" /> Done
+              </span>
+            )}
+          </div>
+          <h3 className="mt-1 text-[14px] font-semibold leading-snug text-foreground">
+            {task.title}
+          </h3>
+          <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
+            {task.goal}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-3 rounded-lg border border-border bg-background p-3">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            Paste this into an AI
+          </span>
+          <button
+            type="button"
+            onClick={copyPrompt}
+            className="rounded-md border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary hover:text-primary"
+          >
+            {copied ? "Copied" : "Copy"}
+          </button>
+        </div>
+        <pre className="max-h-64 overflow-auto whitespace-pre-wrap break-words font-mono text-[12px] leading-relaxed text-foreground">
+          {task.prompt}
+        </pre>
+      </div>
+
+      {task.success.length > 0 && (
+        <div className="mt-3">
+          <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            You nailed it when
+          </div>
+          <ul className="mt-1 space-y-0.5">
+            {task.success.map((s, i) => (
+              <li
+                key={i}
+                className="flex items-start gap-2 text-[12.5px] leading-relaxed text-foreground"
+              >
+                <Check className="mt-0.5 h-3.5 w-3.5 flex-none text-accent" />
+                <span>{s}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div className="mt-3">
+        <div className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+          Which AI did you use?
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {TOOLS.map((t) => {
+            const active = tool === t.id;
+            return (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => setTool(t.id)}
+                className={
+                  "rounded-md border px-2.5 py-1 text-xs transition-colors " +
+                  (active
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border bg-background text-muted-foreground hover:border-primary hover:text-foreground")
+                }
+              >
+                <span className="font-medium">{t.label}</span>
+                <span className="ml-1 font-mono text-[10px] opacity-70">{t.hint}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-3">
+        <label
+          htmlFor={`result-${dayId}-${index}`}
+          className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground"
+        >
+          Paste the AI's response (or your reflection)
+        </label>
+        <textarea
+          id={`result-${dayId}-${index}`}
+          value={result}
+          onChange={(e) => setResult(e.target.value)}
+          placeholder="Paste what the model gave you. Add a note if it missed the success criteria."
+          className="min-h-[120px] w-full rounded-lg border border-border bg-background p-3 font-mono text-[12.5px] leading-relaxed text-foreground outline-none focus:border-primary"
+        />
+        <div className="mt-2 flex items-center justify-between">
+          <span className="text-[11px] text-muted-foreground">
+            {done ? "Saved · +5 XP awarded" : "Saved locally on submit · +5 XP"}
+          </span>
+          <button
+            type="button"
+            disabled={!canSubmit}
+            onClick={() => onComplete({ tool, result })}
+            className={
+              "rounded-md px-3 py-1.5 text-xs font-semibold transition-colors " +
+              (canSubmit
+                ? "bg-primary text-primary-foreground hover:opacity-90"
+                : "cursor-not-allowed bg-muted text-muted-foreground")
+            }
+          >
+            {done ? "Update" : "Mark done"}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

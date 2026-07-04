@@ -23,6 +23,8 @@ export type CourseState = {
   dayLogs: Record<string, { tool: string; result: string }>;
   quizCompleted: string[]; // dayIds with quiz XP awarded
   quizAnswers: Record<string, number[]>; // dayId -> chosen option index per question
+  completedTasks: string[]; // keys like `${dayId}#${index}`
+  taskLogs: Record<string, { tool: string; result: string }>; // key `${dayId}#${index}`
 };
 
 const initialState: CourseState = {
@@ -36,6 +38,8 @@ const initialState: CourseState = {
   dayLogs: {},
   quizCompleted: [],
   quizAnswers: {},
+  completedTasks: [],
+  taskLogs: {},
 };
 
 function today() {
@@ -75,6 +79,8 @@ type CourseContextValue = {
   saveDayLog: (dayId: string, log: { tool: string; result: string }) => void;
   submitQuiz: (dayId: string, answers: number[], correctCount: number) => { firstTime: boolean; xpGained: number };
   isQuizDone: (dayId: string) => boolean;
+  completeTask: (dayId: string, index: number, log: { tool: string; result: string }) => { firstTime: boolean; xpGained: number };
+  isTaskDone: (dayId: string, index: number) => boolean;
 };
 
 const CourseContext = createContext<CourseContextValue | null>(null);
@@ -193,6 +199,31 @@ export function CourseStateProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
+  const completeTask = useCallback(
+    (dayId: string, index: number, log: { tool: string; result: string }) => {
+      const key = `${dayId}#${index}`;
+      let firstTime = false;
+      let xpGained = 0;
+      setState((s) => {
+        const already = s.completedTasks.includes(key);
+        const nextLogs = { ...s.taskLogs, [key]: log };
+        if (already) return { ...s, taskLogs: nextLogs };
+        firstTime = true;
+        xpGained = 5;
+        pushXp(xpGained);
+        const bumped = bumpStreak(s);
+        return {
+          ...bumped,
+          taskLogs: nextLogs,
+          completedTasks: [...bumped.completedTasks, key],
+          xp: bumped.xp + xpGained,
+        };
+      });
+      return { firstTime, xpGained };
+    },
+    [bumpStreak, pushXp],
+  );
+
   const submitQuiz = useCallback(
     (dayId: string, answers: number[], correctCount: number) => {
       let firstTime = false;
@@ -235,8 +266,10 @@ export function CourseStateProvider({ children }: { children: ReactNode }) {
       saveDayLog,
       submitQuiz,
       isQuizDone: (dayId) => state.quizCompleted.includes(dayId),
+      completeTask,
+      isTaskDone: (dayId, index) => state.completedTasks.includes(`${dayId}#${index}`),
     }),
-    [state, hydrated, xpEvents, toggleDay, submitChallenge, saveDraft, saveNotes, resetAll, saveDayLog, submitQuiz],
+    [state, hydrated, xpEvents, toggleDay, submitChallenge, saveDraft, saveNotes, resetAll, saveDayLog, submitQuiz, completeTask],
   );
 
   return <CourseContext.Provider value={value}>{children}</CourseContext.Provider>;
