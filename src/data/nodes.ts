@@ -371,6 +371,18 @@ export const NODES: NodeContent[] = [
       "Advisory case: if a healthcare-AI conversation ever raises \"patient data can't leave our servers,\" that's exactly the scenario where open-source/self-hosted becomes the right call over a closed API - a good real test of whether you can apply this distinction correctly.",
   },
   {
+    id: "d6",
+    cluster: "D",
+    title: "Multimodal Models — Beyond Text",
+    buildsOn: ["a2", "c5"],
+    layer0:
+      "A multimodal model natively understands and generates a mix of text, images, video, and audio — rather than gluing separate single-purpose tools together. It's the difference between reading a textbook description of tennis versus watching, hearing, and feeling the game — multimodal AI experiences data closer to the second way. The model generating a company's text and the one generating its video are usually completely different architectures under the hood, since predicting the next word and simulating physical motion require fundamentally different math.",
+    layer1:
+      "Early multimodal systems were \"bolted on\" — a separate vision encoder translated an image into text tokens for a standard text model to read, which was slow and missed fine-grained spatial detail. Current-generation models (Claude Sonnet 5, Gemini 3.5, Qwen3-VL) use unified architectures where text, image, and audio are projected into the same continuous mathematical space from the start. For video, systems like Runway's GWM-1 (\"General World Model\") have moved past simple pixel prediction into simulating physical dynamics directly — object permanence, gravity, lighting — building an internal model of reality rather than just rendering frames. Audio models like ElevenLabs' Eleven v3 similarly generate raw waveforms directly from the emotional and contextual meaning of text, rather than mapping text to sound phonetically.",
+    layer2:
+      "Give a vision-capable model (Claude or GPT) a photo of a cluttered desk and instead of asking it to describe the image, ask: \"give the pixel coordinates of the pen tip, and tell me what happens physically if I pull the notebook out from under the coffee cup.\" A model relying on a bolted-on vision encoder tends to hallucinate coordinates and answer generically; a native multimodal model grounds the object in actual 2D space and reasons about the physical cause-and-effect correctly.",
+  },
+  {
     id: "e1",
     cluster: "E",
     title: "What actually makes something an \"agent\"",
