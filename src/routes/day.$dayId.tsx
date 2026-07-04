@@ -314,3 +314,166 @@ function QuizItem({
     </li>
   );
 }
+
+function TaskCard({
+  dayId,
+  index,
+  task,
+  done,
+  savedLog,
+  onComplete,
+}: {
+  dayId: string;
+  index: number;
+  task: LessonTask;
+  done: boolean;
+  savedLog: { tool: string; result: string } | undefined;
+  onComplete: (log: { tool: string; result: string }) => void;
+}) {
+  const [tool, setTool] = useState<string>(savedLog?.tool ?? task.suggestedTool ?? "");
+  const [result, setResult] = useState<string>(savedLog?.result ?? "");
+  const [copied, setCopied] = useState(false);
+  const canSubmit = tool && result.trim().length > 0;
+
+  const copyPrompt = async () => {
+    try {
+      await navigator.clipboard.writeText(task.prompt);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1400);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  return (
+    <div
+      className={
+        "rounded-xl border bg-card p-4 " +
+        (done ? "border-accent/40" : "border-border")
+      }
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            <span>Task {index + 1}</span>
+            {task.suggestedTool && (
+              <>
+                <span>·</span>
+                <span>try with {task.suggestedTool}</span>
+              </>
+            )}
+            {done && (
+              <span className="inline-flex items-center gap-1 rounded-full border border-accent/40 bg-accent/10 px-1.5 py-0.5 text-accent">
+                <Check className="h-3 w-3" /> Done
+              </span>
+            )}
+          </div>
+          <h3 className="mt-1 text-[14px] font-semibold leading-snug text-foreground">
+            {task.title}
+          </h3>
+          <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
+            {task.goal}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-3 rounded-lg border border-border bg-background p-3">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            Paste this into an AI
+          </span>
+          <button
+            type="button"
+            onClick={copyPrompt}
+            className="rounded-md border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary hover:text-primary"
+          >
+            {copied ? "Copied" : "Copy"}
+          </button>
+        </div>
+        <pre className="max-h-64 overflow-auto whitespace-pre-wrap break-words font-mono text-[12px] leading-relaxed text-foreground">
+          {task.prompt}
+        </pre>
+      </div>
+
+      {task.success.length > 0 && (
+        <div className="mt-3">
+          <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            You nailed it when
+          </div>
+          <ul className="mt-1 space-y-0.5">
+            {task.success.map((s, i) => (
+              <li
+                key={i}
+                className="flex items-start gap-2 text-[12.5px] leading-relaxed text-foreground"
+              >
+                <Check className="mt-0.5 h-3.5 w-3.5 flex-none text-accent" />
+                <span>{s}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div className="mt-3">
+        <div className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+          Which AI did you use?
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {TOOLS.map((t) => {
+            const active = tool === t.id;
+            return (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => setTool(t.id)}
+                className={
+                  "rounded-md border px-2.5 py-1 text-xs transition-colors " +
+                  (active
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border bg-background text-muted-foreground hover:border-primary hover:text-foreground")
+                }
+              >
+                <span className="font-medium">{t.label}</span>
+                <span className="ml-1 font-mono text-[10px] opacity-70">{t.hint}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-3">
+        <label
+          htmlFor={`result-${dayId}-${index}`}
+          className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground"
+        >
+          Paste the AI's response (or your reflection)
+        </label>
+        <textarea
+          id={`result-${dayId}-${index}`}
+          value={result}
+          onChange={(e) => setResult(e.target.value)}
+          placeholder="Paste what the model gave you. Add a note if it missed the success criteria."
+          className="min-h-[120px] w-full rounded-lg border border-border bg-background p-3 font-mono text-[12.5px] leading-relaxed text-foreground outline-none focus:border-primary"
+        />
+        <div className="mt-2 flex items-center justify-between">
+          <span className="text-[11px] text-muted-foreground">
+            {done ? "Saved · +5 XP awarded" : "Saved locally on submit · +5 XP"}
+          </span>
+          <button
+            type="button"
+            disabled={!canSubmit}
+            onClick={() => onComplete({ tool, result })}
+            className={
+              "rounded-md px-3 py-1.5 text-xs font-semibold transition-colors " +
+              (canSubmit
+                ? "bg-primary text-primary-foreground hover:opacity-90"
+                : "cursor-not-allowed bg-muted text-muted-foreground")
+            }
+          >
+            {done ? "Update" : "Mark done"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
