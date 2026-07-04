@@ -14,7 +14,8 @@ export type MapState = {
   gotIt: string[];
   activityDates: string[]; // YYYY-MM-DD, unique, unsorted
   notes: string;
-  reflections: Record<string, string>; // nodeId -> one-line reflection
+  reflections: Record<string, string>;
+  reflectionOrder: string[]; // node ids, most-recently-edited first
 };
 
 const initialState: MapState = {
@@ -22,6 +23,7 @@ const initialState: MapState = {
   activityDates: [],
   notes: "",
   reflections: {},
+  reflectionOrder: [],
 };
 
 function today(): string {
@@ -136,7 +138,21 @@ export function MapStateProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const saveReflection = useCallback((nodeId: string, t: string) => {
-    setState((s) => ({ ...s, reflections: { ...s.reflections, [nodeId]: t } }));
+    setState((s) => {
+      const trimmed = t;
+      const nextReflections = { ...s.reflections };
+      const withoutId = s.reflectionOrder.filter((x) => x !== nodeId);
+      if (trimmed.trim().length === 0) {
+        delete nextReflections[nodeId];
+        return { ...s, reflections: nextReflections, reflectionOrder: withoutId };
+      }
+      nextReflections[nodeId] = trimmed;
+      return {
+        ...s,
+        reflections: nextReflections,
+        reflectionOrder: [nodeId, ...withoutId],
+      };
+    });
   }, []);
 
   const resetAll = useCallback(() => setState(initialState), []);

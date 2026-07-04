@@ -54,10 +54,12 @@ function NodePage() {
 
   useEffect(() => {
     if (!hydrated) return;
-    const t = window.setTimeout(() => saveReflection(node.id, reflection), 300);
+    const current = state.reflections[node.id] ?? "";
+    if (current === reflection) return;
+    const t = window.setTimeout(() => saveReflection(node.id, reflection), 250);
     return () => window.clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reflection, hydrated, node.id]);
+  }, [reflection, hydrated, node.id, state.reflections, saveReflection]);
+
   const cluster = CLUSTERS.find((c) => c.id === node.cluster)!;
   const buildsOn = (node.buildsOn as string[])
     .map((id: string) => NODES.find((n) => n.id === id))
@@ -140,19 +142,6 @@ function NodePage() {
         </a>
       )}
 
-      <section className="mb-4 rounded-xl border border-border bg-card p-4">
-        <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-          your reflection
-        </div>
-        <textarea
-          value={reflection}
-          onChange={(e) => setReflection(e.target.value)}
-          placeholder="One line, in your own words - what's the takeaway?"
-          rows={2}
-          className="w-full resize-none bg-transparent text-[13px] leading-relaxed text-foreground outline-none placeholder:text-muted-foreground/60"
-        />
-      </section>
-
       <div className="sticky bottom-24 mt-8 flex justify-center">
         <button
           type="button"
@@ -167,6 +156,27 @@ function NodePage() {
           <Check className="h-4 w-4" />
           {got ? "got it" : "mark as got it"}
         </button>
+      </div>
+
+      <div className="mt-6">
+        <label
+          htmlFor="reflection"
+          className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground"
+        >
+          your one-line takeaway
+          <span className="ml-2 text-[10px] normal-case tracking-normal text-muted-foreground/60">
+            (optional, autosaved)
+          </span>
+        </label>
+        <textarea
+          id="reflection"
+          value={reflection}
+          onChange={(e) => setReflection(e.target.value)}
+          placeholder="what stuck with you?"
+          rows={2}
+          spellCheck={false}
+          className="w-full resize-none rounded-lg border border-border bg-card px-3 py-2 text-[13px] leading-6 text-foreground caret-primary outline-none placeholder:text-muted-foreground/60 focus:border-primary"
+        />
       </div>
     </article>
   );
