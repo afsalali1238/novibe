@@ -83,12 +83,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "A non-linear topic map for AI literacy. Six clusters, thirty nodes, three depths each. Read as deep as curiosity goes.",
+          "A non-linear topic map for AI literacy. Six clusters, 33 nodes, three depths each. Read as deep as curiosity goes.",
       },
       { name: "author", content: "Novibe" },
       { name: "theme-color", content: "#ffffff" },
       { property: "og:title", content: "Novibe - The Map" },
-      { property: "og:description", content: "A non-linear topic map for AI literacy. 30 nodes across 6 clusters." },
+      { property: "og:description", content: "A non-linear topic map for AI literacy. 33 nodes across 6 clusters." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },

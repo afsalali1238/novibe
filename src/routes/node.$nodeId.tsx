@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
 import { ArrowLeft, Check, ChevronRight } from "lucide-react";
 import { ExternalLink } from "lucide-react";
+import { useEffect, useState } from "react";
 import { CLUSTERS, NODES, findNode, type NodeContent } from "../data/nodes";
 import { useMapState } from "../hooks/useMapState";
 
@@ -41,9 +42,22 @@ function NodeNotFound() {
 
 function NodePage() {
   const { node } = Route.useLoaderData() as { node: NodeContent };
-  const { isGot, toggleGot } = useMapState();
+  const { isGot, toggleGot, state, saveReflection, hydrated } = useMapState();
   const router = useRouter();
   const got = isGot(node.id);
+  const [reflection, setReflection] = useState("");
+
+  useEffect(() => {
+    if (hydrated) setReflection(state.reflections[node.id] ?? "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated, node.id]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    const t = window.setTimeout(() => saveReflection(node.id, reflection), 300);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reflection, hydrated, node.id]);
   const cluster = CLUSTERS.find((c) => c.id === node.cluster)!;
   const buildsOn = (node.buildsOn as string[])
     .map((id: string) => NODES.find((n) => n.id === id))
@@ -125,6 +139,19 @@ function NodePage() {
           <span>{node.videoTitle ?? "explainer"}</span>
         </a>
       )}
+
+      <section className="mb-4 rounded-xl border border-border bg-card p-4">
+        <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+          your reflection
+        </div>
+        <textarea
+          value={reflection}
+          onChange={(e) => setReflection(e.target.value)}
+          placeholder="One line, in your own words - what's the takeaway?"
+          rows={2}
+          className="w-full resize-none bg-transparent text-[13px] leading-relaxed text-foreground outline-none placeholder:text-muted-foreground/60"
+        />
+      </section>
 
       <div className="sticky bottom-24 mt-8 flex justify-center">
         <button

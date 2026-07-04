@@ -10,13 +10,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "A non-linear topic map for AI literacy. Six clusters, thirty nodes, three depths each. Open any node, read as deep as you're curious.",
+          "A non-linear topic map for AI literacy. Six clusters, 33 nodes, three depths each. Open any node, read as deep as you're curious.",
       },
       { property: "og:title", content: "Novibe - The Map" },
       {
         property: "og:description",
         content:
-          "Non-linear map for AI literacy. Six clusters, thirty nodes. Read as deep as curiosity goes.",
+          "Non-linear map for AI literacy. Six clusters, 33 nodes. Read as deep as curiosity goes.",
       },
     ],
   }),
@@ -128,7 +128,7 @@ function Home() {
       </div>
 
       <p className="mt-8 text-center font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-        // 30 nodes · 6 clusters · read anywhere
+        // {TOTAL_NODES} nodes · 6 clusters · read anywhere
       </p>
     </div>
   );

@@ -11,9 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as SandboxRouteImport } from './routes/sandbox'
+import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NodeNodeIdRouteImport } from './routes/node.$nodeId'
 
+const GlossaryRoute = GlossaryRouteImport.update({
+  id: '/glossary',
+  path: '/glossary',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StatsRoute = StatsRouteImport.update({
   id: '/stats',
   path: '/stats',
@@ -38,12 +44,14 @@ const NodeNodeIdRoute = NodeNodeIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/sandbox': typeof SandboxRoute
+  '/glossary': typeof GlossaryRoute
   '/stats': typeof StatsRoute
   '/node/$nodeId': typeof NodeNodeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/sandbox': typeof SandboxRoute
+  '/glossary': typeof GlossaryRoute
   '/stats': typeof StatsRoute
   '/node/$nodeId': typeof NodeNodeIdRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/sandbox': typeof SandboxRoute
+  '/glossary': typeof GlossaryRoute
   '/stats': typeof StatsRoute
   '/node/$nodeId': typeof NodeNodeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sandbox' | '/stats' | '/node/$nodeId'
+  fullPaths: '/' | '/sandbox' | '/glossary' | '/stats' | '/node/$nodeId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sandbox' | '/stats' | '/node/$nodeId'
-  id: '__root__' | '/' | '/sandbox' | '/stats' | '/node/$nodeId'
+  to: '/' | '/sandbox' | '/glossary' | '/stats' | '/node/$nodeId'
+  id: '__root__' | '/' | '/sandbox' | '/glossary' | '/stats' | '/node/$nodeId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SandboxRoute: typeof SandboxRoute
+  GlossaryRoute: typeof GlossaryRoute
   StatsRoute: typeof StatsRoute
   NodeNodeIdRoute: typeof NodeNodeIdRoute
 }
@@ -83,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/sandbox'
       fullPath: '/sandbox'
       preLoaderRoute: typeof SandboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/glossary': {
+      id: '/glossary'
+      path: '/glossary'
+      fullPath: '/glossary'
+      preLoaderRoute: typeof GlossaryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SandboxRoute: SandboxRoute,
+  GlossaryRoute: GlossaryRoute,
   StatsRoute: StatsRoute,
   NodeNodeIdRoute: NodeNodeIdRoute,
 }

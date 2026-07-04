@@ -14,12 +14,14 @@ export type MapState = {
   gotIt: string[];
   activityDates: string[]; // YYYY-MM-DD, unique, unsorted
   notes: string;
+  reflections: Record<string, string>; // nodeId -> one-line reflection
 };
 
 const initialState: MapState = {
   gotIt: [],
   activityDates: [],
   notes: "",
+  reflections: {},
 };
 
 function today(): string {
@@ -84,6 +86,7 @@ type Ctx = {
   isGot: (id: string) => boolean;
   toggleGot: (id: string) => void;
   saveNotes: (t: string) => void;
+  saveReflection: (nodeId: string, t: string) => void;
   resetAll: () => void;
   weeklySummary: () => { nodesThisWeek: number; clustersThisWeek: number };
 };
@@ -132,6 +135,10 @@ export function MapStateProvider({ children }: { children: ReactNode }) {
     setState((s) => ({ ...s, notes: t }));
   }, []);
 
+  const saveReflection = useCallback((nodeId: string, t: string) => {
+    setState((s) => ({ ...s, reflections: { ...s.reflections, [nodeId]: t } }));
+  }, []);
+
   const resetAll = useCallback(() => setState(initialState), []);
 
   const streak = useMemo(
@@ -147,6 +154,7 @@ export function MapStateProvider({ children }: { children: ReactNode }) {
       isGot: (id) => state.gotIt.includes(id),
       toggleGot,
       saveNotes,
+      saveReflection,
       resetAll,
       weeklySummary: () => {
         // Not derived here - callers can compute; keep here for convenience.
@@ -154,7 +162,7 @@ export function MapStateProvider({ children }: { children: ReactNode }) {
         return { nodesThisWeek: 0, clustersThisWeek: 0 };
       },
     }),
-    [state, hydrated, streak, toggleGot, saveNotes, resetAll],
+    [state, hydrated, streak, toggleGot, saveNotes, saveReflection, resetAll],
   );
 
   return <MapContext.Provider value={value}>{children}</MapContext.Provider>;

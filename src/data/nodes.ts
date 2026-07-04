@@ -53,20 +53,20 @@ export const NODES: NodeContent[] = [
     layer2:
       "Go to any tokenizer tool (search \"OpenAI tokenizer\" or use Anthropic's docs) and paste a paragraph of your own writing. Count how many tokens vs. words it produces. Then paste something in Arabic or another non-English language and compare the token count for the same amount of meaning - notice non-English text often costs more tokens.",
     diagram: `<svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="30" text-anchor="middle" font-size="13" fill="var(--muted-foreground)" font-family="ui-monospace, monospace" letter-spacing="0.5">THE MODEL NEVER SEES WORDS - IT SEES TOKENS</text>
+  <text x="300" y="30" text-anchor="middle" font-size="13" fill="var(--muted-foreground)" font-family="ui-monospace, monospace" letter-spacing="0.5">THE MODEL NEVER SEES WORDS — IT SEES TOKENS</text>
   <rect x="220" y="55" width="160" height="34" rx="6" fill="var(--card)" stroke="var(--border)"/>
   <text x="300" y="77" text-anchor="middle" font-size="15" fill="var(--foreground)" font-family="ui-monospace, monospace">unbelievable</text>
   <line x1="300" y1="89" x2="300" y2="112" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#arrow)"/>
   <text x="330" y="105" font-size="10" fill="var(--muted-foreground)">tokenizer</text>
   <g font-family="ui-monospace, monospace" font-size="14">
-    <rect x="130" y="118" width="60" height="34" rx="6" fill="color-mix(in oklab, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
+    <rect x="130" y="118" width="60" height="34" rx="6" fill="color-mix(in oklch, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
     <text x="160" y="140" text-anchor="middle" fill="var(--primary)">un</text>
-    <rect x="200" y="118" width="110" height="34" rx="6" fill="color-mix(in oklab, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
+    <rect x="200" y="118" width="110" height="34" rx="6" fill="color-mix(in oklch, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
     <text x="255" y="140" text-anchor="middle" fill="var(--accent)">believ</text>
-    <rect x="320" y="118" width="80" height="34" rx="6" fill="color-mix(in oklab, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
+    <rect x="320" y="118" width="80" height="34" rx="6" fill="color-mix(in oklch, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
     <text x="360" y="140" text-anchor="middle" fill="var(--warning)">able</text>
   </g>
-  <text x="300" y="172" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">3 tokens, not 1 word - this is what you're billed and limited by</text>
+  <text x="300" y="172" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">3 tokens, not 1 word — this is what you're billed and limited by</text>
   <defs>
     <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
       <path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/>
@@ -98,7 +98,7 @@ export const NODES: NodeContent[] = [
     layer2:
       "Paste a long document into Claude (5,000+ words) along with one specific instruction buried in the middle of it, and one at the very end. Ask a question that requires both. Notice which one it follows more reliably - a live demonstration of context window behavior.",
     diagram: `<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="24" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">CONTEXT WINDOW - ONLY WHAT'S INSIDE THE BOX EXISTS TO THE MODEL</text>
+  <text x="300" y="24" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">CONTEXT WINDOW — ONLY WHAT'S INSIDE THE BOX EXISTS TO THE MODEL</text>
   <g opacity="0.35">
     <rect x="10" y="70" width="70" height="60" rx="6" fill="var(--card)" stroke="var(--border)" stroke-dasharray="3 3"/>
     <text x="45" y="103" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">msg 1</text>
@@ -114,10 +114,10 @@ export const NODES: NodeContent[] = [
   <text x="310" y="103" text-anchor="middle" font-size="10" fill="var(--foreground)">msg 4</text>
   <rect x="355" y="70" width="70" height="60" rx="6" fill="var(--card)" stroke="var(--border)"/>
   <text x="390" y="103" text-anchor="middle" font-size="10" fill="var(--foreground)">msg 5</text>
-  <rect x="435" y="70" width="70" height="60" rx="6" fill="color-mix(in oklab, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
+  <rect x="435" y="70" width="70" height="60" rx="6" fill="color-mix(in oklch, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
   <text x="470" y="98" text-anchor="middle" font-size="10" fill="var(--accent)">your new</text>
   <text x="470" y="112" text-anchor="middle" font-size="10" fill="var(--accent)">message</text>
-  <text x="300" y="175" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Once full, the oldest messages drop out to make room - the model never "remembers" them again</text>
+  <text x="300" y="175" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Once full, the oldest messages drop out to make room — the model never "remembers" them again</text>
 </svg>`,
   },
   {
@@ -131,6 +131,18 @@ export const NODES: NodeContent[] = [
       "The model has no built-in fact-checking step - it doesn't distinguish between \"I recall this precisely\" and \"this pattern feels right.\" Hallucination rates go up with obscure facts, exact numbers, quotes, and citations - anything requiring precision rather than pattern completion. This is exactly why tools like web search or RAG (Cluster C) exist: to give the model real, current text to ground its answer in, instead of relying purely on memorized patterns.",
     layer2:
       "Ask Claude or ChatGPT (without web search enabled) for \"the exact publication date and page number of a specific quote\" from an obscure book. Then ask it to search the web for the same thing. Compare confidence and accuracy - a direct feel for grounded vs. ungrounded answers.",
+  },
+  {
+    id: "a6",
+    cluster: "A",
+    title: "AI safety, alignment & jailbreaks",
+    buildsOn: ["a1"],
+    layer0:
+      "\"Alignment\" is the effort to make an AI model actually do what humans intend, not just what a prompt literally says or what maximizes some narrow objective - the gap between \"did what I said\" and \"did what I meant\" is the core alignment problem. A \"jailbreak\" is a prompt crafted specifically to bypass a model's built-in safety training and get it to say or do something its provider tried to prevent. Neither is solved - it's active, ongoing work at every major lab, not a checkbox that gets ticked once.",
+    layer1:
+      "Providers layer safety training (RLHF, constitutional AI, red-teaming) on top of raw next-token prediction to reduce harmful, biased, or dangerous outputs. That training is shaped by imperfect human judgment calls, so it's never airtight - clever rephrasing, role-play framing, or multi-step prompts can sometimes get a model to produce something it would normally refuse. \"Alignment\" spans this narrow \"don't say bad things\" layer all the way up to much harder questions about whether increasingly capable, autonomous systems reliably pursue the goals we actually intend once they're taking real-world actions (see autonomy levels, E4) rather than just talking.",
+    layer2:
+      "Ask a model to explain the reasoning behind one of its own refusals - \"why did you decline that specific request?\" - and notice it can usually articulate the actual safety principle involved, rather than giving a generic canned response. That's a direct, honest look at how alignment training shows up in a real conversation.",
   },
   {
     id: "b1",
@@ -204,16 +216,16 @@ export const NODES: NodeContent[] = [
     layer2:
       "Case example: think about ProvaCV or AfzalOS - any tool where an AI needs to answer using specific documents (a CV, a vault of notes) rather than general knowledge is a RAG-shaped problem, even if it's built simply.",
     diagram: `<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="22" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">RAG - GROUNDING THE MODEL IN YOUR OWN DOCUMENTS</text>
+  <text x="300" y="22" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">RAG — GROUNDING THE MODEL IN YOUR OWN DOCUMENTS</text>
   <rect x="10" y="70" width="90" height="50" rx="8" fill="var(--card)" stroke="var(--border)"/>
   <text x="55" y="99" text-anchor="middle" font-size="11" fill="var(--foreground)">Your</text>
   <text x="55" y="112" text-anchor="middle" font-size="11" fill="var(--foreground)">question</text>
   <path d="M100 95 L140 95" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a1)"/>
-  <rect x="145" y="70" width="90" height="50" rx="8" fill="color-mix(in oklab, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
+  <rect x="145" y="70" width="90" height="50" rx="8" fill="color-mix(in oklch, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
   <text x="190" y="99" text-anchor="middle" font-size="11" fill="var(--primary)">Search your</text>
   <text x="190" y="112" text-anchor="middle" font-size="11" fill="var(--primary)">documents</text>
   <path d="M235 95 L275 95" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a1)"/>
-  <rect x="280" y="70" width="90" height="50" rx="8" fill="color-mix(in oklab, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
+  <rect x="280" y="70" width="90" height="50" rx="8" fill="color-mix(in oklch, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
   <text x="325" y="93" text-anchor="middle" font-size="11" fill="var(--accent)">Relevant</text>
   <text x="325" y="106" text-anchor="middle" font-size="11" fill="var(--accent)">chunks found</text>
   <path d="M370 95 L410 95" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a1)"/>
@@ -221,10 +233,10 @@ export const NODES: NodeContent[] = [
   <text x="455" y="99" text-anchor="middle" font-size="11" fill="var(--foreground)">Model reads</text>
   <text x="455" y="112" text-anchor="middle" font-size="10" fill="var(--foreground)">question + chunks</text>
   <path d="M495 95 L535 95" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a1)"/>
-  <rect x="540" y="70" width="55" height="50" rx="8" fill="color-mix(in oklab, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
+  <rect x="540" y="70" width="55" height="50" rx="8" fill="color-mix(in oklch, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
   <text x="567" y="99" text-anchor="middle" font-size="10" fill="var(--warning)">Grounded</text>
   <text x="567" y="111" text-anchor="middle" font-size="10" fill="var(--warning)">answer</text>
-  <text x="300" y="165" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Without this, the model answers from memorized training data only - often wrong for anything specific to you</text>
+  <text x="300" y="165" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Without this, the model answers from memorized training data only — often wrong for anything specific to you</text>
   <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
   },
@@ -276,7 +288,7 @@ export const NODES: NodeContent[] = [
     layer2:
       "No task needed to grasp this conceptually - but if curious, search \"embedding projector visualization\" to see an actual 3D map of words/sentences clustered by meaning; seeing similar concepts cluster together makes the idea concrete fast.",
     diagram: `<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">EMBEDDINGS - SIMILAR MEANING = CLOSE TOGETHER</text>
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">EMBEDDINGS — SIMILAR MEANING = CLOSE TOGETHER</text>
   <rect x="30" y="35" width="540" height="155" rx="10" fill="none" stroke="var(--border)"/>
   <g fill="var(--primary)">
     <circle cx="120" cy="80" r="4"/>
@@ -296,6 +308,7 @@ export const NODES: NodeContent[] = [
     <circle cx="245" cy="170" r="4"/>
   </g>
   <text x="230" y="190" font-size="11" fill="var(--warning)">happy · joyful · glad</text>
+  <text x="300" y="210" text-anchor="middle" font-size="11" fill="var(--muted-foreground)" opacity="0">spacer</text>
 </svg>`,
   },
   {
@@ -359,6 +372,18 @@ export const NODES: NodeContent[] = [
       "Advisory case: if a healthcare-AI conversation ever raises \"patient data can't leave our servers,\" that's exactly the scenario where open-source/self-hosted becomes the right call over a closed API - a good real test of whether you can apply this distinction correctly.",
   },
   {
+    id: "d6",
+    cluster: "D",
+    title: "Multimodal models: image, video, audio",
+    buildsOn: ["a1", "d1"],
+    layer0:
+      "An LLM only reads and writes text. A multimodal model extends the same core idea - predict the next chunk - to other formats: generating or understanding images, video, or audio, or combining several at once (describe this image, narrate this video). You already use two of these directly - ElevenLabs (text to voice) and Runway (text/image to video) are both multimodal generation tools, each specialized to one output type.",
+    layer1:
+      "Under the hood these aren't fundamentally different from LLMs - many use the same transformer architecture, just trained on tokenized pixels, audio waveforms, or video frames instead of (or alongside) text; newer \"world models\" go further, learning to predict how a whole scene evolves over time rather than generating one static image. General-purpose multimodal models (recent Claude, GPT, and Gemini versions) can take an image or audio clip as input and reason about it inside the same conversation as text; dedicated generation tools like Runway or ElevenLabs are usually narrower, tuned specifically for output quality in one modality rather than general reasoning.",
+    layer2:
+      "Take a real Kasper or Provia asset - a photo, or a short script - and run it through two paths: describe it in words to a text-only model, versus feeding the actual image or audio directly to a multimodal model. Notice how much nuance your text description loses compared to the model reasoning over the real file.",
+  },
+  {
     id: "e1",
     cluster: "E",
     title: "What actually makes something an \"agent\"",
@@ -371,11 +396,11 @@ export const NODES: NodeContent[] = [
       "Take something you already automated manually in n8n/Make and ask: at which step did you make the decision vs. the AI? Relabeling your own workflow this way is the fastest way to see the human/agent line clearly.",
     diagram: `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
   <text x="200" y="24" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">THE AGENT LOOP</text>
-  <rect x="150" y="45" width="100" height="46" rx="8" fill="color-mix(in oklab, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
+  <rect x="150" y="45" width="100" height="46" rx="8" fill="color-mix(in oklch, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
   <text x="200" y="73" text-anchor="middle" font-size="12" fill="var(--primary)">Observe</text>
-  <rect x="290" y="177" width="100" height="46" rx="8" fill="color-mix(in oklab, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
+  <rect x="290" y="177" width="100" height="46" rx="8" fill="color-mix(in oklch, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
   <text x="340" y="205" text-anchor="middle" font-size="12" fill="var(--accent)">Decide</text>
-  <rect x="150" y="309" width="100" height="46" rx="8" fill="color-mix(in oklab, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
+  <rect x="150" y="309" width="100" height="46" rx="8" fill="color-mix(in oklch, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
   <text x="200" y="337" text-anchor="middle" font-size="12" fill="var(--warning)">Act (tool)</text>
   <rect x="10" y="177" width="100" height="46" rx="8" fill="var(--card)" stroke="var(--border)"/>
   <text x="60" y="205" text-anchor="middle" font-size="12" fill="var(--foreground)">Result</text>
@@ -383,7 +408,7 @@ export const NODES: NodeContent[] = [
   <path d="M335 224 L245 305" stroke="var(--muted-foreground)" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
   <path d="M150 328 L75 225" stroke="var(--muted-foreground)" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
   <path d="M65 176 L155 90" stroke="var(--muted-foreground)" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
-  <text x="200" y="385" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Same model, called repeatedly - the "intelligence" is in the loop, not one big prompt</text>
+  <text x="200" y="385" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Same model, called repeatedly — the "intelligence" is in the loop, not one big prompt</text>
   <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
   },
@@ -399,12 +424,12 @@ export const NODES: NodeContent[] = [
     layer2:
       "Ask Claude \"what's the weather in Dubai right now\" - you're watching tool use happen live. Notice the model doesn't know this from training; it had to decide to call a tool, and that tool's real result got fed back in before the final answer.",
     diagram: `<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">TOOL USE - THE MODEL NEVER ACTS DIRECTLY</text>
-  <rect x="20" y="70" width="120" height="55" rx="8" fill="color-mix(in oklab, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">TOOL USE — THE MODEL NEVER ACTS DIRECTLY</text>
+  <rect x="20" y="70" width="120" height="55" rx="8" fill="color-mix(in oklch, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
   <text x="80" y="94" text-anchor="middle" font-size="11" fill="var(--primary)">Model outputs:</text>
   <text x="80" y="110" text-anchor="middle" font-size="10" fill="var(--primary)" font-family="ui-monospace, monospace">"call weather_api"</text>
   <path d="M140 97 L185 97" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a3)"/>
-  <rect x="190" y="70" width="120" height="55" rx="8" fill="color-mix(in oklab, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
+  <rect x="190" y="70" width="120" height="55" rx="8" fill="color-mix(in oklch, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
   <text x="250" y="94" text-anchor="middle" font-size="11" fill="var(--warning)">App actually</text>
   <text x="250" y="110" text-anchor="middle" font-size="11" fill="var(--warning)">calls the API</text>
   <path d="M310 97 L355 97" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a3)"/>
@@ -413,7 +438,7 @@ export const NODES: NodeContent[] = [
   <text x="415" y="110" text-anchor="middle" font-size="10" fill="var(--foreground)">"28°C, sunny"</text>
   <path d="M415 125 Q415 160 250 160 Q140 160 100 128" stroke="var(--muted-foreground)" stroke-width="1.5" fill="none" marker-end="url(#a3)"/>
   <text x="260" y="150" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">fed back in as new context</text>
-  <rect x="490" y="70" width="90" height="55" rx="8" fill="color-mix(in oklab, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
+  <rect x="490" y="70" width="90" height="55" rx="8" fill="color-mix(in oklch, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
   <text x="535" y="94" text-anchor="middle" font-size="11" fill="var(--accent)">Final</text>
   <text x="535" y="110" text-anchor="middle" font-size="11" fill="var(--accent)">answer</text>
   <path d="M470 97 L485 97" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a3)"/>
@@ -433,13 +458,13 @@ export const NODES: NodeContent[] = [
       "Notice, right now, that this conversation \"knows\" things about your work at Kasper from before - that's long-term memory in action: facts stored elsewhere, silently re-inserted into context, not the model recalling on its own.",
     diagram: `<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
   <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">MEMORY IS ENGINEERING, NOT THE MODEL LEARNING</text>
-  <rect x="30" y="45" width="230" height="130" rx="10" fill="color-mix(in oklab, var(--primary) 6%, transparent)" stroke="var(--primary)"/>
+  <rect x="30" y="45" width="230" height="130" rx="10" fill="color-mix(in oklch, var(--primary) 6%, transparent)" stroke="var(--primary)"/>
   <text x="145" y="65" text-anchor="middle" font-size="11" fill="var(--primary)" letter-spacing="0.3">SHORT-TERM (context window)</text>
   <rect x="50" y="80" width="190" height="24" rx="4" fill="var(--card)" stroke="var(--border)"/>
   <text x="145" y="96" text-anchor="middle" font-size="10" fill="var(--foreground)">this conversation so far</text>
   <rect x="50" y="112" width="190" height="24" rx="4" fill="var(--card)" stroke="var(--border)"/>
   <text x="145" y="128" text-anchor="middle" font-size="10" fill="var(--foreground)">disappears when chat ends</text>
-  <rect x="340" y="45" width="230" height="130" rx="10" fill="color-mix(in oklab, var(--accent) 6%, transparent)" stroke="var(--accent)"/>
+  <rect x="340" y="45" width="230" height="130" rx="10" fill="color-mix(in oklch, var(--accent) 6%, transparent)" stroke="var(--accent)"/>
   <text x="455" y="65" text-anchor="middle" font-size="11" fill="var(--accent)" letter-spacing="0.3">LONG-TERM (database)</text>
   <rect x="360" y="80" width="190" height="24" rx="4" fill="var(--card)" stroke="var(--border)"/>
   <text x="455" y="96" text-anchor="middle" font-size="10" fill="var(--foreground)">saved facts about you</text>
@@ -463,14 +488,14 @@ export const NODES: NodeContent[] = [
     layer2:
       "Design (on paper, no build needed) an autonomy ladder for one real Kasper task - e.g. \"operator onboarding follow-up\": what would level-1 (approve every message) vs. level-3 (fully autonomous) look like, and where would you personally draw the line?",
     diagram: `<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">AUTONOMY LADDER - MORE FREEDOM, MORE RISK</text>
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">AUTONOMY LADDER — MORE FREEDOM, MORE RISK</text>
   <rect x="60" y="130" width="480" height="40" rx="6" fill="var(--card)" stroke="var(--border)"/>
-  <text x="80" y="155" font-size="12" fill="var(--foreground)">Level 1 - human approves every single step</text>
-  <rect x="60" y="80" width="480" height="40" rx="6" fill="color-mix(in oklab, var(--warning) 10%, transparent)" stroke="var(--warning)"/>
-  <text x="80" y="105" font-size="12" fill="var(--warning)">Level 2 - human sets goal, checks in periodically</text>
-  <rect x="60" y="30" width="480" height="40" rx="6" fill="color-mix(in oklab, var(--destructive) 10%, transparent)" stroke="var(--destructive)"/>
-  <text x="80" y="55" font-size="12" fill="var(--destructive)">Level 3 - fully autonomous, reports only at the end</text>
-  <text x="300" y="200" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Higher levels need proportionally stronger guardrails - logging, tool limits, approval gates on irreversible actions</text>
+  <text x="80" y="155" font-size="12" fill="var(--foreground)">Level 1 — human approves every single step</text>
+  <rect x="60" y="80" width="480" height="40" rx="6" fill="color-mix(in oklch, var(--warning) 10%, transparent)" stroke="var(--warning)"/>
+  <text x="80" y="105" font-size="12" fill="var(--warning)">Level 2 — human sets goal, checks in periodically</text>
+  <rect x="60" y="30" width="480" height="40" rx="6" fill="color-mix(in oklch, var(--destructive) 10%, transparent)" stroke="var(--destructive)"/>
+  <text x="80" y="55" font-size="12" fill="var(--destructive)">Level 3 — fully autonomous, reports only at the end</text>
+  <text x="300" y="200" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Higher levels need proportionally stronger guardrails — logging, tool limits, approval gates on irreversible actions</text>
 </svg>`,
   },
   {
@@ -485,21 +510,33 @@ export const NODES: NodeContent[] = [
     layer2:
       "Take one of your own multi-step Claude skills (e.g. cv-tailoring) and map it explicitly as a chain: what's step 1's exact input/output, what feeds into step 2, etc. You'll likely find you've been orchestrating without naming it as such.",
     diagram: `<svg viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
-  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">ORCHESTRATION - SMALL VERIFIABLE JOBS, CHAINED</text>
-  <rect x="30" y="55" width="140" height="55" rx="8" fill="color-mix(in oklab, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">ORCHESTRATION — SMALL VERIFIABLE JOBS, CHAINED</text>
+  <rect x="30" y="55" width="140" height="55" rx="8" fill="color-mix(in oklch, var(--primary) 12%, transparent)" stroke="var(--primary)"/>
   <text x="100" y="79" text-anchor="middle" font-size="12" fill="var(--primary)">Classify</text>
   <text x="100" y="94" text-anchor="middle" font-size="9" fill="var(--primary)">raw transcript</text>
   <path d="M170 82 L215 82" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a5)"/>
-  <rect x="220" y="55" width="140" height="55" rx="8" fill="color-mix(in oklab, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
+  <rect x="220" y="55" width="140" height="55" rx="8" fill="color-mix(in oklch, var(--accent) 12%, transparent)" stroke="var(--accent)"/>
   <text x="290" y="79" text-anchor="middle" font-size="12" fill="var(--accent)">Extract</text>
   <text x="290" y="94" text-anchor="middle" font-size="9" fill="var(--accent)">key details</text>
   <path d="M360 82 L405 82" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a5)"/>
-  <rect x="410" y="55" width="150" height="55" rx="8" fill="color-mix(in oklab, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
+  <rect x="410" y="55" width="150" height="55" rx="8" fill="color-mix(in oklch, var(--warning) 12%, transparent)" stroke="var(--warning)"/>
   <text x="485" y="79" text-anchor="middle" font-size="12" fill="var(--warning)">Draft</text>
   <text x="485" y="94" text-anchor="middle" font-size="9" fill="var(--warning)">follow-up email</text>
-  <text x="300" y="140" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Each box is one narrow, checkable AI call - not one giant prompt trying to do everything</text>
+  <text x="300" y="140" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Each box is one narrow, checkable AI call — not one giant prompt trying to do everything</text>
   <defs><marker id="a5" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
+  },
+  {
+    id: "e6",
+    cluster: "E",
+    title: "Prompt injection & AI security",
+    buildsOn: ["e2"],
+    layer0:
+      "Prompt injection is what happens when untrusted text - a webpage, an email, a document, a message from someone else - contains hidden instructions that an AI system reads and mistakenly follows as if they came from you, the actual user. It's the AI-era version of the classic security rule \"never trust user input,\" except here the \"input\" can be anything the model reads, not just what you typed.",
+    layer1:
+      "This becomes a real risk specifically once a model has tool use (E2) or reads content it didn't generate itself - an AI agent that reads emails, browses the web, or opens documents on your behalf can be quietly told, by the content itself, to exfiltrate data, take unintended actions, or ignore its real instructions. Defenses are still evolving: treating fetched content as data rather than commands, requiring human approval before irreversible actions (tying back to the autonomy ladder, E4), and sandboxing what tools an agent is allowed to call are the main mitigations today - there's no fully solved fix yet.",
+    layer2:
+      "Directly relevant to what you build: next time you design or evaluate a feature where an AI reads content from outside the user (an inbox, a scraped webpage, an uploaded document), ask explicitly - \"if this content contained hidden instructions, what's the worst it could make the AI do, and what actually stops that?\" That single question is most of what security-conscious AI product design really is.",
   },
   {
     id: "f1",
@@ -519,17 +556,17 @@ export const NODES: NodeContent[] = [
   <path d="M270 75 L110 130" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a6)"/>
   <path d="M300 75 L300 130" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a6)"/>
   <path d="M330 75 L490 130" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a6)"/>
-  <rect x="20" y="135" width="180" height="60" rx="8" fill="color-mix(in oklab, var(--primary) 10%, transparent)" stroke="var(--primary)"/>
+  <rect x="20" y="135" width="180" height="60" rx="8" fill="color-mix(in oklch, var(--primary) 10%, transparent)" stroke="var(--primary)"/>
   <text x="110" y="158" text-anchor="middle" font-size="12" fill="var(--primary)">Buy</text>
   <text x="110" y="173" text-anchor="middle" font-size="10" fill="var(--primary)">existing tool solves it</text>
-  <text x="110" y="186" text-anchor="middle" font-size="10" fill="var(--primary)">- most common answer</text>
-  <rect x="210" y="135" width="180" height="60" rx="8" fill="color-mix(in oklab, var(--accent) 10%, transparent)" stroke="var(--accent)"/>
+  <text x="110" y="186" text-anchor="middle" font-size="10" fill="var(--primary)">— most common answer</text>
+  <rect x="210" y="135" width="180" height="60" rx="8" fill="color-mix(in oklch, var(--accent) 10%, transparent)" stroke="var(--accent)"/>
   <text x="300" y="158" text-anchor="middle" font-size="12" fill="var(--accent)">Build</text>
   <text x="300" y="173" text-anchor="middle" font-size="10" fill="var(--accent)">API + prompting + RAG</text>
-  <text x="300" y="186" text-anchor="middle" font-size="10" fill="var(--accent)">- usually the right call</text>
-  <rect x="400" y="135" width="180" height="60" rx="8" fill="color-mix(in oklab, var(--warning) 10%, transparent)" stroke="var(--warning)"/>
+  <text x="300" y="186" text-anchor="middle" font-size="10" fill="var(--accent)">— usually the right call</text>
+  <rect x="400" y="135" width="180" height="60" rx="8" fill="color-mix(in oklch, var(--warning) 10%, transparent)" stroke="var(--warning)"/>
   <text x="490" y="158" text-anchor="middle" font-size="12" fill="var(--warning)">Fine-tune</text>
-  <text x="490" y="173" text-anchor="middle" font-size="10" fill="var(--warning)">rare - narrow, high-scale,</text>
+  <text x="490" y="173" text-anchor="middle" font-size="10" fill="var(--warning)">rare — narrow, high-scale,</text>
   <text x="490" y="186" text-anchor="middle" font-size="10" fill="var(--warning)">prompting genuinely can't do it</text>
   <defs><marker id="a6" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
