@@ -526,6 +526,18 @@ export const NODES: NodeContent[] = [
 </svg>`,
   },
   {
+    id: "e6",
+    cluster: "E",
+    title: "Prompt Injection & AI Security",
+    buildsOn: ["a6", "b2"],
+    layer0:
+      "Prompt injection is an attack where malicious instructions are hidden inside content an AI is asked to read, tricking it into doing something its developer never intended. If a system prompt is the model's \"boss,\" prompt injection is a stranger slipping a fake note under the door claiming to be from the boss. It's genuinely hard to fully fix because models process instructions and data through the exact same stream of text — there's no built-in wall between \"trusted command\" and \"content I was just asked to summarize.\"",
+    layer1:
+      "This is often called the \"semantic gap\" — system instructions and external inputs share one token stream with no privilege separation, unlike traditional software where code and data are kept structurally apart. Indirect prompt injection (IPI) is the more dangerous enterprise version: the payload sits inside third-party content (a webpage, PDF, email) the user never directly sees, and the AI agent executes it under the user's own privileges. \"EchoLeak\" (CVE-2025-32711) showed this concretely — a hidden markdown instruction in an email caused Microsoft 365 Copilot to gather a user's private data and leak it via an auto-rendered image request, with zero clicks required. A separate Claude Code vulnerability (CVE-2026-21852) showed a related but distinct failure mode: a malicious repository's config file set the API endpoint to an attacker's server, and Claude Code read that setting and began sending API traffic — including the user's API key — before the user ever saw a trust prompt. Leading defenses use \"Spotlighting\" — wrapping untrusted external content in special markers or randomized delimiters so the model treats it as passive data rather than executable instructions.",
+    layer2:
+      "Look up \"EchoLeak CVE-2025-32711\" — the attack chain (hidden instruction → Copilot retrieves it as context → auto-renders an image pointing at an attacker's server → data leaks with zero clicks) is a clean, concrete case study of exactly why \"just tell the model not to do that\" isn't a real defense once untrusted content enters its context.",
+  },
+  {
     id: "f1",
     cluster: "F",
     title: "Build vs. buy vs. fine-tune",
