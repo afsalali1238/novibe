@@ -12,8 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as SandboxRouteImport } from './routes/sandbox'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as PlaygroundWeekIdRouteImport } from './routes/playground.$weekId'
-import { Route as DayDayIdRouteImport } from './routes/day.$dayId'
+import { Route as NodeNodeIdRouteImport } from './routes/node.$nodeId'
 
 const StatsRoute = StatsRouteImport.update({
   id: '/stats',
@@ -30,14 +29,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PlaygroundWeekIdRoute = PlaygroundWeekIdRouteImport.update({
-  id: '/playground/$weekId',
-  path: '/playground/$weekId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DayDayIdRoute = DayDayIdRouteImport.update({
-  id: '/day/$dayId',
-  path: '/day/$dayId',
+const NodeNodeIdRoute = NodeNodeIdRouteImport.update({
+  id: '/node/$nodeId',
+  path: '/node/$nodeId',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -45,44 +39,34 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/sandbox': typeof SandboxRoute
   '/stats': typeof StatsRoute
-  '/day/$dayId': typeof DayDayIdRoute
-  '/playground/$weekId': typeof PlaygroundWeekIdRoute
+  '/node/$nodeId': typeof NodeNodeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/sandbox': typeof SandboxRoute
   '/stats': typeof StatsRoute
-  '/day/$dayId': typeof DayDayIdRoute
-  '/playground/$weekId': typeof PlaygroundWeekIdRoute
+  '/node/$nodeId': typeof NodeNodeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/sandbox': typeof SandboxRoute
   '/stats': typeof StatsRoute
-  '/day/$dayId': typeof DayDayIdRoute
-  '/playground/$weekId': typeof PlaygroundWeekIdRoute
+  '/node/$nodeId': typeof NodeNodeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sandbox' | '/stats' | '/day/$dayId' | '/playground/$weekId'
+  fullPaths: '/' | '/sandbox' | '/stats' | '/node/$nodeId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sandbox' | '/stats' | '/day/$dayId' | '/playground/$weekId'
-  id:
-    | '__root__'
-    | '/'
-    | '/sandbox'
-    | '/stats'
-    | '/day/$dayId'
-    | '/playground/$weekId'
+  to: '/' | '/sandbox' | '/stats' | '/node/$nodeId'
+  id: '__root__' | '/' | '/sandbox' | '/stats' | '/node/$nodeId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SandboxRoute: typeof SandboxRoute
   StatsRoute: typeof StatsRoute
-  DayDayIdRoute: typeof DayDayIdRoute
-  PlaygroundWeekIdRoute: typeof PlaygroundWeekIdRoute
+  NodeNodeIdRoute: typeof NodeNodeIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -108,18 +92,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/playground/$weekId': {
-      id: '/playground/$weekId'
-      path: '/playground/$weekId'
-      fullPath: '/playground/$weekId'
-      preLoaderRoute: typeof PlaygroundWeekIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/day/$dayId': {
-      id: '/day/$dayId'
-      path: '/day/$dayId'
-      fullPath: '/day/$dayId'
-      preLoaderRoute: typeof DayDayIdRouteImport
+    '/node/$nodeId': {
+      id: '/node/$nodeId'
+      path: '/node/$nodeId'
+      fullPath: '/node/$nodeId'
+      preLoaderRoute: typeof NodeNodeIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -129,9 +106,18 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SandboxRoute: SandboxRoute,
   StatsRoute: StatsRoute,
-  DayDayIdRoute: DayDayIdRoute,
-  PlaygroundWeekIdRoute: PlaygroundWeekIdRoute,
+  NodeNodeIdRoute: NodeNodeIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
