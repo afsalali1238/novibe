@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Flame, Map as MapIcon } from "lucide-react";
+import { Flame } from "lucide-react";
 import { TOTAL_NODES } from "../../data/nodes";
 import { useMapState } from "../../hooks/useMapState";
 
@@ -12,9 +12,13 @@ export function TopBar() {
     <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-2xl items-center gap-3 px-4 pt-[max(env(safe-area-inset-top),0.25rem)] pb-2">
         <Link to="/" className="flex min-w-0 flex-1 items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md border border-primary/40 bg-primary/10 text-primary">
-            <MapIcon className="h-4 w-4" />
-          </div>
+          <img
+            src="/novibe-icon.png"
+            alt="Novibe"
+            width={32}
+            height={32}
+            className="h-8 w-8 rounded-md"
+          />
           <div className="min-w-0">
             <div className="truncate text-[14px] font-semibold tracking-tight text-foreground">
               Novibe
