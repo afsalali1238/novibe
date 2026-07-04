@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, BookOpen, Check, ExternalLink, ListChecks, Sparkles } from "lucide-react";
+import { ArrowLeft, BookOpen, Check, ExternalLink, Eye, Lightbulb, ListChecks, Sparkles, Zap } from "lucide-react";
 import { useMemo, useState } from "react";
 import { resourceUrl, WEEKS, type Day, type Week } from "../data/curriculum";
 import { lessonFor, type LessonTask } from "../data/lessons";
@@ -56,6 +56,9 @@ function DayPage() {
   } = useCourseState();
 
   const lesson = useMemo(() => lessonFor(day.id), [day.id]);
+  const [revealed, setRevealed] = useState(false);
+  const challenge = lesson?.challenge
+    ?? `Before I explain: think for 60 seconds — how would YOU approach "${day.topic.toLowerCase()}"? Jot a guess, then reveal the brief and see how close you were.`;
 
   const quiz = useMemo(() => quizFor(day.id), [day.id]);
   const quizDone = isQuizDone(day.id);
@@ -101,13 +104,51 @@ function DayPage() {
         </a>
       </header>
 
+      {/* Challenge-first — try before you read */}
+      <section className="rounded-xl border border-primary/30 bg-primary/5 p-4">
+        <div className="flex items-center gap-2">
+          <Zap className="h-4 w-4 text-primary" />
+          <h2 className="text-sm font-semibold text-foreground">Try this first</h2>
+          <span className="ml-auto rounded-full border border-primary/30 bg-background px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-primary">
+            challenge · then reveal
+          </span>
+        </div>
+        <p className="mt-2 text-[13.5px] leading-relaxed text-foreground/90">{challenge}</p>
+        {!revealed ? (
+          <button
+            type="button"
+            onClick={() => setRevealed(true)}
+            className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90"
+          >
+            <Eye className="h-3.5 w-3.5" /> Reveal the lesson
+          </button>
+        ) : (
+          <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-primary/80">
+            ✓ revealed · scroll for brief & tasks
+          </div>
+        )}
+      </section>
+
       {/* Expert Brief */}
-      {lesson && (
+      {lesson && revealed && (
         <section className="rounded-xl border border-border bg-card p-4">
           <div className="flex items-center gap-2">
             <BookOpen className="h-4 w-4 text-primary" />
             <h2 className="text-sm font-semibold text-foreground">Brief</h2>
           </div>
+          {lesson.analogy && (
+            <div className="mt-2 flex items-start gap-2 rounded-lg border border-accent/30 bg-accent/5 p-3">
+              <Lightbulb className="mt-0.5 h-4 w-4 flex-none text-accent" />
+              <div>
+                <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-accent">
+                  In plain english
+                </div>
+                <p className="mt-0.5 text-[13px] leading-relaxed text-foreground">
+                  {lesson.analogy}
+                </p>
+              </div>
+            </div>
+          )}
           <div className="mt-2 space-y-2.5">
             {lesson.brief.map((p, i) => (
               <p key={i} className="text-[13.5px] leading-relaxed text-foreground/90">
@@ -137,7 +178,7 @@ function DayPage() {
       )}
 
       {/* Hands-on tasks */}
-      {lesson && lesson.tasks.length > 0 && (
+      {lesson && revealed && lesson.tasks.length > 0 && (
         <section className="space-y-3">
           <div className="flex items-center gap-2">
             <ListChecks className="h-4 w-4 text-primary" />
@@ -162,7 +203,7 @@ function DayPage() {
         </section>
       )}
 
-      {!lesson && (
+      {!lesson && revealed && (
         <section className="rounded-xl border border-dashed border-border bg-card p-4 text-[12.5px] text-muted-foreground">
           <div className="flex items-center gap-2 text-foreground">
             <Sparkles className="h-4 w-4 text-primary" />
@@ -176,7 +217,7 @@ function DayPage() {
       )}
 
       {/* Quiz */}
-      {quiz.length > 0 && (
+      {quiz.length > 0 && revealed && (
         <section className="rounded-xl border border-border bg-card p-4">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-foreground">Quick check ({quiz.length} Qs)</h2>
