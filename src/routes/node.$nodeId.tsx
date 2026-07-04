@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate, useRouter } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, ChevronRight } from "lucide-react";
 import { ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -44,6 +44,7 @@ function NodePage() {
   const { node } = Route.useLoaderData() as { node: NodeContent };
   const { isGot, toggleGot, state, saveReflection, hydrated } = useMapState();
   const router = useRouter();
+  const navigate = useNavigate();
   const got = isGot(node.id);
   const [reflection, setReflection] = useState("");
 
@@ -64,6 +65,23 @@ function NodePage() {
   const nodeIndex = NODES.findIndex((n) => n.id === node.id);
   const prevNode = nodeIndex > 0 ? NODES[nodeIndex - 1] : undefined;
   const nextNode = nodeIndex >= 0 && nodeIndex < NODES.length - 1 ? NODES[nodeIndex + 1] : undefined;
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      const tag = (e.target as HTMLElement | null)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || (e.target as HTMLElement | null)?.isContentEditable) {
+        return;
+      }
+      if (e.key === "ArrowLeft" && prevNode) {
+        navigate({ to: "/node/$nodeId", params: { nodeId: prevNode.id } });
+      } else if (e.key === "ArrowRight" && nextNode) {
+        navigate({ to: "/node/$nodeId", params: { nodeId: nextNode.id } });
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [prevNode, nextNode, navigate]);
+
   const buildsOn = (node.buildsOn as string[])
     .map((id: string) => NODES.find((n) => n.id === id))
     .filter((n): n is (typeof NODES)[number] => Boolean(n));
@@ -119,6 +137,7 @@ function NodePage() {
       {node.diagram && (
         <figure
           className="mb-4 overflow-hidden rounded-xl border border-border bg-transparent p-4"
+          role="img"
           aria-label={`Diagram for ${node.title}`}
           dangerouslySetInnerHTML={{ __html: node.diagram }}
         />
