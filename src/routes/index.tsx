@@ -128,7 +128,7 @@ function Home() {
       </div>
 
       <p className="mt-8 text-center font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-        // 30 nodes · 6 clusters · read anywhere
+        // 33 nodes · 6 clusters · read anywhere
       </p>
     </div>
   );
