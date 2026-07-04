@@ -44,9 +44,9 @@ function NodePage() {
   const router = useRouter();
   const got = isGot(node.id);
   const cluster = CLUSTERS.find((c) => c.id === node.cluster)!;
-  const buildsOn = node.buildsOn
-    .map((id) => NODES.find((n) => n.id === id))
-    .filter(Boolean) as typeof NODES;
+  const buildsOn = (node.buildsOn as string[])
+    .map((id: string) => NODES.find((n) => n.id === id))
+    .filter((n): n is (typeof NODES)[number] => Boolean(n));
 
   return (
     <article className="pb-4">
