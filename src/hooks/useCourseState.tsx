@@ -20,6 +20,9 @@ export type CourseState = {
   completedChallenges: string[];
   playgroundDrafts: Record<string, string>;
   globalNotes: string;
+  dayLogs: Record<string, { tool: string; result: string }>;
+  quizCompleted: string[]; // dayIds with quiz XP awarded
+  quizAnswers: Record<string, number[]>; // dayId -> chosen option index per question
 };
 
 const initialState: CourseState = {
@@ -30,6 +33,9 @@ const initialState: CourseState = {
   completedChallenges: [],
   playgroundDrafts: {},
   globalNotes: "",
+  dayLogs: {},
+  quizCompleted: [],
+  quizAnswers: {},
 };
 
 function today() {
@@ -66,6 +72,9 @@ type CourseContextValue = {
   saveDraft: (weekId: string, text: string) => void;
   saveNotes: (text: string) => void;
   resetAll: () => void;
+  saveDayLog: (dayId: string, log: { tool: string; result: string }) => void;
+  submitQuiz: (dayId: string, answers: number[], correctCount: number) => { firstTime: boolean; xpGained: number };
+  isQuizDone: (dayId: string) => boolean;
 };
 
 const CourseContext = createContext<CourseContextValue | null>(null);
@@ -177,6 +186,40 @@ export function CourseStateProvider({ children }: { children: ReactNode }) {
     setState(initialState);
   }, []);
 
+  const saveDayLog = useCallback((dayId: string, log: { tool: string; result: string }) => {
+    setState((s) => ({
+      ...s,
+      dayLogs: { ...s.dayLogs, [dayId]: log },
+    }));
+  }, []);
+
+  const submitQuiz = useCallback(
+    (dayId: string, answers: number[], correctCount: number) => {
+      let firstTime = false;
+      let xpGained = 0;
+      setState((s) => {
+        const already = s.quizCompleted.includes(dayId);
+        const nextAnswers = { ...s.quizAnswers, [dayId]: answers };
+        if (already) {
+          return { ...s, quizAnswers: nextAnswers };
+        }
+        firstTime = true;
+        // 5 XP per correct answer, first time only
+        xpGained = correctCount * 5;
+        if (xpGained) pushXp(xpGained);
+        const bumped = bumpStreak(s);
+        return {
+          ...bumped,
+          quizAnswers: nextAnswers,
+          quizCompleted: [...bumped.quizCompleted, dayId],
+          xp: bumped.xp + xpGained,
+        };
+      });
+      return { firstTime, xpGained };
+    },
+    [bumpStreak, pushXp],
+  );
+
   const value = useMemo<CourseContextValue>(
     () => ({
       state,
@@ -189,8 +232,11 @@ export function CourseStateProvider({ children }: { children: ReactNode }) {
       saveDraft,
       saveNotes,
       resetAll,
+      saveDayLog,
+      submitQuiz,
+      isQuizDone: (dayId) => state.quizCompleted.includes(dayId),
     }),
-    [state, hydrated, xpEvents, toggleDay, submitChallenge, saveDraft, saveNotes, resetAll],
+    [state, hydrated, xpEvents, toggleDay, submitChallenge, saveDraft, saveNotes, resetAll, saveDayLog, submitQuiz],
   );
 
   return <CourseContext.Provider value={value}>{children}</CourseContext.Provider>;
