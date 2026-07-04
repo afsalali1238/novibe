@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
-import { CLUSTERS, NODES } from "../data/nodes";
+import { ChevronRight, Search } from "lucide-react";
+import { GLOSSARY } from "../data/glossary";
+import { findNode } from "../data/nodes";
 
 export const Route = createFileRoute("/glossary")({
   head: () => ({
@@ -9,31 +10,54 @@ export const Route = createFileRoute("/glossary")({
       { title: "Glossary - Novibe" },
       {
         name: "description",
-        content: "Every term on the map, one-line definitions, searchable.",
+        content: "A quick-scan reference of the core AI terms used across the map.",
+      },
+      { property: "og:title", content: "Glossary - Novibe" },
+      {
+        property: "og:description",
+        content: "A quick-scan reference of the core AI terms used across the map.",
       },
     ],
   }),
   component: Glossary,
 });
 
-// First sentence of layer0 doubles as the glossary definition, so there's
-// only one place (nodes.ts) where the actual wording lives.
-function firstSentence(text: string): string {
-  const match = text.match(/^.*?[.!?](?=\s|$)/);
-  return (match ? match[0] : text).trim();
-}
+// Maps a glossary term to the node that covers it in depth, where one exists.
+// Not every term has a dedicated node (e.g. "Attention Mechanism") - those
+// just render without a link.
+const TERM_TO_NODE: Record<string, string> = {
+  Agent: "e1",
+  Alignment: "a6",
+  "Context Window": "a4",
+  "Direct Prompt Injection": "e6",
+  Embeddings: "c5",
+  "Few-Shot Prompting": "b3",
+  "Fine-Tuning": "c2",
+  Guardrails: "e4",
+  Hallucination: "a5",
+  "Indirect Prompt Injection (IPI)": "e6",
+  Inference: "a3",
+  "Large Language Model (LLM)": "a1",
+  Multimodal: "d6",
+  Parameters: "a2",
+  "Prompt Injection": "e6",
+  "Retrieval-Augmented Generation (RAG)": "c1",
+  "RLHF (Reinforcement Learning from Human Feedback)": "a6",
+  "System Prompt": "b2",
+  Tokens: "a2",
+  "Vector Database": "d4",
+  "World Model": "d6",
+};
 
 function Glossary() {
   const [query, setQuery] = useState("");
 
   const entries = useMemo(
     () =>
-      NODES.map((n) => ({
-        id: n.id,
-        title: n.title,
-        cluster: n.cluster,
-        def: firstSentence(n.layer0),
-      })).sort((a, b) => a.title.localeCompare(b.title)),
+      GLOSSARY.map((e) => ({
+        ...e,
+        nodeId: TERM_TO_NODE[e.term],
+      })),
     [],
   );
 
@@ -41,7 +65,7 @@ function Glossary() {
     const q = query.trim().toLowerCase();
     if (!q) return entries;
     return entries.filter(
-      (e) => e.title.toLowerCase().includes(q) || e.def.toLowerCase().includes(q),
+      (e) => e.term.toLowerCase().includes(q) || e.definition.toLowerCase().includes(q),
     );
   }, [entries, query]);
 
@@ -55,7 +79,8 @@ function Glossary() {
           Glossary
         </h1>
         <p className="mt-1 text-[13px] text-muted-foreground">
-          Every term on the map, in one place. Tap a term to open its full node.
+          One-line definitions for the terms that recur across the map. Scan, look up,
+          move on - tap a term with a node link to go deeper.
         </p>
       </header>
 
@@ -75,28 +100,39 @@ function Glossary() {
           No terms match "{query}".
         </p>
       ) : (
-        <ul className="divide-y divide-border/70 overflow-hidden rounded-xl border border-border bg-card">
-          {filtered.map((e) => (
-            <li key={e.id}>
-              <Link
-                to="/node/$nodeId"
-                params={{ nodeId: e.id }}
-                className="block px-4 py-3 transition-colors hover:bg-muted/60"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-primary">
-                    {CLUSTERS.find((c) => c.id === e.cluster)?.id}
-                  </span>
-                  <span className="text-[13px] font-medium text-foreground">
-                    {e.title}
-                  </span>
-                </div>
-                <p className="mt-1 text-[12px] leading-snug text-muted-foreground">
-                  {e.def}
+        <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
+          {filtered.map((entry) => {
+            const node = entry.nodeId ? findNode(entry.nodeId) : undefined;
+            const content = (
+              <>
+                <p className="text-[14px] leading-relaxed text-foreground">
+                  <span className="font-semibold text-foreground">{entry.term}</span>
+                  <span className="text-muted-foreground"> — {entry.definition}</span>
                 </p>
-              </Link>
-            </li>
-          ))}
+                {node && (
+                  <span className="mt-1 inline-flex items-center gap-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-primary">
+                    open {node.id.toUpperCase()}
+                    <ChevronRight className="h-3 w-3" />
+                  </span>
+                )}
+              </>
+            );
+            return (
+              <li key={entry.term}>
+                {node ? (
+                  <Link
+                    to="/node/$nodeId"
+                    params={{ nodeId: node.id }}
+                    className="block px-4 py-3 transition-colors hover:bg-muted/60"
+                  >
+                    {content}
+                  </Link>
+                ) : (
+                  <div className="px-4 py-3">{content}</div>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

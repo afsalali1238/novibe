@@ -5,6 +5,7 @@ export type NodeContent = {
   cluster: ClusterId;
   title: string;
   buildsOn: string[];
+  seeAlso?: string[]; // lateral cross-links to related nodes, not a dependency
   layer0: string;
   layer1: string;
   layer2: string;
@@ -46,6 +47,7 @@ export const NODES: NodeContent[] = [
     cluster: "A",
     title: "Tokens & parameters - the two numbers that matter",
     buildsOn: ["a1"],
+    seeAlso: ["d6"],
     layer0:
       "A \"token\" is a chunk of text the model reads or writes - roughly ¾ of a word in English. \"Parameters\" are the model's internal dials - the things learned during training. More parameters generally means more capacity to capture patterns (and more cost/slowness). When people say \"70B model\" or \"trillion parameter model,\" that's the dial count.",
     layer1:
@@ -137,6 +139,7 @@ export const NODES: NodeContent[] = [
     cluster: "A",
     title: "AI safety, alignment & jailbreaks",
     buildsOn: ["a1"],
+    seeAlso: ["e4", "f5"],
     layer0:
       "\"Alignment\" is the effort to make an AI model actually do what humans intend, not just what a prompt literally says or what maximizes some narrow objective - the gap between \"did what I said\" and \"did what I meant\" is the core alignment problem. A \"jailbreak\" is a prompt crafted specifically to bypass a model's built-in safety training and get it to say or do something its provider tried to prevent. Neither is solved - it's active, ongoing work at every major lab, not a checkbox that gets ticked once.",
     layer1:
@@ -209,6 +212,7 @@ export const NODES: NodeContent[] = [
     cluster: "C",
     title: "RAG (Retrieval-Augmented Generation)",
     buildsOn: ["a5"],
+    seeAlso: ["d4"],
     layer0:
       "RAG is how you give a model access to your specific, current information instead of relying on what it memorized during training. The system first searches (retrieves) relevant chunks of your documents/data, then hands those chunks to the model along with your question, so it answers grounded in real material instead of guessing.",
     layer1:
@@ -281,6 +285,7 @@ export const NODES: NodeContent[] = [
     cluster: "C",
     title: "Embeddings - the math of meaning",
     buildsOn: ["a2", "c1"],
+    seeAlso: ["d4"],
     layer0:
       "An embedding is a way of converting text into a list of numbers that captures its meaning, so that similar meanings end up as similar numbers - even if the actual words are totally different. This is what lets a search system find \"vehicle maintenance costs\" as relevant to a query about \"truck repair expenses,\" despite no shared words.",
     layer1:
@@ -328,6 +333,7 @@ export const NODES: NodeContent[] = [
     cluster: "D",
     title: "No-code automation: n8n, Make, Zapier",
     buildsOn: ["c4"],
+    seeAlso: ["e2"],
     layer0:
       "These are visual, drag-and-drop tools for connecting apps and AI models together into automated workflows - \"when X happens in Gmail, send the text to Claude, then post the result to Slack\" - without writing code. They're the glue layer between AI models and the rest of your business tools.",
     layer1:
@@ -340,6 +346,7 @@ export const NODES: NodeContent[] = [
     cluster: "D",
     title: "Coding copilots: Cursor, Claude Code",
     buildsOn: ["a1"],
+    seeAlso: ["e2"],
     layer0:
       "These are AI tools built specifically for writing and editing code - instead of a general chat window, they work directly inside your codebase, can read your files, and can make edits or run commands for you, with you approving or guiding the changes.",
     layer1:
@@ -352,6 +359,7 @@ export const NODES: NodeContent[] = [
     cluster: "D",
     title: "Vector databases & embedding tools",
     buildsOn: ["c5"],
+    seeAlso: ["c1"],
     layer0:
       "A vector database is specialized storage built to hold embeddings (C5) and search through them by \"closeness of meaning\" instead of exact keyword match. It's the practical infrastructure piece that makes RAG (C1) actually work at scale.",
     layer1:
@@ -376,6 +384,7 @@ export const NODES: NodeContent[] = [
     cluster: "D",
     title: "Multimodal models: image, video, audio",
     buildsOn: ["a1", "d1"],
+    seeAlso: ["a2"],
     layer0:
       "An LLM only reads and writes text. A multimodal model extends the same core idea - predict the next chunk - to other formats: generating or understanding images, video, or audio, or combining several at once (describe this image, narrate this video). You already use two of these directly - ElevenLabs (text to voice) and Runway (text/image to video) are both multimodal generation tools, each specialized to one output type.",
     layer1:
@@ -417,6 +426,7 @@ export const NODES: NodeContent[] = [
     cluster: "E",
     title: "Tool use / function calling",
     buildsOn: ["b4", "e1"],
+    seeAlso: ["d2", "d3"],
     layer0:
       "Tool use (or \"function calling\") is how a model does things beyond just generating text - like searching the web, running code, or calling an API - by outputting a structured request (\"call this tool with these inputs\"), which the surrounding software then actually executes and feeds the result back in.",
     layer1:
@@ -481,6 +491,7 @@ export const NODES: NodeContent[] = [
     cluster: "E",
     title: "The agent loop & autonomy levels",
     buildsOn: ["e1", "e2", "e3"],
+    seeAlso: ["a6", "e6"],
     layer0:
       "Not all agents are equally autonomous. There's a spectrum: (1) human approves every single step, (2) human sets a goal and checks in periodically, (3) fully autonomous - runs for hours/days with no check-in, only reporting at the end. Higher autonomy is riskier (harder to catch mistakes) but more valuable for tedious multi-step work.",
     layer1:
@@ -531,6 +542,7 @@ export const NODES: NodeContent[] = [
     cluster: "E",
     title: "Prompt injection & AI security",
     buildsOn: ["e2"],
+    seeAlso: ["e4"],
     layer0:
       "Prompt injection is what happens when untrusted text - a webpage, an email, a document, a message from someone else - contains hidden instructions that an AI system reads and mistakenly follows as if they came from you, the actual user. It's the AI-era version of the classic security rule \"never trust user input,\" except here the \"input\" can be anything the model reads, not just what you typed.",
     layer1:
@@ -612,6 +624,7 @@ export const NODES: NodeContent[] = [
     cluster: "F",
     title: "Evaluating AI hype vs. reality",
     buildsOn: ["f3", "c2"],
+    seeAlso: ["a6"],
     layer0:
       "AI news and pitches are full of overclaiming - \"we built our own AI,\" \"fully autonomous agent,\" \"proprietary model\" often actually mean \"we prompted GPT-4 well\" or \"we automated 3 steps in n8n.\" Being able to translate marketing language back into the real underlying mechanism is the core skill of advisory-level literacy.",
     layer1:

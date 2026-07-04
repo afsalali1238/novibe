@@ -64,6 +64,9 @@ function NodePage() {
   const buildsOn = (node.buildsOn as string[])
     .map((id: string) => NODES.find((n) => n.id === id))
     .filter((n): n is (typeof NODES)[number] => Boolean(n));
+  const seeAlso = (node.seeAlso ?? [])
+    .map((id: string) => NODES.find((n) => n.id === id))
+    .filter((n): n is (typeof NODES)[number] => Boolean(n));
 
   return (
     <article className="pb-4">
@@ -140,6 +143,24 @@ function NodePage() {
           <span className="font-mono uppercase tracking-[0.12em] text-muted-foreground">watch:</span>
           <span>{node.videoTitle ?? "explainer"}</span>
         </a>
+      )}
+
+      {seeAlso.length > 0 && (
+        <div className="mt-4 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground">
+          <span className="font-mono uppercase tracking-[0.14em]">see also:</span>
+          {seeAlso.map((n) => (
+            <Link
+              key={n.id}
+              to="/node/$nodeId"
+              params={{ nodeId: n.id }}
+              className="inline-flex items-center gap-0.5 rounded-md border border-border bg-muted/50 px-1.5 py-0.5 font-mono text-[10px] text-foreground hover:border-primary hover:text-primary"
+              title={n.title}
+            >
+              {n.id.toUpperCase()}
+              <ChevronRight className="h-3 w-3" />
+            </Link>
+          ))}
+        </div>
       )}
 
       <div className="sticky bottom-24 mt-8 flex justify-center">
