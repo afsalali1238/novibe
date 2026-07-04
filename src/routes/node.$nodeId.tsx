@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
 import { ArrowLeft, Check, ChevronRight } from "lucide-react";
 import { ExternalLink } from "lucide-react";
+import { useEffect, useState } from "react";
 import { CLUSTERS, NODES, findNode, type NodeContent } from "../data/nodes";
 import { useMapState } from "../hooks/useMapState";
 
@@ -41,9 +42,24 @@ function NodeNotFound() {
 
 function NodePage() {
   const { node } = Route.useLoaderData() as { node: NodeContent };
-  const { isGot, toggleGot } = useMapState();
+  const { isGot, toggleGot, state, saveReflection, hydrated } = useMapState();
   const router = useRouter();
   const got = isGot(node.id);
+  const [reflection, setReflection] = useState("");
+
+  useEffect(() => {
+    if (hydrated) setReflection(state.reflections[node.id] ?? "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated, node.id]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    const current = state.reflections[node.id] ?? "";
+    if (current === reflection) return;
+    const t = window.setTimeout(() => saveReflection(node.id, reflection), 250);
+    return () => window.clearTimeout(t);
+  }, [reflection, hydrated, node.id, state.reflections, saveReflection]);
+
   const cluster = CLUSTERS.find((c) => c.id === node.cluster)!;
   const buildsOn = (node.buildsOn as string[])
     .map((id: string) => NODES.find((n) => n.id === id))
@@ -140,6 +156,27 @@ function NodePage() {
           <Check className="h-4 w-4" />
           {got ? "got it" : "mark as got it"}
         </button>
+      </div>
+
+      <div className="mt-6">
+        <label
+          htmlFor="reflection"
+          className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground"
+        >
+          your one-line takeaway
+          <span className="ml-2 text-[10px] normal-case tracking-normal text-muted-foreground/60">
+            (optional, autosaved)
+          </span>
+        </label>
+        <textarea
+          id="reflection"
+          value={reflection}
+          onChange={(e) => setReflection(e.target.value)}
+          placeholder="what stuck with you?"
+          rows={2}
+          spellCheck={false}
+          className="w-full resize-none rounded-lg border border-border bg-card px-3 py-2 text-[13px] leading-6 text-foreground caret-primary outline-none placeholder:text-muted-foreground/60 focus:border-primary"
+        />
       </div>
     </article>
   );
