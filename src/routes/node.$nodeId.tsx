@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
 import { ArrowLeft, Check, ChevronRight } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { CLUSTERS, NODES, findNode, type NodeContent } from "../data/nodes";
 import { useMapState } from "../hooks/useMapState";
 
@@ -93,6 +94,13 @@ function NodePage() {
         tone="primary"
         body={node.layer0}
       />
+      {node.diagram && (
+        <figure
+          className="mb-4 overflow-hidden rounded-xl border border-border bg-transparent p-4"
+          aria-label={`Diagram for ${node.title}`}
+          dangerouslySetInnerHTML={{ __html: node.diagram }}
+        />
+      )}
       <Layer
         tag="Layer 1"
         subtitle="How it actually works"
@@ -105,6 +113,18 @@ function NodePage() {
         tone="warning"
         body={node.layer2}
       />
+      {node.videoUrl && (
+        <a
+          href={node.videoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-1 inline-flex items-center gap-1.5 text-[12px] text-primary hover:underline"
+        >
+          <ExternalLink className="h-3.5 w-3.5" />
+          <span className="font-mono uppercase tracking-[0.12em] text-muted-foreground">watch:</span>
+          <span>{node.videoTitle ?? "explainer"}</span>
+        </a>
+      )}
 
       <div className="sticky bottom-24 mt-8 flex justify-center">
         <button
