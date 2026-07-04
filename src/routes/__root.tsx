@@ -12,7 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "../components/app/AppShell";
-import { CourseStateProvider } from "../hooks/useCourseState";
+import { MapStateProvider } from "../hooks/useMapState";
 
 function NotFoundComponent() {
   return (
@@ -79,33 +79,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "No-Code AI & Agentic Engineering — Orchestrator's Blueprint" },
+      { title: "Novibe — The Map" },
       {
         name: "description",
         content:
-          "A gamified 6-week curriculum for building autonomous AI agents in n8n and Make.com. Earn XP, keep your streak, and ship the Zero-Touch Orchestrator.",
+          "A non-linear topic map for AI literacy. Six clusters, thirty nodes, three depths each. Read as deep as curiosity goes.",
       },
-      { name: "author", content: "The AI Orchestrator's Blueprint" },
-      { name: "theme-color", content: "#0b1020" },
-      {
-        property: "og:title",
-        content: "No-Code AI & Agentic Engineering — Orchestrator's Blueprint",
-      },
-      {
-        property: "og:description",
-        content:
-          "Gamified 6-week curriculum for no-code agentic engineering. XP, streaks, and a weekly playground.",
-      },
+      { name: "author", content: "Novibe" },
+      { name: "theme-color", content: "#ffffff" },
+      { property: "og:title", content: "Novibe — The Map" },
+      { property: "og:description", content: "A non-linear topic map for AI literacy — 30 nodes across 6 clusters." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
-      { property: "og:title", content: "No-Code AI & Agentic Engineering — Orchestrator's Blueprint" },
-      { name: "twitter:title", content: "No-Code AI & Agentic Engineering — Orchestrator's Blueprint" },
-      { name: "description", content: "A gamified 6-week curriculum for building autonomous AI agents in n8n and Make.com. Earn XP, keep your streak, and ship the Zero-Touch Orchestrator." },
-      { property: "og:description", content: "A gamified 6-week curriculum for building autonomous AI agents in n8n and Make.com. Earn XP, keep your streak, and ship the Zero-Touch Orchestrator." },
-      { name: "twitter:description", content: "A gamified 6-week curriculum for building autonomous AI agents in n8n and Make.com. Earn XP, keep your streak, and ship the Zero-Touch Orchestrator." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/71178353-07ac-4606-91a3-fe70f56b7be7/id-preview-d99e420e--0e1674c4-79f3-4a53-be9d-4178b68f5650.lovable.app-1783162045654.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/71178353-07ac-4606-91a3-fe70f56b7be7/id-preview-d99e420e--0e1674c4-79f3-4a53-be9d-4178b68f5650.lovable.app-1783162045654.png" },
+      { name: "twitter:title", content: "Novibe — The Map" },
+      { name: "twitter:description", content: "A non-linear topic map for AI literacy." },
     ],
     links: [
       {
@@ -146,11 +134,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CourseStateProvider>
+      <MapStateProvider>
         <AppShell>
           <Outlet />
         </AppShell>
-      </CourseStateProvider>
+      </MapStateProvider>
     </QueryClientProvider>
   );
 }
