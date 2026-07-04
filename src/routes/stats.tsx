@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { RotateCcw } from "lucide-react";
+import { Download, RotateCcw, Upload } from "lucide-react";
+import { useRef, useState, type ChangeEvent } from "react";
 import { CLUSTERS, NODES, TOTAL_NODES, findNode, nodesInCluster } from "../data/nodes";
 import { useMapState } from "../hooks/useMapState";
 
@@ -14,7 +15,11 @@ export const Route = createFileRoute("/stats")({
 });
 
 function Stats() {
-  const { state, streak, resetAll } = useMapState();
+  const { state, streak, resetAll, exportState, importState } = useMapState();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [importMessage, setImportMessage] = useState<{ type: "ok" | "error"; text: string } | null>(
+    null,
+  );
   const done = state.gotIt.length;
   const clustersTouched = new Set(
     state.gotIt.map((id) => NODES.find((n) => n.id === id)?.cluster).filter(Boolean) as string[],
@@ -29,6 +34,45 @@ function Stats() {
     .filter((id) => state.gotIt.includes(id) && (state.reflections[id]?.trim().length ?? 0) > 0)
     .map((id) => ({ id, node: findNode(id), text: state.reflections[id]! }))
     .filter((e) => e.node);
+
+  const handleExport = () => {
+    const json = exportState();
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `novibe-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportClick = () => fileInputRef.current?.click();
+
+  const handleImportFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-selecting the same file later
+    if (!file) return;
+    if (
+      !window.confirm(
+        "Importing will replace your current progress, streak, and reflections with the backup file. Continue?",
+      )
+    ) {
+      return;
+    }
+    file
+      .text()
+      .then((text) => {
+        const result = importState(text);
+        setImportMessage(
+          result.ok
+            ? { type: "ok", text: "Backup restored." }
+            : { type: "error", text: result.error },
+        );
+      })
+      .catch(() => setImportMessage({ type: "error", text: "Couldn't read that file." }));
+  };
 
   return (
     <div>
@@ -119,6 +163,51 @@ function Stats() {
               </li>
             ))}
           </ul>
+        )}
+      </section>
+
+      <section className="mb-6 rounded-xl border border-border bg-card p-4">
+        <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+          Backup
+        </div>
+        <p className="mb-3 text-[13px] leading-relaxed text-muted-foreground">
+          Everything lives only in this browser. Export a backup before clearing your
+          browser data or switching devices, and restore it here.
+        </p>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={handleExport}
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-md border border-border bg-background px-3 py-2 font-mono text-xs text-foreground hover:border-primary hover:text-primary"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Export
+          </button>
+          <button
+            type="button"
+            onClick={handleImportClick}
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-md border border-border bg-background px-3 py-2 font-mono text-xs text-foreground hover:border-primary hover:text-primary"
+          >
+            <Upload className="h-3.5 w-3.5" />
+            Import
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json"
+            onChange={handleImportFile}
+            className="hidden"
+          />
+        </div>
+        {importMessage && (
+          <p
+            className={
+              "mt-2 text-[12px] " +
+              (importMessage.type === "ok" ? "text-primary" : "text-destructive")
+            }
+          >
+            {importMessage.text}
+          </p>
         )}
       </section>
 

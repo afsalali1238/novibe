@@ -81,6 +81,8 @@ function computeStreak(active: Set<string>): number {
   return streak;
 }
 
+export type ImportResult = { ok: true } | { ok: false; error: string };
+
 type Ctx = {
   state: MapState;
   hydrated: boolean;
@@ -90,8 +92,54 @@ type Ctx = {
   saveNotes: (t: string) => void;
   saveReflection: (nodeId: string, t: string) => void;
   resetAll: () => void;
+  exportState: () => string;
+  importState: (raw: string) => ImportResult;
   weeklySummary: () => { nodesThisWeek: number; clustersThisWeek: number };
 };
+
+const BACKUP_VERSION = 1;
+
+function isStringArray(v: unknown): v is string[] {
+  return Array.isArray(v) && v.every((x) => typeof x === "string");
+}
+
+function isStringRecord(v: unknown): v is Record<string, string> {
+  return (
+    typeof v === "object" &&
+    v !== null &&
+    !Array.isArray(v) &&
+    Object.values(v as Record<string, unknown>).every((x) => typeof x === "string")
+  );
+}
+
+function parseBackup(raw: string): MapState | null {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+  if (typeof parsed !== "object" || parsed === null) return null;
+  // Accept either a raw MapState export or one wrapped with {version, state}.
+  const candidate =
+    "state" in (parsed as Record<string, unknown>)
+      ? (parsed as Record<string, unknown>).state
+      : parsed;
+  if (typeof candidate !== "object" || candidate === null) return null;
+  const c = candidate as Record<string, unknown>;
+  if (!isStringArray(c.gotIt)) return null;
+  if (!isStringArray(c.activityDates)) return null;
+  if (typeof c.notes !== "string") return null;
+  if (!isStringRecord(c.reflections)) return null;
+  if (!isStringArray(c.reflectionOrder)) return null;
+  return {
+    gotIt: c.gotIt,
+    activityDates: c.activityDates,
+    notes: c.notes,
+    reflections: c.reflections,
+    reflectionOrder: c.reflectionOrder,
+  };
+}
 
 const MapContext = createContext<Ctx | null>(null);
 
@@ -157,6 +205,23 @@ export function MapStateProvider({ children }: { children: ReactNode }) {
 
   const resetAll = useCallback(() => setState(initialState), []);
 
+  const exportState = useCallback(() => {
+    return JSON.stringify(
+      { version: BACKUP_VERSION, exportedAt: new Date().toISOString(), state },
+      null,
+      2,
+    );
+  }, [state]);
+
+  const importState = useCallback((raw: string): ImportResult => {
+    const parsed = parseBackup(raw);
+    if (!parsed) {
+      return { ok: false, error: "That file doesn't look like a Novibe backup." };
+    }
+    setState(parsed);
+    return { ok: true };
+  }, []);
+
   const streak = useMemo(
     () => computeStreak(new Set(state.activityDates)),
     [state.activityDates],
@@ -172,13 +237,25 @@ export function MapStateProvider({ children }: { children: ReactNode }) {
       saveNotes,
       saveReflection,
       resetAll,
+      exportState,
+      importState,
       weeklySummary: () => {
         // Not derived here - callers can compute; keep here for convenience.
         // We can't know node→cluster without importing; move real logic to callers.
         return { nodesThisWeek: 0, clustersThisWeek: 0 };
       },
     }),
-    [state, hydrated, streak, toggleGot, saveNotes, saveReflection, resetAll],
+    [
+      state,
+      hydrated,
+      streak,
+      toggleGot,
+      saveNotes,
+      saveReflection,
+      resetAll,
+      exportState,
+      importState,
+    ],
   );
 
   return <MapContext.Provider value={value}>{children}</MapContext.Provider>;

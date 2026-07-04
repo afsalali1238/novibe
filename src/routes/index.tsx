@@ -1,5 +1,6 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Check, Shuffle } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Check, Search } from "lucide-react";
+import { useMemo, useState } from "react";
 import { CLUSTERS, NODES, TOTAL_NODES, nodesInCluster } from "../data/nodes";
 import { useMapState } from "../hooks/useMapState";
 
@@ -10,13 +11,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "A non-linear topic map for AI literacy. Six clusters, 33 nodes, three depths each. Open any node, read as deep as you're curious.",
+          "AI explained in plain English - LLMs, agents, prompts, and the tools people actually use. Pick a topic, get the simple version, go deeper if you're curious.",
       },
       { property: "og:title", content: "Novibe - The Map" },
       {
         property: "og:description",
         content:
-          "Non-linear map for AI literacy. Six clusters, 33 nodes. Read as deep as curiosity goes.",
+          "AI, explained simply. Pick a topic, get the plain-English version, go deeper if you're curious.",
       },
     ],
   }),
@@ -25,15 +26,21 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { state, streak, hydrated } = useMapState();
-  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
   const done = state.gotIt.length;
 
-  const surpriseMe = () => {
-    const notDone = NODES.filter((n) => !state.gotIt.includes(n.id));
-    const pool = notDone.length > 0 ? notDone : NODES;
-    const pick = pool[Math.floor(Math.random() * pool.length)];
-    navigate({ to: "/node/$nodeId", params: { nodeId: pick.id } });
-  };
+  const searchResults = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return null;
+    return NODES.filter(
+      (n) =>
+        n.title.toLowerCase().includes(q) ||
+        n.layer0.toLowerCase().includes(q) ||
+        n.layer1.toLowerCase().includes(q) ||
+        n.layer2.toLowerCase().includes(q),
+    );
+  }, [query]);
+
   const clustersTouched = new Set(
     state.gotIt
       .map((id) => NODES.find((n) => n.id === id)?.cluster)
@@ -56,18 +63,11 @@ function Home() {
           Novibe
         </h1>
         <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
-          A non-linear topic map for AI literacy. Open any node, in any order. Read the
-          60-second plain-English version - or go deeper. No streaks to protect, no XP,
-          no locks. Just what you're curious about right now.
+          AI, explained in plain English - what LLMs actually are, how tools like
+          ChatGPT and Claude work, why AI sometimes makes things up, and the popular
+          tools people build with. Pick any topic and start with the simple version.
+          Go deeper only if you're curious - no streaks, no pressure.
         </p>
-        <button
-          type="button"
-          onClick={surpriseMe}
-          className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/[0.06] px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-primary transition-colors hover:bg-primary/10"
-        >
-          <Shuffle className="h-3.5 w-3.5" />
-          Surprise me
-        </button>
       </header>
 
       {hydrated && (
@@ -82,6 +82,58 @@ function Home() {
         </div>
       )}
 
+      <div className="mb-4 flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2">
+        <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search the whole map..."
+          className="w-full bg-transparent text-[13px] text-foreground outline-none placeholder:text-muted-foreground/60"
+        />
+      </div>
+
+      {searchResults ? (
+        searchResults.length === 0 ? (
+          <p className="py-8 text-center text-[13px] text-muted-foreground">
+            No nodes match "{query}".
+          </p>
+        ) : (
+          <ul className="divide-y divide-border/70 overflow-hidden rounded-xl border border-border bg-card">
+            {searchResults.map((n) => {
+              const got = state.gotIt.includes(n.id);
+              return (
+                <li key={n.id}>
+                  <Link
+                    to="/node/$nodeId"
+                    params={{ nodeId: n.id }}
+                    className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted/60"
+                  >
+                    <span
+                      className={
+                        "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border font-mono text-[10px] " +
+                        (got
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border text-muted-foreground")
+                      }
+                    >
+                      {got ? <Check className="h-3.5 w-3.5" /> : n.id.toUpperCase()}
+                    </span>
+                    <span
+                      className={
+                        "flex-1 text-[13px] leading-snug " +
+                        (got ? "text-muted-foreground line-through decoration-1" : "text-foreground")
+                      }
+                    >
+                      {n.title}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        )
+      ) : (
       <div className="space-y-4">
         {CLUSTERS.map((c) => {
           const nodes = nodesInCluster(c.id);
@@ -142,6 +194,7 @@ function Home() {
           );
         })}
       </div>
+      )}
 
       <p className="mt-8 text-center font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
         // {TOTAL_NODES} nodes · 6 clusters · read anywhere

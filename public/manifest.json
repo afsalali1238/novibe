@@ -1,0 +1,19 @@
+{
+  "name": "Novibe - AI Literacy Map",
+  "short_name": "Novibe",
+  "description": "AI, explained in plain English. Pick a topic, get the simple version, go deeper if you're curious.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/novibe-icon.png",
+      "sizes": "816x816",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

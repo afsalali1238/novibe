@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "../components/app/AppShell";
 import { MapStateProvider } from "../hooks/useMapState";
+import { ThemeProvider, THEME_INIT_SCRIPT } from "../hooks/useTheme";
 
 function NotFoundComponent() {
   return (
@@ -83,17 +84,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "A non-linear topic map for AI literacy. Six clusters, 33 nodes, three depths each. Read as deep as curiosity goes.",
+          "AI explained in plain English - LLMs, agents, prompts, and the tools people actually use. Pick a topic, get the simple version, go deeper if you're curious.",
       },
       { name: "author", content: "Novibe" },
       { name: "theme-color", content: "#ffffff" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-title", content: "Novibe" },
       { property: "og:title", content: "Novibe - The Map" },
-      { property: "og:description", content: "A non-linear topic map for AI literacy. 33 nodes across 6 clusters." },
+      { property: "og:description", content: "AI, explained simply. Pick a topic, get the plain-English version, go deeper if you're curious." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "Novibe - The Map" },
-      { name: "twitter:description", content: "A non-linear topic map for AI literacy." },
+      { name: "twitter:description", content: "AI, explained simply - pick a topic, get the plain-English version." },
     ],
     links: [
       {
@@ -102,6 +107,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", type: "image/png", href: "/novibe-icon.png" },
       { rel: "apple-touch-icon", href: "/novibe-icon.png" },
+      { rel: "manifest", href: "/manifest.json" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -120,6 +126,8 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        {/* Runs before hydration so the right theme applies before first paint. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
       <body>
@@ -135,11 +143,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MapStateProvider>
-        <AppShell>
-          <Outlet />
-        </AppShell>
-      </MapStateProvider>
+      <ThemeProvider>
+        <MapStateProvider>
+          <AppShell>
+            <Outlet />
+          </AppShell>
+        </MapStateProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

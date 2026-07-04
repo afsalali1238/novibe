@@ -143,7 +143,7 @@ export const NODES: NodeContent[] = [
     layer0:
       "\"Alignment\" is the effort to make an AI model actually do what humans intend, not just what a prompt literally says or what maximizes some narrow objective - the gap between \"did what I said\" and \"did what I meant\" is the core alignment problem. A \"jailbreak\" is a prompt crafted specifically to bypass a model's built-in safety training and get it to say or do something its provider tried to prevent. Neither is solved - it's active, ongoing work at every major lab, not a checkbox that gets ticked once.",
     layer1:
-      "Providers layer safety training (RLHF, constitutional AI, red-teaming) on top of raw next-token prediction to reduce harmful, biased, or dangerous outputs. That training is shaped by imperfect human judgment calls, so it's never airtight - clever rephrasing, role-play framing, or multi-step prompts can sometimes get a model to produce something it would normally refuse. \"Alignment\" spans this narrow \"don't say bad things\" layer all the way up to much harder questions about whether increasingly capable, autonomous systems reliably pursue the goals we actually intend once they're taking real-world actions (see autonomy levels, E4) rather than just talking.",
+      "Providers layer safety training (RLHF, constitutional AI, red-teaming) on top of raw next-token prediction to reduce harmful, biased, or dangerous outputs. Each major lab publishes its own version of this as policy - Anthropic's Responsible Scaling Policy, OpenAI's Preparedness Framework, Google DeepMind's Frontier Safety Framework - all trying to tie a model's real-world autonomy to proportionally stronger safeguards. That training is shaped by imperfect human judgment calls, so it's never airtight - clever rephrasing, role-play framing, or multi-step prompts can sometimes get a model to produce something it would normally refuse. \"Alignment\" spans this narrow \"don't say bad things\" layer all the way up to much harder questions about whether increasingly capable, autonomous systems reliably pursue the goals we actually intend once they're taking real-world actions (see autonomy levels, E4) rather than just talking.",
     layer2:
       "Ask a model to explain the reasoning behind one of its own refusals - \"why did you decline that specific request?\" - and notice it can usually articulate the actual safety principle involved, rather than giving a generic canned response. That's a direct, honest look at how alignment training shows up in a real conversation.",
   },
@@ -203,7 +203,7 @@ export const NODES: NodeContent[] = [
     layer0:
       "Every word (token) you send to and receive from a model costs money and time, roughly proportional to length. Prompt caching is a trick where a long, unchanging part of your prompt (like a big system prompt or document) gets \"remembered\" cheaply by the provider for repeated calls, instead of being fully reprocessed (and repaid for) every single time.",
     layer1:
-      "This matters at the product-building level, not casual chat use - if you're building an app that sends the same 5,000-word system prompt with every single user message, caching that static prefix can cut cost and latency dramatically at volume. It's a lever specifically for people building AI products/agents, not something an individual chatting occasionally needs to think about.",
+      "This matters at the product-building level, not casual chat use - if you're building an app that sends the same 5,000-word system prompt with every single user message, caching that static prefix can cut cost and latency dramatically at volume. Anthropic, OpenAI, and Google all ship this natively in their APIs (usually called \"prompt caching\" or \"context caching\") - it's a lever specifically for people building AI products/agents, not something an individual chatting occasionally needs to think about.",
     layer2:
       "No hands-on task needed here - this is a \"know it exists\" node for when you're evaluating or building a product. Case in point: if you ever price out an AI feature for Kasper's platform, ask whichever provider/dev you're working with whether prompt caching is being used for the static parts of the prompt - it directly affects your running cost.",
   },
@@ -216,7 +216,7 @@ export const NODES: NodeContent[] = [
     layer0:
       "RAG is how you give a model access to your specific, current information instead of relying on what it memorized during training. The system first searches (retrieves) relevant chunks of your documents/data, then hands those chunks to the model along with your question, so it answers grounded in real material instead of guessing.",
     layer1:
-      "Practically: your documents get broken into chunks, converted into \"embeddings\" (see C5), and stored in a searchable index. When you ask a question, the system finds the most relevant chunks, stuffs them into the prompt as context, and the model generates an answer using that inserted text. This is the core mechanism behind \"chat with your PDF\" tools and most internal company AI assistants.",
+      "Practically: your documents get broken into chunks, converted into \"embeddings\" (see C5), and stored in a searchable index. When you ask a question, the system finds the most relevant chunks, stuffs them into the prompt as context, and the model generates an answer using that inserted text. This is the core mechanism behind popular products like Google's NotebookLM and Perplexity's search-grounded answers, and behind most internal \"chat with your PDF\" company assistants; developers usually wire it up with a framework like LangChain or LlamaIndex rather than from scratch.",
     layer2:
       "Case example: think about ProvaCV or AfzalOS - any tool where an AI needs to answer using specific documents (a CV, a vault of notes) rather than general knowledge is a RAG-shaped problem, even if it's built simply.",
     diagram: `<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
@@ -264,7 +264,7 @@ export const NODES: NodeContent[] = [
     layer0:
       "An \"eval\" is a test set used to measure whether an AI system is actually good at its job - a fixed set of example inputs with known correct (or graded) outputs, run automatically to score a model or prompt. Without evals, teams are just \"vibes-checking\" outputs, which doesn't scale and hides regressions.",
     layer1:
-      "Good evals matter more than picking the \"best\" model, because model quality varies wildly by task - a model great at coding might be mediocre at your specific classification task. Serious AI teams build a private eval set from real examples of their use case, then measure any prompt/model change against it before shipping, the same way software teams use test suites.",
+      "Good evals matter more than picking the \"best\" model, because model quality varies wildly by task - a model great at coding might be mediocre at your specific classification task. Serious AI teams build a private eval set from real examples of their use case, then measure any prompt/model change against it before shipping, the same way software teams use test suites - tools like LangSmith, Braintrust, and OpenAI's own Evals framework exist specifically to run and track this.",
     layer2:
       "Advisory case: if you're ever hiring someone to build an AI feature, one strong question is \"how will we know if this is actually working well, beyond it looking fine in a demo?\" - the answer should involve some form of eval set, not just \"we tried it and it seemed good.\"",
   },
@@ -291,7 +291,7 @@ export const NODES: NodeContent[] = [
     layer1:
       "Text gets passed through an embedding model, producing a vector (a long list of numbers) representing its position in a huge \"meaning space.\" Searching then becomes a math problem: find the stored vectors closest to your query's vector. This is the retrieval half of RAG (C1) and the core of any \"semantic search\" feature.",
     layer2:
-      "No task needed to grasp this conceptually - but if curious, search \"embedding projector visualization\" to see an actual 3D map of words/sentences clustered by meaning; seeing similar concepts cluster together makes the idea concrete fast.",
+      "No task needed to grasp this conceptually - but if curious, search \"embedding projector visualization\" to see an actual 3D map of words/sentences clustered by meaning; seeing similar concepts cluster together makes the idea concrete fast. Popular embedding models you'll see named in the wild: OpenAI's text-embedding-3, Voyage AI (Anthropic's recommended partner), and Cohere Embed.",
     diagram: `<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
   <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">EMBEDDINGS — SIMILAR MEANING = CLOSE TOGETHER</text>
   <rect x="30" y="35" width="540" height="155" rx="10" fill="none" stroke="var(--border)"/>
@@ -344,15 +344,15 @@ export const NODES: NodeContent[] = [
   {
     id: "d3",
     cluster: "D",
-    title: "Coding copilots: Cursor, Claude Code",
+    title: "Coding copilots & AI app builders: Cursor, Lovable, Replit",
     buildsOn: ["a1"],
     seeAlso: ["e2"],
     layer0:
-      "These are AI tools built specifically for writing and editing code - instead of a general chat window, they work directly inside your codebase, can read your files, and can make edits or run commands for you, with you approving or guiding the changes.",
+      "These are AI tools built specifically for writing and shipping software. Copilots like Cursor and Claude Code work inside an existing codebase, reading your files and making edits you approve. App builders like Lovable, Replit, bolt.new, and v0 go further - describe the app you want in plain English and get a real, working product back, which you keep refining with more prompts. You're reading this sentence inside an app that was built exactly that way, with Lovable.",
     layer1:
-      "Cursor is an AI-native code editor (a modified VS Code) where you chat with AI that has full context of your open project. Claude Code is a command-line/agentic tool that can autonomously read files, write code, run tests, and iterate - closer to \"delegate a coding task\" than \"autocomplete.\" Both are dramatically changing how fast solo builders (like you, with Kasper Trips) can ship.",
+      "Cursor is an AI-native code editor (a modified VS Code) where you chat with AI that has full context of your open project. Claude Code is a command-line/agentic tool that can autonomously read files, write code, run tests, and iterate - closer to \"delegate a coding task\" than \"autocomplete.\" Lovable, Replit, bolt.new, and v0 are the most popular \"prompt-to-app\" builders right now - each turns a plain-English description into a deployed app, which is often called \"vibe coding.\" Both categories are dramatically changing how fast solo builders (like you, with Kasper Trips and this very Novibe app) can ship.",
     layer2:
-      "You already have real experience here (Kasper Trips, ProvaCV) - the useful exercise is comparing: what did you delegate fully vs. review carefully? That distinction (autonomy level) previews Cluster E's \"agent loop\" concept directly.",
+      "You already have real experience across both camps (Kasper Trips built with a copilot, Novibe built with Lovable) - the useful exercise is comparing: what did you delegate fully vs. review carefully in each? That distinction (autonomy level) previews Cluster E's \"agent loop\" concept directly.",
   },
   {
     id: "d4",
@@ -373,7 +373,7 @@ export const NODES: NodeContent[] = [
     title: "Open-source models - when they actually matter",
     buildsOn: ["a2", "d1"],
     layer0:
-      "Open-source (or \"open-weight\") models are ones whose parameters are publicly downloadable, letting anyone run them on their own hardware instead of calling a company's API. They matter for privacy-sensitive use cases, cost control at huge scale, or full customization - not usually for quality, since top closed models are typically still ahead.",
+      "Open-source (or \"open-weight\") models are ones whose parameters are publicly downloadable, letting anyone run them on their own hardware instead of calling a company's API. Meta's Llama, Mistral, DeepSeek, and Alibaba's Qwen are the names you'll hear most often. They matter for privacy-sensitive use cases, cost control at huge scale, or full customization - not usually for quality, since top closed models are typically still ahead.",
     layer1:
       "Running an open model yourself means you own infrastructure costs (GPUs, hosting) and lose the \"it just works\" reliability of a managed API - a real tradeoff, not a free lunch. Companies choose open-source mainly for data sovereignty (nothing leaves their servers), predictable fixed cost at extreme scale, or the ability to fine-tune deeply for a narrow task.",
     layer2:
@@ -386,7 +386,7 @@ export const NODES: NodeContent[] = [
     buildsOn: ["a1", "d1"],
     seeAlso: ["a2"],
     layer0:
-      "An LLM only reads and writes text. A multimodal model extends the same core idea - predict the next chunk - to other formats: generating or understanding images, video, or audio, or combining several at once (describe this image, narrate this video). You already use two of these directly - ElevenLabs (text to voice) and Runway (text/image to video) are both multimodal generation tools, each specialized to one output type.",
+      "An LLM only reads and writes text. A multimodal model extends the same core idea - predict the next chunk - to other formats: generating or understanding images, video, or audio, or combining several at once (describe this image, narrate this video). You already use two of these directly - ElevenLabs (text to voice) and Runway (text/image to video) are both multimodal generation tools, each specialized to one output type. Midjourney (images), OpenAI's Sora, and Google's Veo (both video) are the other names you'll hear most.",
     layer1:
       "Under the hood these aren't fundamentally different from LLMs - many use the same transformer architecture, just trained on tokenized pixels, audio waveforms, or video frames instead of (or alongside) text; newer \"world models\" go further, learning to predict how a whole scene evolves over time rather than generating one static image. General-purpose multimodal models (recent Claude, GPT, and Gemini versions) can take an image or audio clip as input and reason about it inside the same conversation as text; dedicated generation tools like Runway or ElevenLabs are usually narrower, tuned specifically for output quality in one modality rather than general reasoning.",
     layer2:
@@ -400,7 +400,7 @@ export const NODES: NodeContent[] = [
     layer0:
       "A chatbot answers one message at a time and stops. An \"agent\" is a system that can take multiple steps on its own toward a goal - deciding what to do next, using tools, and continuing without a human approving every single step. The word gets used loosely in marketing; the real test is: does it make its own next-step decisions, or is a human choosing every action?",
     layer1:
-      "Agentic systems typically run a loop: observe the current state → decide an action (possibly using a tool) → take the action → observe the result → repeat, until a goal is met or a limit is hit. The \"intelligence\" isn't one big magic model - it's the same LLM being called repeatedly in a loop with tools and memory wired around it (this is the \"orchestrator mindset\" - and it's exactly correct).",
+      "Agentic systems typically run a loop: observe the current state → decide an action (possibly using a tool) → take the action → observe the result → repeat, until a goal is met or a limit is hit. The \"intelligence\" isn't one big magic model - it's the same LLM being called repeatedly in a loop with tools and memory wired around it (this is the \"orchestrator mindset\" - and it's exactly correct). Real products built on this loop include Claude's computer use, ChatGPT's agent mode, and Manus - each just wires more tools and longer autonomy around the same underlying mechanism.",
     layer2:
       "Take something you already automated manually in n8n/Make and ask: at which step did you make the decision vs. the AI? Relabeling your own workflow this way is the fastest way to see the human/agent line clearly.",
     diagram: `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
@@ -430,7 +430,7 @@ export const NODES: NodeContent[] = [
     layer0:
       "Tool use (or \"function calling\") is how a model does things beyond just generating text - like searching the web, running code, or calling an API - by outputting a structured request (\"call this tool with these inputs\"), which the surrounding software then actually executes and feeds the result back in.",
     layer1:
-      "The model itself never directly \"does\" anything - it only ever outputs text/structured data. When it \"uses a tool,\" it's really outputting something like a JSON block saying \"call weather_api with city=Dubai,\" and the application code intercepts that, actually calls the real API, and returns the result to the model as new context for its next response. This is the exact mechanism behind every AI tool you've used in this very conversation.",
+      "The model itself never directly \"does\" anything - it only ever outputs text/structured data. When it \"uses a tool,\" it's really outputting something like a JSON block saying \"call weather_api with city=Dubai,\" and the application code intercepts that, actually calls the real API, and returns the result to the model as new context for its next response. This is the exact mechanism behind every AI tool you've used in this very conversation. The Model Context Protocol (MCP), introduced by Anthropic, has become the popular open standard for wiring up these tool connections consistently across different apps and models.",
     layer2:
       "Ask Claude \"what's the weather in Dubai right now\" - you're watching tool use happen live. Notice the model doesn't know this from training; it had to decide to call a tool, and that tool's real result got fed back in before the final answer.",
     diagram: `<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
@@ -463,7 +463,7 @@ export const NODES: NodeContent[] = [
     layer0:
       "\"Memory\" in AI products isn't the model learning - it's engineering. Short-term memory is just re-sending the recent conversation each time (limited by the context window, A4). Long-term memory is a separate system that saves facts about you somewhere (a database) and selectively re-inserts relevant bits into future prompts - which is exactly how the memory you're experiencing in this very conversation works.",
     layer1:
-      "Building real long-term memory means deciding: what gets saved, how it gets retrieved (often via embeddings/RAG, C1/C5), and how much gets re-injected without blowing the context window. Badly designed memory either forgets things that matter or stuffs in irrelevant details that confuse the model - a real design problem, not a solved default.",
+      "Building real long-term memory means deciding: what gets saved, how it gets retrieved (often via embeddings/RAG, C1/C5), and how much gets re-injected without blowing the context window. Badly designed memory either forgets things that matter or stuffs in irrelevant details that confuse the model - a real design problem, not a solved default. ChatGPT's \"Memory\" and Claude's \"memory\" features are consumer-facing versions of exactly this system, just built and tuned by the provider instead of you.",
     layer2:
       "Notice, right now, that this conversation \"knows\" things about your work at Kasper from before - that's long-term memory in action: facts stored elsewhere, silently re-inserted into context, not the model recalling on its own.",
     diagram: `<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
@@ -517,7 +517,7 @@ export const NODES: NodeContent[] = [
     layer0:
       "Complex AI systems rarely use one giant prompt for everything - they break a task into smaller steps, each handled by a separate, narrower AI call, with the output of one step feeding into the next. Decomposition is the core orchestrator skill.",
     layer1:
-      "Chaining smaller, verifiable jobs (classify → extract → draft, for example) is more reliable than one massive prompt trying to do everything at once, because each step is easier to check, debug, and improve independently. This is the actual mental model behind everything you already build - Kasper Trips, ProvaCV, your Claude skills library - even when it doesn't look like \"AI agents\" on the surface.",
+      "Chaining smaller, verifiable jobs (classify → extract → draft, for example) is more reliable than one massive prompt trying to do everything at once, because each step is easier to check, debug, and improve independently. Frameworks like LangChain, LangGraph, and CrewAI exist specifically to build and manage these chains in code. This is the actual mental model behind everything you already build - Kasper Trips, ProvaCV, your Claude skills library - even when it doesn't look like \"AI agents\" on the surface.",
     layer2:
       "Take one of your own multi-step Claude skills (e.g. cv-tailoring) and map it explicitly as a chain: what's step 1's exact input/output, what feeds into step 2, etc. You'll likely find you've been orchestrating without naming it as such.",
     diagram: `<svg viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">

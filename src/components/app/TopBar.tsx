@@ -1,10 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { Flame } from "lucide-react";
+import { Flame, Moon, Sun } from "lucide-react";
 import { TOTAL_NODES } from "../../data/nodes";
 import { useMapState } from "../../hooks/useMapState";
+import { useTheme } from "../../hooks/useTheme";
 
 export function TopBar() {
   const { state, streak, hydrated } = useMapState();
+  const { theme, toggleTheme } = useTheme();
   const done = state.gotIt.length;
   const pct = hydrated ? Math.round((done / TOTAL_NODES) * 100) : 0;
 
@@ -43,6 +45,15 @@ export function TopBar() {
             </div>
           </>
         )}
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+          title={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+        >
+          {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+        </button>
       </div>
 
       <div className="h-[2px] w-full bg-border">
