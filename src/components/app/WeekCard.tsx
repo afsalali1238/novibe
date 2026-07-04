@@ -71,14 +71,14 @@ export function WeekCard({ week, defaultOpen }: { week: Week; defaultOpen?: bool
               <Zap className={"h-4 w-4 " + (challengeDone ? "text-accent" : "text-secondary")} />
               <div>
                 <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                  Weekly Playground \u00b7 +100 XP
+                  Weekly Playground · +100 XP
                 </div>
                 <div className="text-sm font-semibold text-foreground">
-                  {challengeDone ? "Solved \u2014 revisit challenge" : "Open the Sandbox"}
+                  {challengeDone ? "Solved — revisit challenge" : "Open the Sandbox"}
                 </div>
               </div>
             </div>
-            <span className="font-mono text-xs text-muted-foreground">\u2192</span>
+            <span className="font-mono text-xs text-muted-foreground">→</span>
           </Link>
         </div>
       )}
