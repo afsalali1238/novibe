@@ -128,7 +128,7 @@ export const NODES: NodeContent[] = [
     title: "Why models \"hallucinate\"",
     buildsOn: ["a1", "a3"],
     layer0:
-      "A hallucination is when the model confidently states something false - a fake statistic, a book that doesn't exist, a wrong date. This happens because the model isn't looking anything up by default; it's generating the statistically most-likely next words based on patterns in its training data, and sometimes the most \"plausible-sounding\" answer just isn't true.",
+      "A hallucination is when the model confidently states something false - a fake statistic, a book that doesn't exist, a wrong date. Last month, a major airline's chatbot hallucinated a refund policy and the court forced them to honor it. This happens because the model isn't looking anything up by default; it's generating the statistically most-likely next words based on patterns in its training data, and sometimes the most \"plausible-sounding\" answer just isn't true.",
     layer1:
       "The model has no built-in fact-checking step - it doesn't distinguish between \"I recall this precisely\" and \"this pattern feels right.\" Hallucination rates go up with obscure facts, exact numbers, quotes, and citations - anything requiring precision rather than pattern completion. This is exactly why tools like web search or RAG (Cluster C) exist: to give the model real, current text to ground its answer in, instead of relying purely on memorized patterns.",
     layer2:
@@ -589,7 +589,7 @@ export const NODES: NodeContent[] = [
     title: "Cost & latency tradeoffs",
     buildsOn: ["a2", "b5"],
     layer0:
-      "Every AI feature has two practical costs: money (roughly proportional to tokens in/out) and time (latency - how long a response takes). Bigger/smarter models are usually slower and pricier; smaller/faster models are cheaper but less capable. Product decisions constantly trade these off - you don't always need the smartest model for every task.",
+      "Every AI feature has two practical costs: money (roughly proportional to tokens in/out) and time (latency - how long a response takes). Bigger/smarter models are usually slower and pricier; smaller/faster models are cheaper but less capable. For example, running a heavy task through GPT-4o can cost 10x more per token than using Claude 3.5 Haiku for the exact same result. Product decisions constantly trade these off - you don't always need the smartest model for every task.",
     layer1:
       "A common real pattern: use a small, cheap, fast model for simple tasks (classification, extraction) and reserve the expensive, slow, capable model only for the hard reasoning step - exactly mirroring the \"orchestration\" idea (E5). Latency also compounds in agent loops - five sequential model calls each taking 2 seconds is a 10-second wait, which matters hugely for user-facing products vs. background jobs.",
     layer2:
