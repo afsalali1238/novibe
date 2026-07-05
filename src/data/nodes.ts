@@ -220,6 +220,18 @@ export const NODES: NodeContent[] = [
       "No hands-on task needed here - this is a \"know it exists\" node for when you're evaluating or building a product. Case in point: if you ever price out an AI feature for Kasper's platform, ask whichever provider/dev you're working with whether prompt caching is being used for the static parts of the prompt - it directly affects your running cost.",
   },
   {
+    id: "b6",
+    cluster: "B",
+    title: "Reverse Prompting (The Interview Pattern)",
+    buildsOn: ["b1"],
+    layer0:
+      "One of the most powerful prompting techniques is asking the AI to ask YOU questions. Instead of trying to guess all the context the AI needs, you simply tell it what your goal is, and instruct it to interview you until it has enough context to do the job perfectly.",
+    layer1:
+      "This solves the 'blank page syndrome' of prompt engineering. By writing 'I want to build X. Ask me exactly 5 questions, one at a time, to gather all the context you need before you start drafting,' you force the model to build its own perfect prompt through you. It takes the burden of knowing what's important off your shoulders and puts it on the AI.",
+    layer2:
+      "Open ChatGPT or Claude and type: 'I need to write a difficult email to a client delaying a project. Do not write it yet. Interview me, asking one question at a time, until you have exactly what you need to write a perfect draft.' See how it guides you instead of the other way around.",
+  },
+  {
     id: "c1",
     cluster: "C",
     title: "RAG (Retrieval-Augmented Generation)",
@@ -364,7 +376,7 @@ export const NODES: NodeContent[] = [
     layer1:
       "n8n and Make are more flexible/powerful (support branching logic, loops, self-hosting for n8n) and popular for building \"agentic\" workflows; Zapier is simpler and more mainstream but less flexible for complex logic. Each node in these tools is usually either an app action (send email, add row) or an AI call (classify, summarize, generate) - meaning everything from Cluster B (prompting) applies directly inside these tools.",
     layer2:
-      "Build one tiny real workflow: a new email in a specific label triggers an AI call that classifies it, and the result gets logged to a Google Sheet. Even a 3-node workflow makes the \"automation glue\" concept concrete.",
+      "Build one tiny real workflow in n8n or Make: a new email triggers a 'Reading Agent' that classifies it. If it's a sales lead, it triggers a 'Research Agent' to scrape the sender's website, which then hands off to a 'Drafting Agent' to write a customized reply. Even building this 3-step loop makes the \"automation glue\" concept concrete.",
   },
   {
     id: "d3",
@@ -597,7 +609,7 @@ export const NODES: NodeContent[] = [
     layer1:
       "This mirrors human corporate structure. If an agent tries to be a researcher, writer, and editor all at once, it loses focus (context window limits, A4) and fails. If you explicitly wire an \"Editor\" agent to review the \"Writer\" agent's output before passing it to the \"Manager,\" quality skyrockets. Tools like CrewAI and AutoGen exist specifically to build these digital coworker teams.",
     layer2:
-      "Think about your internal tools (Cowork / Clawbot). Sketch a 3-agent team for a real Kasper workflow: What does Agent 1 do? What exactly does it hand off to Agent 2? How does the Manager Agent verify the final work before a human ever sees it?",
+      "Think about your internal tools (like Cowork or Clawbot). Sketch a 3-agent team for a real Kasper workflow. For example: a 'Scraping Agent' pulls data from a URL, hands it to a 'Validation Agent' to check for missing fields, which then hands it to a 'Formatting Agent' to output pure JSON. How does the Manager Agent verify the final work before a human ever sees it?",
   },
   {
     id: "f1",
