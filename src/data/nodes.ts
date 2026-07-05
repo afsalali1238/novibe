@@ -148,6 +148,18 @@ export const NODES: NodeContent[] = [
       "Ask a model to explain the reasoning behind one of its own refusals - \"why did you decline that specific request?\" - and notice it can usually articulate the actual safety principle involved, rather than giving a generic canned response. That's a direct, honest look at how alignment training shows up in a real conversation.",
   },
   {
+    id: "a7",
+    cluster: "A",
+    title: "Reasoning Models (o1, DeepSeek R1)",
+    buildsOn: ["a1", "a2"],
+    layer0:
+      "Until recently, models just predicted the next word instantly. Reasoning models (like OpenAI's o1 or DeepSeek R1) pause to \"think\" before answering. They generate a hidden chain of thought—breaking the problem down, checking their own work, and fixing mistakes—before outputting the final answer.",
+    layer1:
+      "This shifts compute from training to inference. Instead of needing a massively smarter base model, you just give the model more time to think. It's the AI equivalent of System 1 (fast, instinctive) vs System 2 (slow, deliberate) thinking.",
+    layer2:
+      "Ask a standard model (like GPT-4o or Claude 3.5 Sonnet) a tricky logic puzzle. Then ask a reasoning model (o1 or R1) the exact same puzzle. Notice how the reasoning model outputs a \"thought process\" block that takes 10-20 seconds before giving the right answer.",
+  },
+  {
     id: "b1",
     cluster: "B",
     title: "Prompting fundamentals",
@@ -317,6 +329,19 @@ export const NODES: NodeContent[] = [
 </svg>`,
   },
   {
+    id: "c6",
+    cluster: "C",
+    title: "GitHub & Hosting: Where AI code actually lives",
+    buildsOn: ["c4"],
+    seeAlso: ["d3"],
+    layer0:
+      "AI coding tools (like Cursor or Lovable) just generate text files. To turn those files into a real, live product on the internet, you need version control and hosting. GitHub is the vault that saves and tracks your code history; hosting platforms like Vercel or Supabase are the engines that pull your code from GitHub and run it on the public internet.",
+    layer1:
+      "A huge hurdle for non-technical founders is realizing that AI doesn't \"deploy\" itself by default. When an AI writes code, it sits locally on your machine (or in a sandbox). You have to \"git commit\" (save) and \"git push\" (upload to GitHub). Once pushed, modern hosting platforms automatically detect the new code and build a live website from it. This entire flow is called CI/CD (Continuous Integration/Continuous Deployment).",
+    layer2:
+      "Look at the URL of this exact app. It ends in vercel.app. This means the code was pushed to a GitHub repository, and Vercel automatically grabbed it, built it, and hosted it. If you change a file locally, the live site won't change until you push it to GitHub again.",
+  },
+  {
     id: "d1",
     cluster: "D",
     title: "Claude vs. GPT vs. Gemini - real differences",
@@ -393,6 +418,18 @@ export const NODES: NodeContent[] = [
       "Take a real Kasper or Provia asset - a photo, or a short script - and run it through two paths: describe it in words to a text-only model, versus feeding the actual image or audio directly to a multimodal model. Notice how much nuance your text description loses compared to the model reasoning over the real file.",
   },
   {
+    id: "d7",
+    cluster: "D",
+    title: "Local AI & Small Language Models (SLMs)",
+    buildsOn: ["a2", "f2"],
+    layer0:
+      "You don't always need a massive cloud server to run AI. Small Language Models (SLMs) like Llama 8B or Apple Intelligence are small enough to run entirely locally on your phone or laptop. They are faster, completely private, and work offline.",
+    layer1:
+      "SLMs aren't smart enough to write a complex app, but they are perfect for fast, frequent tasks on your device—like summarizing a notification, formatting text, or basic extraction. They trade deep reasoning for zero latency, zero cloud cost, and absolute privacy. This is why Apple and Google are pushing SLMs to run entirely on-device for consumer features.",
+    layer2:
+      "Download an app like LM Studio or Ollama on your computer. Download a small open-source model (like Llama 3 8B) and turn off your wifi. Chat with the model. Experiencing an LLM run offline on your own hardware completely demystifies the \"magic\" of the cloud.",
+  },
+  {
     id: "e1",
     cluster: "E",
     title: "What actually makes something an \"agent\"",
@@ -424,7 +461,7 @@ export const NODES: NodeContent[] = [
   {
     id: "e2",
     cluster: "E",
-    title: "Tool use / function calling",
+    title: "Tool use & MCPs (Model Context Protocol)",
     buildsOn: ["b4", "e1"],
     seeAlso: ["d2", "d3"],
     layer0:
@@ -551,6 +588,18 @@ export const NODES: NodeContent[] = [
       "Directly relevant to what you build: next time you design or evaluate a feature where an AI reads content from outside the user (an inbox, a scraped webpage, an uploaded document), ask explicitly - \"if this content contained hidden instructions, what's the worst it could make the AI do, and what actually stops that?\" That single question is most of what security-conscious AI product design really is.",
   },
   {
+    id: "e7",
+    cluster: "E",
+    title: "Multi-Agent Systems (Swarms)",
+    buildsOn: ["e1", "e5"],
+    layer0:
+      "Instead of building one giant AI trying to do everything, the future of work is a team of agents. A Multi-Agent System (or swarm) splits complex work among specialized AI roles—like a \"Manager\" agent delegating tasks to a \"Researcher\" agent and a \"Coder\" agent. Each has a narrow job and they talk to each other.",
+    layer1:
+      "This mirrors human corporate structure. If an agent tries to be a researcher, writer, and editor all at once, it loses focus (context window limits, A4) and fails. If you explicitly wire an \"Editor\" agent to review the \"Writer\" agent's output before passing it to the \"Manager,\" quality skyrockets. Tools like CrewAI and AutoGen exist specifically to build these digital coworker teams.",
+    layer2:
+      "Think about your internal tools (Cowork / Clawbot). Sketch a 3-agent team for a real Kasper workflow: What does Agent 1 do? What exactly does it hand off to Agent 2? How does the Manager Agent verify the final work before a human ever sees it?",
+  },
+  {
     id: "f1",
     cluster: "F",
     title: "Build vs. buy vs. fine-tune",
@@ -631,6 +680,19 @@ export const NODES: NodeContent[] = [
       "A useful mental checklist when evaluating any AI claim: What model is actually underneath this (D1)? Is this really fine-tuned or just well-prompted (C2)? Is \"agent\" here doing multi-step autonomous work, or is it a single chatbot call (E1)? Has this been tested beyond a demo (F3)? Running any pitch through these five questions cuts through most hype fast.",
     layer2:
       "Pick one AI product or startup pitch you've seen recently (Realla.AI's own materials are a good real example) and run it through the checklist above - write down your honest guess at what's actually happening underneath, then see if you can find out how close you were.",
+  },
+  {
+    id: "f6",
+    cluster: "F",
+    title: "Data Privacy & Enterprise Security",
+    buildsOn: ["c4"],
+    seeAlso: ["d5", "e6"],
+    layer0:
+      "\"Will my data train the model?\" The answer depends entirely on how you access it. If you use free consumer tools (like ChatGPT.com), your inputs are often used for training by default. If you use the developer API (C4) or Enterprise tiers, providers explicitly guarantee your data is zero-retention and never used for training.",
+    layer1:
+      "Most non-technical founders accidentally ban AI out of fear, without realizing that plugging into an API is exactly as secure as using AWS or Stripe. The rule of thumb: Consumer Chat UI = potentially used for training. Developer API = private and safe. If extreme privacy is required, open-source models (D5) or local SLMs (D7) are the only way to ensure data physically never leaves your hardware.",
+    layer2:
+      "Go to your personal ChatGPT or Claude settings right now and find the \"Data Controls\" or \"Improve the Model for Everyone\" toggle. Turn it off. You've just switched from the consumer default to a private tier manually.",
   },
 ];
 
