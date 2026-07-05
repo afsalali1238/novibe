@@ -232,6 +232,18 @@ export const NODES: NodeContent[] = [
       "Open ChatGPT or Claude and type: 'I need to write a difficult email to a client delaying a project. Do not write it yet. Interview me, asking one question at a time, until you have exactly what you need to write a perfect draft.' See how it guides you instead of the other way around.",
   },
   {
+    id: "b7",
+    cluster: "B",
+    title: "Chain of Thought (CoT) Prompting",
+    buildsOn: ["b1", "a7"],
+    layer0:
+      "Before native reasoning models (A7) existed, the best way to make a model smarter was to force it to write out its thinking before giving an answer. This is called Chain of Thought prompting—literally just adding \"think step by step\" to your prompt.",
+    layer1:
+      "If you ask a model a complex math problem and demand just the final number, it will often guess wrong because it has to calculate everything in one \"token\" (prediction). By forcing it to write out its steps first, it uses the generated text as a scratchpad to \"show its work,\" increasing its accuracy exponentially.",
+    layer2:
+      "Ask Claude a complex word problem and tell it: \"Output ONLY the final answer, nothing else.\" Then ask it again, but tell it: \"Explain your reasoning step-by-step, then give the answer.\" Compare the results.",
+  },
+  {
     id: "c1",
     cluster: "C",
     title: "RAG (Retrieval-Augmented Generation)",
@@ -352,6 +364,19 @@ export const NODES: NodeContent[] = [
       "A huge hurdle for non-technical founders is realizing that AI doesn't \"deploy\" itself by default. When an AI writes code, it sits locally on your machine (or in a sandbox). You have to \"git commit\" (save) and \"git push\" (upload to GitHub). Once pushed, modern hosting platforms automatically detect the new code and build a live website from it. This entire flow is called CI/CD (Continuous Integration/Continuous Deployment).",
     layer2:
       "Look at the URL of this exact app. It ends in vercel.app. This means the code was pushed to a GitHub repository, and Vercel automatically grabbed it, built it, and hosted it. If you change a file locally, the live site won't change until you push it to GitHub again.",
+  },
+  {
+    id: "c7",
+    cluster: "C",
+    title: "AI UX: Streaming & Generative UI",
+    buildsOn: ["c4"],
+    seeAlso: ["d3"],
+    layer0:
+      "AI models don't return their answer all at once; they generate it one token at a time. If an app waits for the entire response to finish before showing it, the user might stare at a loading spinner for 10 seconds. Streaming is the technical fix for this.",
+    layer1:
+      "\"Streaming\" means showing the text typing out in real-time as the model generates it. A newer trend is \"Generative UI\"—instead of just streaming text, the model streams raw data (like JSON), and the app uses that data to instantly build native buttons, charts, or components on the screen on the fly (like Vercel's v0 does).",
+    layer2:
+      "Notice how ChatGPT types its answers out letter-by-letter instead of making you wait. If you ever build a user-facing AI tool, explicitly ask your developer to \"enable streaming\"—it is the single biggest upgrade to perceived performance.",
   },
   {
     id: "d1",
