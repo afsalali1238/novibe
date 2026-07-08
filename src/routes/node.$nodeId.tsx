@@ -4,6 +4,7 @@ import { ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CLUSTERS, NODES, findNode, type NodeContent, type ResourceType } from "../data/nodes";
 import { useMapState } from "../hooks/useMapState";
+import { truncateToWord } from "../lib/utils";
 
 const RESOURCE_VERB: Record<ResourceType, string> = {
   video: "watch",
@@ -26,12 +27,13 @@ export const Route = createFileRoute("/node/$nodeId")({
       return { meta: [{ title: "Not found - Novibe" }, { name: "robots", content: "noindex" }] };
     }
     const { node } = loaderData;
+    const description = truncateToWord(node.layer0, 155);
     return {
       meta: [
         { title: `${node.title} - Novibe` },
-        { name: "description", content: node.layer0.slice(0, 155) },
+        { name: "description", content: description },
         { property: "og:title", content: `${node.title} - Novibe` },
-        { property: "og:description", content: node.layer0.slice(0, 155) },
+        { property: "og:description", content: description },
       ],
     };
   },
@@ -62,14 +64,6 @@ function NodePage() {
     if (hydrated) setReflection(state.reflections[node.id] ?? "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, node.id]);
-
-  useEffect(() => {
-    if (!hydrated) return;
-    const current = state.reflections[node.id] ?? "";
-    if (current === reflection) return;
-    const t = window.setTimeout(() => saveReflection(node.id, reflection), 250);
-    return () => window.clearTimeout(t);
-  }, [reflection, hydrated, node.id, state.reflections, saveReflection]);
 
   const cluster = CLUSTERS.find((c) => c.id === node.cluster)!;
   const nodeIndex = NODES.findIndex((n) => n.id === node.id);
@@ -233,6 +227,11 @@ function NodePage() {
           id="reflection"
           value={reflection}
           onChange={(e) => setReflection(e.target.value)}
+          onBlur={() => {
+            if (hydrated && (state.reflections[node.id] ?? "") !== reflection) {
+              saveReflection(node.id, reflection);
+            }
+          }}
           placeholder="what stuck with you?"
           rows={2}
           spellCheck={false}

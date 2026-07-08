@@ -80,8 +80,10 @@ function Home() {
       )}
 
       <div className="mb-4 flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2">
+        <label htmlFor="main-search" className="sr-only">Search the whole map</label>
         <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
         <input
+          id="main-search"
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
