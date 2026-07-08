@@ -94,7 +94,6 @@ type Ctx = {
   resetAll: () => void;
   exportState: () => string;
   importState: (raw: string) => ImportResult;
-  weeklySummary: () => { nodesThisWeek: number; clustersThisWeek: number };
 };
 
 const BACKUP_VERSION = 1;
@@ -239,11 +238,6 @@ export function MapStateProvider({ children }: { children: ReactNode }) {
       resetAll,
       exportState,
       importState,
-      weeklySummary: () => {
-        // Not derived here - callers can compute; keep here for convenience.
-        // We can't know node→cluster without importing; move real logic to callers.
-        return { nodesThisWeek: 0, clustersThisWeek: 0 };
-      },
     }),
     [
       state,

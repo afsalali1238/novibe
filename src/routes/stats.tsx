@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Download, RotateCcw, Upload } from "lucide-react";
 import { useRef, useState, type ChangeEvent } from "react";
-import { CLUSTERS, NODES, TOTAL_NODES, findNode, nodesInCluster } from "../data/nodes";
+import { CLUSTERS, TOTAL_NODES, findNode, nodesInCluster } from "../data/nodes";
 import { useMapState } from "../hooks/useMapState";
+import { activeThisWeek, clustersTouched } from "../lib/mapStats";
+import { StatCard } from "../components/app/StatCard";
 
 export const Route = createFileRoute("/stats")({
   head: () => ({
@@ -21,14 +23,8 @@ function Stats() {
     null,
   );
   const done = state.gotIt.length;
-  const clustersTouched = new Set(
-    state.gotIt.map((id) => NODES.find((n) => n.id === id)?.cluster).filter(Boolean) as string[],
-  ).size;
-
-  const weekStart = new Date();
-  weekStart.setUTCDate(weekStart.getUTCDate() - 6);
-  const weekStartIso = weekStart.toISOString().slice(0, 10);
-  const activeThisWeek = state.activityDates.filter((d) => d >= weekStartIso).length;
+  const touchedClusters = clustersTouched(state.gotIt);
+  const activeDaysThisWeek = activeThisWeek(state.activityDates);
 
   const reflectionEntries = state.reflectionOrder
     .filter((id) => state.gotIt.includes(id) && (state.reflections[id]?.trim().length ?? 0) > 0)
@@ -86,9 +82,13 @@ function Stats() {
       </header>
 
       <section className="mb-5 grid grid-cols-3 gap-2">
-        <Tile label="Nodes" value={`${done}/${TOTAL_NODES}`} />
-        <Tile label="Clusters" value={`${clustersTouched}/${CLUSTERS.length}`} />
-        <Tile label="Streak" value={streak > 0 ? `${streak}d` : "-"} hint={`${activeThisWeek}/7 this week`} />
+        <StatCard label="Nodes" value={`${done}/${TOTAL_NODES}`} />
+        <StatCard label="Clusters" value={`${touchedClusters}/${CLUSTERS.length}`} />
+        <StatCard
+          label="Streak"
+          value={streak > 0 ? `${streak}d` : "-"}
+          hint={`${activeDaysThisWeek}/7 this week`}
+        />
       </section>
 
       <section className="mb-6 rounded-xl border border-border bg-card p-4">
@@ -221,20 +221,6 @@ function Stats() {
         <RotateCcw className="h-3.5 w-3.5" />
         Reset all progress
       </button>
-    </div>
-  );
-}
-
-function Tile({ label, value, hint }: { label: string; value: string; hint?: string }) {
-  return (
-    <div className="rounded-lg border border-border bg-card px-3 py-2">
-      <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-        {label}
-      </div>
-      <div className="mt-0.5 font-mono text-[16px] font-semibold tabular-nums text-foreground">
-        {value}
-      </div>
-      {hint && <div className="mt-0.5 text-[10px] text-muted-foreground">{hint}</div>}
     </div>
   );
 }

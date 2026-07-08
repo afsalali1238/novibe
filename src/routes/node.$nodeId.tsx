@@ -2,8 +2,18 @@ import { createFileRoute, Link, notFound, useNavigate, useRouter } from "@tansta
 import { ArrowLeft, ArrowRight, Check, ChevronRight } from "lucide-react";
 import { ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
-import { CLUSTERS, NODES, findNode, type NodeContent } from "../data/nodes";
+import { CLUSTERS, NODES, findNode, type NodeContent, type ResourceType } from "../data/nodes";
 import { useMapState } from "../hooks/useMapState";
+
+const RESOURCE_VERB: Record<ResourceType, string> = {
+  video: "watch",
+  tool: "try",
+  article: "read",
+  paper: "read",
+  repo: "explore",
+  doc: "read",
+  course: "take",
+};
 
 export const Route = createFileRoute("/node/$nodeId")({
   loader: ({ params }) => {
@@ -154,17 +164,25 @@ function NodePage() {
         tone="warning"
         body={node.layer2}
       />
-      {node.videoUrl && (
-        <a
-          href={node.videoUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-1 inline-flex items-center gap-1.5 text-[12px] text-primary hover:underline"
-        >
-          <ExternalLink className="h-3.5 w-3.5" />
-          <span className="font-mono uppercase tracking-[0.12em] text-muted-foreground">watch:</span>
-          <span>{node.videoTitle ?? "explainer"}</span>
-        </a>
+      {node.resources && node.resources.length > 0 && (
+        <div className="mt-1 flex flex-col gap-1.5">
+          {node.resources.map((r) => (
+            <a
+              key={r.url}
+              href={r.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-[12px] text-primary hover:underline"
+            >
+              <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+              <span className="font-mono uppercase tracking-[0.12em] text-muted-foreground">
+                {RESOURCE_VERB[r.type]}:
+              </span>
+              <span className="truncate">{r.title}</span>
+              <span className="shrink-0 text-[10px] text-muted-foreground/70">— {r.source}</span>
+            </a>
+          ))}
+        </div>
       )}
 
       {seeAlso.length > 0 && (

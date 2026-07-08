@@ -91,6 +91,7 @@ function Glossary() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search terms..."
+          aria-label="Search glossary terms"
           className="w-full bg-transparent text-[13px] text-foreground outline-none placeholder:text-muted-foreground/60"
         />
       </div>

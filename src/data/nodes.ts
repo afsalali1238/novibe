@@ -1,5 +1,14 @@
 export type ClusterId = "A" | "B" | "C" | "D" | "E" | "F";
 
+export type ResourceType = "video" | "tool" | "article" | "paper" | "repo" | "doc" | "course";
+
+export type NodeResource = {
+  title: string;
+  url: string;
+  source: string; // author/publisher, shown as attribution
+  type: ResourceType;
+};
+
 export type NodeContent = {
   id: string;
   cluster: ClusterId;
@@ -10,9 +19,283 @@ export type NodeContent = {
   layer1: string;
   layer2: string;
   diagram?: string; // raw inline SVG markup, rendered directly on node page
-  videoUrl?: string; // optional external explainer link
-  videoTitle?: string; // short label for the video link
+  resources?: NodeResource[]; // vetted external links - articles, tools, papers, videos
 };
+
+// Shared resource objects, vetted against live URLs before inclusion.
+// Reused across nodes rather than duplicated inline.
+const R = {
+  transformerExplainer: {
+    title: "Transformer Explainer",
+    url: "https://poloclub.github.io/transformer-explainer/",
+    source: "Polo Club, Georgia Tech",
+    type: "tool",
+  },
+  tiktokenizer: {
+    title: "Tiktokenizer Playground",
+    url: "https://tiktokenizer.vercel.app/",
+    source: "AnySphere",
+    type: "tool",
+  },
+  learningToReason: {
+    title: "Learning to Reason with LLMs",
+    url: "https://openai.com/index/learning-to-reason-with-llms/",
+    source: "OpenAI",
+    type: "article",
+  },
+  deepseekR1: {
+    title: "DeepSeek-R1: Incentivizing Reasoning Capability via RL",
+    url: "https://arxiv.org/abs/2501.12948",
+    source: "DeepSeek-AI",
+    type: "paper",
+  },
+  anthropicPromptTutorial: {
+    title: "Anthropic Prompt Engineering Interactive Tutorial",
+    url: "https://github.com/anthropics/prompt-eng-interactive-tutorial",
+    source: "Anthropic",
+    type: "repo",
+  },
+  chatgptPromptCourse: {
+    title: "ChatGPT Prompt Engineering for Developers",
+    url: "https://www.deeplearning.ai/courses/chatgpt-prompt-eng/",
+    source: "DeepLearning.AI",
+    type: "course",
+  },
+  promptingGuide: {
+    title: "PromptingGuide.ai",
+    url: "https://www.promptingguide.ai/",
+    source: "DAIR.AI",
+    type: "article",
+  },
+  promptCachingClaude: {
+    title: "Prompt Caching with Claude",
+    url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude/prompt-caching",
+    source: "Google Cloud",
+    type: "doc",
+  },
+  whatIsRag: {
+    title: "What is Retrieval-Augmented Generation (RAG)?",
+    url: "https://github.com/resources/articles/software-development-with-retrieval-augmentation-generation-rag",
+    source: "GitHub",
+    type: "article",
+  },
+  demystifyingEvals: {
+    title: "Demystifying Evals for AI Agents",
+    url: "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents",
+    source: "Anthropic Engineering",
+    type: "article",
+  },
+  vercelGenerativeUi: {
+    title: "Vercel AI SDK: Generative User Interfaces",
+    url: "https://ai-sdk.dev/docs/ai-sdk-ui/generative-user-interfaces",
+    source: "Vercel",
+    type: "doc",
+  },
+  embeddingProjector: {
+    title: "Embedding Projector",
+    url: "https://projector.tensorflow.org/",
+    source: "Google / TensorFlow",
+    type: "tool",
+  },
+  arenaAi: {
+    title: "Arena AI Leaderboard (formerly LMSYS Chatbot Arena)",
+    url: "https://lmarena.ai/",
+    source: "Arena AI",
+    type: "tool",
+  },
+  ollamaRepo: {
+    title: "Ollama",
+    url: "https://github.com/ollama/ollama",
+    source: "Ollama",
+    type: "repo",
+  },
+  cursorTutorial: {
+    title: "Cursor AI Tutorial for Beginners",
+    url: "https://www.youtube.com/watch?v=3289vhOUdKA",
+    source: "Volo Builds",
+    type: "video",
+  },
+  vectorDbVideo: {
+    title: "What is a Vector Database?",
+    url: "https://www.youtube.com/watch?v=t9IDoenf-lo",
+    source: "IBM Technology",
+    type: "video",
+  },
+  n8nRepo: {
+    title: "n8n",
+    url: "https://github.com/n8n-io/n8n",
+    source: "n8n",
+    type: "repo",
+  },
+  phi3Report: {
+    title: "Phi-3 Technical Report",
+    url: "https://arxiv.org/abs/2404.14219",
+    source: "Microsoft Research",
+    type: "paper",
+  },
+  buildingEffectiveAgents: {
+    title: "Building Effective Agents",
+    url: "https://www.anthropic.com/engineering/building-effective-agents",
+    source: "Anthropic Engineering",
+    type: "article",
+  },
+  mcpSpec: {
+    title: "Model Context Protocol",
+    url: "https://modelcontextprotocol.io/",
+    source: "Anthropic / Open Source",
+    type: "doc",
+  },
+  agentSwarms: {
+    title: "AgentSwarms: Interactive Agentic AI Playground",
+    url: "https://agentswarms.fyi/",
+    source: "AgentSwarms",
+    type: "tool",
+  },
+  langgraphOverview: {
+    title: "LangGraph Overview",
+    url: "https://docs.langchain.com/oss/python/langgraph/overview",
+    source: "LangChain",
+    type: "doc",
+  },
+  codexRce: {
+    title: "Codex CLI RCE & Prompt Injection Mitigations",
+    url: "https://cymulate.com/blog/codex-cli-rce-prompt-injection-mitigations/",
+    source: "Cymulate Research Lab",
+    type: "article",
+  },
+  thisIsAgi: {
+    title: "2026: This is AGI",
+    url: "https://sequoiacap.com/article/2026-this-is-agi/",
+    source: "Sequoia Capital",
+    type: "article",
+  },
+  tokenCostCalculator: {
+    title: "LLM Token Cost Calculator",
+    url: "https://llmgateway.io/token-cost-calculator",
+    source: "LLM Gateway",
+    type: "tool",
+  },
+  beyondPerTokenPricing: {
+    title: "Beyond Per-Token Pricing: LLM Infrastructure Cost Estimation",
+    url: "https://arxiv.org/abs/2606.11690",
+    source: "Academic Submission (arXiv)",
+    type: "paper",
+  },
+  owaspTop10: {
+    title: "OWASP Top 10 for LLM Applications (2025)",
+    url: "https://owasp.org/www-project-top-10-for-large-language-model-applications/assets/PDF/OWASP-Top-10-for-LLMs-v2025.pdf",
+    source: "OWASP GenAI Security Project",
+    type: "doc",
+  },
+  alwaysOnEconomy: {
+    title: "The Always-On Economy: AI's Real Impact",
+    url: "https://sequoiacap.com/article/always-on-economy/",
+    source: "Sequoia Capital",
+    type: "article",
+  },
+  prompting101: {
+    title: "Prompting 101",
+    url: "https://www.youtube.com/watch?v=ysPbXH0LpIE",
+    source: "Anthropic (Code w/ Claude)",
+    type: "video",
+  },
+  masteringClaudeCode: {
+    title: "Mastering Claude Code in 30 minutes",
+    url: "https://www.youtube.com/watch?v=6eBSHbLKuN0",
+    source: "Anthropic",
+    type: "video",
+  },
+  claudeCodeBestPractices: {
+    title: "Claude Code best practices",
+    url: "https://www.youtube.com/watch?v=gv0WHhKelSE",
+    source: "Anthropic (Code w/ Claude)",
+    type: "video",
+  },
+  mcp201: {
+    title: "MCP 201",
+    url: "https://www.youtube.com/watch?v=HNzH5Us1Rvg",
+    source: "Anthropic (Code w/ Claude)",
+    type: "video",
+  },
+  beyondBasicsClaudeCode: {
+    title: "Beyond the basics with Claude Code",
+    url: "https://www.youtube.com/watch?v=tuY2ChJIx48",
+    source: "Claude",
+    type: "video",
+  },
+  proactiveAgentWorkflow: {
+    title: "Build a proactive agent workflow with Claude Code",
+    url: "https://www.youtube.com/watch?v=eSP7PLTXNy8",
+    source: "Claude",
+    type: "video",
+  },
+  aiVsMlCloud: {
+    title: "Artificial intelligence versus machine learning",
+    url: "https://cloud.google.com/discover/deep-learning-vs-machine-learning",
+    source: "Google Cloud",
+    type: "article",
+  },
+  whatIsGpt3b1b: {
+    title: "But what is a GPT? Visual intro to transformers",
+    url: "https://www.youtube.com/watch?v=wjZofJX0v4M",
+    source: "3Blue1Brown",
+    type: "video",
+  },
+  aiVsMlIbm: {
+    title: "AI vs Machine Learning vs Deep Learning - What's Actually the Difference?",
+    url: "https://www.youtube.com/watch?v=WiCHdba-aXM",
+    source: "IBM Technology",
+    type: "video",
+  },
+  hallucinationInevitable: {
+    title: "Hallucination is Inevitable: An Innate Limitation of Large Language Models",
+    url: "https://arxiv.org/abs/2401.11817",
+    source: "arXiv",
+    type: "paper",
+  },
+  whyAiLies: {
+    title: "Why Does AI Lie, and What Can We Do About It?",
+    url: "https://www.youtube.com/watch?v=w65p_IIp6JY",
+    source: "Robert Miles AI Safety",
+    type: "video",
+  },
+  howToFixHallucinations: {
+    title: "How to Fix AI Hallucinations (RAG, Semantic Entropy & Defense in Depth)",
+    url: "https://www.youtube.com/watch?v=7F_nx4WdFnY",
+    source: "Aura Labs",
+    type: "video",
+  },
+  deliberativeAlignment: {
+    title: "Deliberative alignment: reasoning enables safer language models",
+    url: "https://openai.com/index/deliberative-alignment/",
+    source: "OpenAI",
+    type: "article",
+  },
+  manyShotJailbreaking: {
+    title: "Many-shot jailbreaking",
+    url: "https://www.anthropic.com/research/many-shot-jailbreaking",
+    source: "Anthropic",
+    type: "article",
+  },
+  introToAiSafety: {
+    title: "Intro to AI Safety, Remastered",
+    url: "https://www.youtube.com/watch?v=pYXy-A4siMw",
+    source: "Robert Miles AI Safety",
+    type: "video",
+  },
+  ragVsFineTuningPaper: {
+    title: "RAG vs Fine-tuning: Pipelines, Tradeoffs, and a Case Study on Agriculture",
+    url: "https://arxiv.org/abs/2401.08406",
+    source: "arXiv",
+    type: "paper",
+  },
+  ragVsFineTuningIbm: {
+    title: "RAG vs Fine-Tuning vs Prompt Engineering: Optimizing AI Models",
+    url: "https://www.youtube.com/watch?v=zYGDpG-pTho",
+    source: "IBM Technology",
+    type: "video",
+  },
+} as const satisfies Record<string, NodeResource>;
 
 export type Cluster = {
   id: ClusterId;
@@ -41,6 +324,7 @@ export const NODES: NodeContent[] = [
       "During training, the model reads enormous amounts of text and adjusts billions of internal numbers (parameters) so that its next-word predictions get statistically closer to real text. It never \"understands\" in a human sense - it's compressed statistical structure over language. At inference (when you chat with it), those learned weights are frozen; the model just runs prediction, one token at a time, using whatever text is in front of it (the prompt) as its only source of \"memory.\"",
     layer2:
       "Open Claude or ChatGPT. Type one word, then keep hitting \"continue\" or asking \"what's the next most likely word\" mentally before reading the actual output. Notice: it's not \"thinking\" ahead - it's building the response piece by piece. Try asking it to write a sentence and then ask it \"why did you choose that specific next word\" - see how it explains its own pattern-following.",
+    resources: [R.aiVsMlCloud, R.whatIsGpt3b1b, R.aiVsMlIbm],
   },
   {
     id: "a2",
@@ -75,6 +359,7 @@ export const NODES: NodeContent[] = [
     </marker>
   </defs>
 </svg>`,
+    resources: [R.transformerExplainer, R.tiktokenizer],
   },
   {
     id: "a3",
@@ -87,6 +372,7 @@ export const NODES: NodeContent[] = [
       "Training happens in massive data-center runs, often months long, producing a frozen set of weights that then gets deployed as \"the model\" (e.g. Claude Sonnet 5). Every time you send a message, that's a fresh inference call - the model reads your whole conversation as input text again from scratch, predicts a response, and forgets. This is why \"memory\" features in AI apps are really just re-inserting your past messages into the prompt every time, not the model actually learning.",
     layer2:
       "Have a long conversation with Claude about a fact you invented (e.g. \"my dog's name is Ziggy\"). Start a brand new chat and ask \"what's my dog's name?\" It won't know - proving the model itself didn't learn anything; the previous chat's context simply isn't there anymore.",
+    resources: [R.transformerExplainer, R.learningToReason, R.deepseekR1],
   },
   {
     id: "a4",
@@ -121,6 +407,7 @@ export const NODES: NodeContent[] = [
   <text x="470" y="112" text-anchor="middle" font-size="10" fill="var(--chart-2)">message</text>
   <text x="300" y="175" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Once full, the oldest messages drop out to make room — the model never "remembers" them again</text>
 </svg>`,
+    resources: [R.transformerExplainer, R.tiktokenizer],
   },
   {
     id: "a5",
@@ -133,6 +420,7 @@ export const NODES: NodeContent[] = [
       "The model has no built-in fact-checking step - it doesn't distinguish between \"I recall this precisely\" and \"this pattern feels right.\" Hallucination rates go up with obscure facts, exact numbers, quotes, and citations - anything requiring precision rather than pattern completion. This is exactly why tools like web search or RAG (Cluster C) exist: to give the model real, current text to ground its answer in, instead of relying purely on memorized patterns.",
     layer2:
       "Ask Claude or ChatGPT (without web search enabled) for \"the exact publication date and page number of a specific quote\" from an obscure book. Then ask it to search the web for the same thing. Compare confidence and accuracy - a direct feel for grounded vs. ungrounded answers.",
+    resources: [R.hallucinationInevitable, R.whyAiLies, R.howToFixHallucinations],
   },
   {
     id: "a6",
@@ -146,6 +434,7 @@ export const NODES: NodeContent[] = [
       "Providers layer safety training (RLHF, constitutional AI, red-teaming) on top of raw next-token prediction to reduce harmful, biased, or dangerous outputs. Each major lab publishes its own version of this as policy - Anthropic's Responsible Scaling Policy, OpenAI's Preparedness Framework, Google DeepMind's Frontier Safety Framework - all trying to tie a model's real-world autonomy to proportionally stronger safeguards. That training is shaped by imperfect human judgment calls, so it's never airtight - clever rephrasing, role-play framing, or multi-step prompts can sometimes get a model to produce something it would normally refuse. \"Alignment\" spans this narrow \"don't say bad things\" layer all the way up to much harder questions about whether increasingly capable, autonomous systems reliably pursue the goals we actually intend once they're taking real-world actions (see autonomy levels, E4) rather than just talking.",
     layer2:
       "Ask a model to explain the reasoning behind one of its own refusals - \"why did you decline that specific request?\" - and notice it can usually articulate the actual safety principle involved, rather than giving a generic canned response. That's a direct, honest look at how alignment training shows up in a real conversation.",
+    resources: [R.deliberativeAlignment, R.manyShotJailbreaking, R.introToAiSafety],
   },
   {
     id: "a7",
@@ -158,6 +447,7 @@ export const NODES: NodeContent[] = [
       "This shifts compute from training to inference. Instead of needing a massively smarter base model, you just give the model more time to think. It's the AI equivalent of System 1 (fast, instinctive) vs System 2 (slow, deliberate) thinking.",
     layer2:
       "Ask a standard model (like GPT-4o or Claude 3.5 Sonnet) a tricky logic puzzle. Then ask a reasoning model (o1 or R1) the exact same puzzle. Notice how the reasoning model outputs a \"thought process\" block that takes 10-20 seconds before giving the right answer.",
+    resources: [R.learningToReason, R.deepseekR1],
   },
   {
     id: "b1",
@@ -170,6 +460,7 @@ export const NODES: NodeContent[] = [
       "Effective prompts usually specify: the task, the context/audience, the format of the output, and any constraints (length, tone, things to avoid). The model treats all of this as \"more pattern to match\" - so specificity narrows the space of plausible next-tokens toward what you actually want.",
     layer2:
       "Take one task you do for Kasper (e.g. drafting an operator outreach message). Write it two ways: (1) \"write an outreach message\" and (2) a fully specified version with audience, tone, length, and one example of good vs bad. Compare the two outputs side by side.",
+    resources: [R.anthropicPromptTutorial, R.chatgptPromptCourse, R.promptingGuide, R.prompting101],
   },
   {
     id: "b2",
@@ -182,6 +473,7 @@ export const NODES: NodeContent[] = [
       "In apps built on the API, developers set the system prompt invisibly; the end user never sees or edits it. It's used to lock in persona, tone, safety rules, and constraints that should hold no matter what a user types. This is the mechanism behind \"Claude will always speak formally\" or \"this bot will never discuss competitor pricing\" behaviors you see in production AI products.",
     layer2:
       "In Claude's API or console (or even by prefacing a chat message with \"For this entire conversation, act as X and never do Y\"), set a strict role, then try to get the model to break it with a normal user message. Notice how much more it resists compared to no system prompt at all.",
+    resources: [R.anthropicPromptTutorial, R.promptCachingClaude],
   },
   {
     id: "b3",
@@ -194,6 +486,7 @@ export const NODES: NodeContent[] = [
       "This works because the model is a pattern-completer at its core - giving it several input→output pairs strongly conditions what \"the next output\" should look like, often more reliably than lengthy instructions. It's especially powerful for consistent formatting, tone-matching, or classification tasks where the \"shape\" of the output matters more than creative variation.",
     layer2:
       "Ask the model to write a one-line product description with no examples first. Then give it 3 examples of the exact style/length you want and ask for a 4th. Compare consistency.",
+    resources: [R.chatgptPromptCourse, R.promptingGuide],
   },
   {
     id: "b4",
@@ -206,6 +499,7 @@ export const NODES: NodeContent[] = [
       "XML tags are especially useful inside prompts themselves - wrapping instructions, examples, and data in distinct tags (e.g. <instructions>, <document>) removes ambiguity about which part of a huge prompt is \"the rule\" vs. \"the content to act on.\" JSON output is used when the model's response needs to plug directly into other software - an app can't safely parse a conversational paragraph, but it can parse a JSON object with fixed fields.",
     layer2:
       "Ask Claude to output a movie recommendation as a JSON object with fields \"title,\" \"genre,\" \"one_line_reason.\" Then try asking without specifying a format and see how much messier and harder-to-reuse the plain-text version is.",
+    resources: [R.anthropicPromptTutorial],
   },
   {
     id: "b5",
@@ -218,6 +512,7 @@ export const NODES: NodeContent[] = [
       "This matters at the product-building level, not casual chat use - if you're building an app that sends the same 5,000-word system prompt with every single user message, caching that static prefix can cut cost and latency dramatically at volume. Anthropic, OpenAI, and Google all ship this natively in their APIs (usually called \"prompt caching\" or \"context caching\") - it's a lever specifically for people building AI products/agents, not something an individual chatting occasionally needs to think about.",
     layer2:
       "No hands-on task needed here - this is a \"know it exists\" node for when you're evaluating or building a product. Case in point: if you ever price out an AI feature for Kasper's platform, ask whichever provider/dev you're working with whether prompt caching is being used for the static parts of the prompt - it directly affects your running cost.",
+    resources: [R.promptCachingClaude],
   },
   {
     id: "b6",
@@ -230,6 +525,7 @@ export const NODES: NodeContent[] = [
       "This solves the 'blank page syndrome' of prompt engineering. By writing 'I want to build X. Ask me exactly 5 questions, one at a time, to gather all the context you need before you start drafting,' you force the model to build its own perfect prompt through you. It takes the burden of knowing what's important off your shoulders and puts it on the AI.",
     layer2:
       "Open ChatGPT or Claude and type: 'I need to write a difficult email to a client delaying a project. Do not write it yet. Interview me, asking one question at a time, until you have exactly what you need to write a perfect draft.' See how it guides you instead of the other way around.",
+    resources: [R.promptingGuide],
   },
   {
     id: "b7",
@@ -242,6 +538,7 @@ export const NODES: NodeContent[] = [
       "If you ask a model a complex math problem and demand just the final number, it will often guess wrong because it has to calculate everything in one \"token\" (prediction). By forcing it to write out its steps first, it uses the generated text as a scratchpad to \"show its work,\" increasing its accuracy exponentially.",
     layer2:
       "Ask Claude a complex word problem and tell it: \"Output ONLY the final answer, nothing else.\" Then ask it again, but tell it: \"Explain your reasoning step-by-step, then give the answer.\" Compare the results.",
+    resources: [R.chatgptPromptCourse, R.promptingGuide],
   },
   {
     id: "c1",
@@ -279,6 +576,7 @@ export const NODES: NodeContent[] = [
   <text x="300" y="165" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Without this, the model answers from memorized training data only — often wrong for anything specific to you</text>
   <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
+    resources: [R.whatIsRag],
   },
   {
     id: "c2",
@@ -291,6 +589,7 @@ export const NODES: NodeContent[] = [
       "Fine-tuning makes sense in narrow cases: you need a very specific consistent style/format at massive scale, you have thousands of high-quality labeled examples, and prompting genuinely can't achieve the consistency you need. It's expensive, slower to iterate (need to retrain to change behavior), and not reversible the way editing a prompt is. Most companies people assume are \"fine-tuning\" are actually just prompting well with RAG.",
     layer2:
       "Advisory exercise: next time you hear a startup claim \"we fine-tuned our own model,\" ask (mentally or literally) whether prompting + RAG could have achieved the same result cheaper - this is a genuinely useful skeptical instinct for evaluating AI product claims.",
+    resources: [R.ragVsFineTuningPaper, R.ragVsFineTuningIbm],
   },
   {
     id: "c3",
@@ -303,6 +602,7 @@ export const NODES: NodeContent[] = [
       "Good evals matter more than picking the \"best\" model, because model quality varies wildly by task - a model great at coding might be mediocre at your specific classification task. Serious AI teams build a private eval set from real examples of their use case, then measure any prompt/model change against it before shipping, the same way software teams use test suites - tools like LangSmith, Braintrust, and OpenAI's own Evals framework exist specifically to run and track this.",
     layer2:
       "Advisory case: if you're ever hiring someone to build an AI feature, one strong question is \"how will we know if this is actually working well, beyond it looking fine in a demo?\" - the answer should involve some form of eval set, not just \"we tried it and it seemed good.\"",
+    resources: [R.demystifyingEvals],
   },
   {
     id: "c4",
@@ -315,6 +615,7 @@ export const NODES: NodeContent[] = [
       "Every API call is a fresh, stateless request (see A3) - the app itself is responsible for storing conversation history and re-sending it each time to fake \"memory.\" This is exactly the layer you already work in when building things like Kasper Trips or ProvaCV - the model call is just one component in a larger app doing auth, storage, and UI around it.",
     layer2:
       "Skip the hands-on task - you already do this. Instead: the next time you're specifying a feature to a dev (or reviewing a quote), notice whether they talk about \"which model/API and what it costs per call\" - that's a sign they actually understand the layer, not just gluing a chatbot widget on top.",
+    resources: [R.vercelGenerativeUi],
   },
   {
     id: "c5",
@@ -351,6 +652,7 @@ export const NODES: NodeContent[] = [
   <text x="230" y="190" font-size="11" fill="var(--warning)">happy · joyful · glad</text>
   <text x="300" y="210" text-anchor="middle" font-size="11" fill="var(--muted-foreground)" opacity="0">spacer</text>
 </svg>`,
+    resources: [R.embeddingProjector, R.whatIsRag],
   },
   {
     id: "c6",
@@ -364,6 +666,7 @@ export const NODES: NodeContent[] = [
       "A huge hurdle for non-technical founders is realizing that AI doesn't \"deploy\" itself by default. When an AI writes code, it sits locally on your machine (or in a sandbox). You have to \"git commit\" (save) and \"git push\" (upload to GitHub). Once pushed, modern hosting platforms automatically detect the new code and build a live website from it. This entire flow is called CI/CD (Continuous Integration/Continuous Deployment).",
     layer2:
       "Look at the URL of this exact app. It ends in vercel.app. This means the code was pushed to a GitHub repository, and Vercel automatically grabbed it, built it, and hosted it. If you change a file locally, the live site won't change until you push it to GitHub again.",
+    resources: [R.vercelGenerativeUi],
   },
   {
     id: "c7",
@@ -377,6 +680,7 @@ export const NODES: NodeContent[] = [
       "\"Streaming\" means showing the text typing out in real-time as the model generates it. A newer trend is \"Generative UI\"—instead of just streaming text, the model streams raw data (like JSON), and the app uses that data to instantly build native buttons, charts, or components on the screen on the fly (like Vercel's v0 does).",
     layer2:
       "Notice how ChatGPT types its answers out letter-by-letter instead of making you wait. If you ever build a user-facing AI tool, explicitly ask your developer to \"enable streaming\"—it is the single biggest upgrade to perceived performance.",
+    resources: [R.vercelGenerativeUi],
   },
   {
     id: "d1",
@@ -389,6 +693,7 @@ export const NODES: NodeContent[] = [
       "Anthropic (Claude) has generally been strong on careful reasoning, longer context handling, and safety-conscious behavior; OpenAI (GPT/ChatGPT) has the broadest ecosystem and plugin/tool integrations; Google (Gemini) integrates tightly with Google's own data/products and offers very large context windows. These positions shift with every release, so \"which is best\" is a moving target, not a fixed fact.",
     layer2:
       "Run the exact same real task (e.g. an actual Kasper document draft) through Claude, ChatGPT, and Gemini and compare outputs side by side - the fastest way to form your own informed opinion instead of repeating marketing claims.",
+    resources: [R.arenaAi],
   },
   {
     id: "d2",
@@ -402,6 +707,7 @@ export const NODES: NodeContent[] = [
       "n8n and Make are more flexible/powerful (support branching logic, loops, self-hosting for n8n) and popular for building \"agentic\" workflows; Zapier is simpler and more mainstream but less flexible for complex logic. Each node in these tools is usually either an app action (send email, add row) or an AI call (classify, summarize, generate) - meaning everything from Cluster B (prompting) applies directly inside these tools.",
     layer2:
       "Build one tiny real workflow in n8n or Make: a new email triggers a 'Reading Agent' that classifies it. If it's a sales lead, it triggers a 'Research Agent' to scrape the sender's website, which then hands off to a 'Drafting Agent' to write a customized reply. Even building this 3-step loop makes the \"automation glue\" concept concrete.",
+    resources: [R.n8nRepo],
   },
   {
     id: "d3",
@@ -415,6 +721,7 @@ export const NODES: NodeContent[] = [
       "Cursor is an AI-native code editor (a modified VS Code) where you chat with AI that has full context of your open project. Claude Code is a command-line/agentic tool that can autonomously read files, write code, run tests, and iterate - closer to \"delegate a coding task\" than \"autocomplete.\" Lovable, Replit, bolt.new, and v0 are the most popular \"prompt-to-app\" builders right now - each turns a plain-English description into a deployed app, which is often called \"vibe coding.\" Both categories are dramatically changing how fast solo builders (like you, with Kasper Trips and this very Novibe app) can ship.",
     layer2:
       "You already have real experience across both camps (Kasper Trips built with a copilot, Novibe built with Lovable) - the useful exercise is comparing: what did you delegate fully vs. review carefully in each? That distinction (autonomy level) previews Cluster E's \"agent loop\" concept directly.",
+    resources: [R.cursorTutorial, R.masteringClaudeCode, R.claudeCodeBestPractices],
   },
   {
     id: "d4",
@@ -428,6 +735,7 @@ export const NODES: NodeContent[] = [
       "Popular options range from fully-managed (Pinecone) to open-source/self-hosted (Chroma, Weaviate) to \"bolt-on\" features inside existing databases (Supabase's pgvector, which you've already used). Choosing one is mostly about scale, hosting preference, and whether you want it bundled with a database you already run.",
     layer2:
       "Advisory-only node - if a dev ever proposes \"we'll build a RAG feature,\" ask what vector store they're planning to use and why; a vague answer is a signal of inexperience with this layer.",
+    resources: [R.vectorDbVideo],
   },
   {
     id: "d5",
@@ -440,6 +748,7 @@ export const NODES: NodeContent[] = [
       "Running an open model yourself means you own infrastructure costs (GPUs, hosting) and lose the \"it just works\" reliability of a managed API - a real tradeoff, not a free lunch. Companies choose open-source mainly for data sovereignty (nothing leaves their servers), predictable fixed cost at extreme scale, or the ability to fine-tune deeply for a narrow task.",
     layer2:
       "Advisory case: if a healthcare-AI conversation ever raises \"patient data can't leave our servers,\" that's exactly the scenario where open-source/self-hosted becomes the right call over a closed API - a good real test of whether you can apply this distinction correctly.",
+    resources: [R.arenaAi, R.ollamaRepo],
   },
   {
     id: "d6",
@@ -453,6 +762,7 @@ export const NODES: NodeContent[] = [
       "Under the hood these aren't fundamentally different from LLMs - many use the same transformer architecture, just trained on tokenized pixels, audio waveforms, or video frames instead of (or alongside) text; newer \"world models\" go further, learning to predict how a whole scene evolves over time rather than generating one static image. General-purpose multimodal models (recent Claude, GPT, and Gemini versions) can take an image or audio clip as input and reason about it inside the same conversation as text; dedicated generation tools like Runway or ElevenLabs are usually narrower, tuned specifically for output quality in one modality rather than general reasoning.",
     layer2:
       "Take a real Kasper or Provia asset - a photo, or a short script - and run it through two paths: describe it in words to a text-only model, versus feeding the actual image or audio directly to a multimodal model. Notice how much nuance your text description loses compared to the model reasoning over the real file.",
+    resources: [R.phi3Report],
   },
   {
     id: "d7",
@@ -465,6 +775,7 @@ export const NODES: NodeContent[] = [
       "SLMs aren't smart enough to write a complex app, but they are perfect for fast, frequent tasks on your device—like summarizing a notification, formatting text, or basic extraction. They trade deep reasoning for zero latency, zero cloud cost, and absolute privacy. This is why Apple and Google are pushing SLMs to run entirely on-device for consumer features.",
     layer2:
       "Download an app like LM Studio or Ollama on your computer. Download a small open-source model (like Llama 3 8B) and turn off your wifi. Chat with the model. Experiencing an LLM run offline on your own hardware completely demystifies the \"magic\" of the cloud.",
+    resources: [R.ollamaRepo, R.phi3Report],
   },
   {
     id: "e1",
@@ -494,6 +805,7 @@ export const NODES: NodeContent[] = [
   <text x="200" y="385" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Same model, called repeatedly — the "intelligence" is in the loop, not one big prompt</text>
   <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
+    resources: [R.buildingEffectiveAgents],
   },
   {
     id: "e2",
@@ -528,6 +840,7 @@ export const NODES: NodeContent[] = [
   <path d="M470 97 L485 97" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a3)"/>
   <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
+    resources: [R.mcpSpec, R.mcp201, R.beyondBasicsClaudeCode],
   },
   {
     id: "e3",
@@ -559,6 +872,7 @@ export const NODES: NodeContent[] = [
   <text x="300" y="162" text-anchor="middle" font-size="9" fill="var(--muted-foreground)">re-inserted</text>
   <defs><marker id="a4" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
+    resources: [R.langgraphOverview],
   },
   {
     id: "e4",
@@ -582,6 +896,7 @@ export const NODES: NodeContent[] = [
   <text x="80" y="55" font-size="12" fill="var(--destructive)">Level 3 — fully autonomous, reports only at the end</text>
   <text x="300" y="200" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Higher levels need proportionally stronger guardrails — logging, tool limits, approval gates on irreversible actions</text>
 </svg>`,
+    resources: [R.buildingEffectiveAgents, R.agentSwarms, R.proactiveAgentWorkflow],
   },
   {
     id: "e5",
@@ -610,6 +925,7 @@ export const NODES: NodeContent[] = [
   <text x="300" y="140" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Each box is one narrow, checkable AI call — not one giant prompt trying to do everything</text>
   <defs><marker id="a5" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
+    resources: [R.agentSwarms, R.langgraphOverview],
   },
   {
     id: "e6",
@@ -623,6 +939,7 @@ export const NODES: NodeContent[] = [
       "This becomes a real risk specifically once a model has tool use (E2) or reads content it didn't generate itself - an AI agent that reads emails, browses the web, or opens documents on your behalf can be quietly told, by the content itself, to exfiltrate data, take unintended actions, or ignore its real instructions. Defenses are still evolving: treating fetched content as data rather than commands, requiring human approval before irreversible actions (tying back to the autonomy ladder, E4), and sandboxing what tools an agent is allowed to call are the main mitigations today - there's no fully solved fix yet.",
     layer2:
       "Directly relevant to what you build: next time you design or evaluate a feature where an AI reads content from outside the user (an inbox, a scraped webpage, an uploaded document), ask explicitly - \"if this content contained hidden instructions, what's the worst it could make the AI do, and what actually stops that?\" That single question is most of what security-conscious AI product design really is.",
+    resources: [R.codexRce],
   },
   {
     id: "e7",
@@ -635,6 +952,7 @@ export const NODES: NodeContent[] = [
       "This mirrors human corporate structure. If an agent tries to be a researcher, writer, and editor all at once, it loses focus (context window limits, A4) and fails. If you explicitly wire an \"Editor\" agent to review the \"Writer\" agent's output before passing it to the \"Manager,\" quality skyrockets. Tools like CrewAI and AutoGen exist specifically to build these digital coworker teams.",
     layer2:
       "Think about your internal tools (like Cowork or Clawbot). Sketch a 3-agent team for a real Kasper workflow. For example: a 'Scraping Agent' pulls data from a URL, hands it to a 'Validation Agent' to check for missing fields, which then hands it to a 'Formatting Agent' to output pure JSON. How does the Manager Agent verify the final work before a human ever sees it?",
+    resources: [R.agentSwarms, R.langgraphOverview],
   },
   {
     id: "f1",
@@ -668,6 +986,7 @@ export const NODES: NodeContent[] = [
   <text x="490" y="186" text-anchor="middle" font-size="10" fill="var(--warning)">prompting genuinely can't do it</text>
   <defs><marker id="a6" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
+    resources: [R.thisIsAgi, R.tokenCostCalculator],
   },
   {
     id: "f2",
@@ -680,6 +999,7 @@ export const NODES: NodeContent[] = [
       "A common real pattern: use a small, cheap, fast model for simple tasks (classification, extraction) and reserve the expensive, slow, capable model only for the hard reasoning step - exactly mirroring the \"orchestration\" idea (E5). Latency also compounds in agent loops - five sequential model calls each taking 2 seconds is a 10-second wait, which matters hugely for user-facing products vs. background jobs.",
     layer2:
       "Advisory exercise: for any AI feature proposal (yours or a vendor's), ask \"which parts genuinely need the most capable model, and which are simple enough for something cheaper and faster?\" - a question that immediately signals sophistication in a vendor conversation.",
+    resources: [R.tokenCostCalculator, R.beyondPerTokenPricing],
   },
   {
     id: "f3",
@@ -692,6 +1012,7 @@ export const NODES: NodeContent[] = [
       "Common failure modes: hallucination on rare/specific facts (A5), inconsistent output format breaking downstream code, silent failures when a tool call errors out, and cost blowing up at scale in ways that weren't visible in testing. Serious teams stress-test with adversarial and edge-case inputs, not just happy-path demos - this is what evals (C3) are actually for.",
     layer2:
       "Advisory habit: whenever you see an impressive AI demo (a pitch, a competitor's feature), ask yourself \"what messy real-world input would break this?\" - practicing this instinct is most of what \"advisory-level literacy\" actually is.",
+    resources: [R.beyondPerTokenPricing, R.owaspTop10],
   },
   {
     id: "f4",
@@ -704,6 +1025,7 @@ export const NODES: NodeContent[] = [
       "Most day-to-day AI feature work (like most of what you already build) sits in the \"full-stack AI engineer\" or \"no-code automation builder\" bands - API integration, prompting, some RAG, some agent orchestration - not deep ML research. Genuine ML/fine-tuning specialists are needed far less often than the market suggests, and are usually overkill (and overpriced) for typical product needs.",
     layer2:
       "Advisory case: next time you're scoping a hire or vendor for Kasper or Realla.AI, write down (before talking to them) which of the four hats you actually need - then see whether their pitch matches that, or tries to upsell you into a fancier (unnecessary) category.",
+    resources: [R.thisIsAgi, R.alwaysOnEconomy],
   },
   {
     id: "f5",
@@ -717,6 +1039,7 @@ export const NODES: NodeContent[] = [
       "A useful mental checklist when evaluating any AI claim: What model is actually underneath this (D1)? Is this really fine-tuned or just well-prompted (C2)? Is \"agent\" here doing multi-step autonomous work, or is it a single chatbot call (E1)? Has this been tested beyond a demo (F3)? Running any pitch through these five questions cuts through most hype fast.",
     layer2:
       "Pick one AI product or startup pitch you've seen recently (Realla.AI's own materials are a good real example) and run it through the checklist above - write down your honest guess at what's actually happening underneath, then see if you can find out how close you were.",
+    resources: [R.thisIsAgi, R.alwaysOnEconomy],
   },
   {
     id: "f6",
@@ -730,6 +1053,7 @@ export const NODES: NodeContent[] = [
       "Most non-technical founders accidentally ban AI out of fear, without realizing that plugging into an API is exactly as secure as using AWS or Stripe. The rule of thumb: Consumer Chat UI = potentially used for training. Developer API = private and safe. If extreme privacy is required, open-source models (D5) or local SLMs (D7) are the only way to ensure data physically never leaves your hardware.",
     layer2:
       "Go to your personal ChatGPT or Claude settings right now and find the \"Data Controls\" or \"Improve the Model for Everyone\" toggle. Turn it off. You've just switched from the consumer default to a private tier manually.",
+    resources: [R.owaspTop10],
   },
 ];
 

@@ -3,6 +3,8 @@ import { Check, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { CLUSTERS, NODES, TOTAL_NODES, nodesInCluster } from "../data/nodes";
 import { useMapState } from "../hooks/useMapState";
+import { activeThisWeek, clustersTouched } from "../lib/mapStats";
+import { StatCard } from "../components/app/StatCard";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -41,17 +43,8 @@ function Home() {
     );
   }, [query]);
 
-  const clustersTouched = new Set(
-    state.gotIt
-      .map((id) => NODES.find((n) => n.id === id)?.cluster)
-      .filter(Boolean) as string[],
-  ).size;
-
-  // This-week summary
-  const weekStart = new Date();
-  weekStart.setUTCDate(weekStart.getUTCDate() - 6);
-  const weekStartIso = weekStart.toISOString().slice(0, 10);
-  const activeThisWeek = state.activityDates.filter((d) => d >= weekStartIso).length;
+  const touchedClusters = clustersTouched(state.gotIt);
+  const activeDaysThisWeek = activeThisWeek(state.activityDates);
 
   return (
     <div>
@@ -72,12 +65,16 @@ function Home() {
 
       {hydrated && (
         <div className="mb-6 grid grid-cols-3 gap-2">
-          <Stat label="Nodes" value={`${done}/${TOTAL_NODES}`} />
-          <Stat label="Clusters" value={`${clustersTouched}/${CLUSTERS.length}`} />
-          <Stat
+          <StatCard label="Nodes" value={`${done}/${TOTAL_NODES}`} />
+          <StatCard label="Clusters" value={`${touchedClusters}/${CLUSTERS.length}`} />
+          <StatCard
             label="Streak"
             value={streak > 0 ? `${streak}d` : "-"}
-            hint={activeThisWeek ? `${activeThisWeek} day${activeThisWeek === 1 ? "" : "s"} this week` : "start today"}
+            hint={
+              activeDaysThisWeek
+                ? `${activeDaysThisWeek} day${activeDaysThisWeek === 1 ? "" : "s"} this week`
+                : "start today"
+            }
           />
         </div>
       )}
@@ -89,6 +86,7 @@ function Home() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search the whole map..."
+          aria-label="Search the whole map"
           className="w-full bg-transparent text-[13px] text-foreground outline-none placeholder:text-muted-foreground/60"
         />
       </div>
@@ -199,20 +197,6 @@ function Home() {
       <p className="mt-8 text-center font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
         // {TOTAL_NODES} nodes · 6 clusters · read anywhere
       </p>
-    </div>
-  );
-}
-
-function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
-  return (
-    <div className="rounded-lg border border-border bg-card px-3 py-2">
-      <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-        {label}
-      </div>
-      <div className="mt-0.5 font-mono text-[16px] font-semibold tabular-nums text-foreground">
-        {value}
-      </div>
-      {hint && <div className="mt-0.5 text-[10px] text-muted-foreground">{hint}</div>}
     </div>
   );
 }
