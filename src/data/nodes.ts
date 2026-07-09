@@ -373,17 +373,17 @@ export const NODES: NodeContent[] = [
   <rect x="25" y="45" width="140" height="65" rx="10" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
   <text x="95" y="70" text-anchor="middle" font-size="12" fill="var(--chart-1)">Training</text>
   <text x="95" y="86" text-anchor="middle" font-size="9" fill="var(--chart-1)">months — changes weights, once</text>
-  <path d="M170 77 L210 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a3a)"/>
-  <text x="190" y="68" text-anchor="middle" font-size="8" fill="var(--muted-foreground)">frozen model</text>
+  <path d="M170 77 L220 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a3a)"/>
+  <text x="195" y="65" text-anchor="middle" font-size="8" fill="var(--muted-foreground)">frozen model</text>
   <g font-size="10" fill="var(--foreground)">
-    <rect x="215" y="45" width="82" height="45" rx="6" fill="var(--card)" stroke="var(--border)"/>
-    <text x="256" y="72" text-anchor="middle">Chat A</text>
-    <rect x="307" y="45" width="82" height="45" rx="6" fill="var(--card)" stroke="var(--border)"/>
-    <text x="348" y="72" text-anchor="middle">Chat B</text>
-    <rect x="399" y="45" width="82" height="45" rx="6" fill="var(--card)" stroke="var(--border)"/>
-    <text x="440" y="72" text-anchor="middle">Chat C</text>
-    <rect x="491" y="45" width="82" height="45" rx="6" fill="var(--card)" stroke="var(--border)"/>
-    <text x="532" y="72" text-anchor="middle">Chat D</text>
+    <rect x="228" y="45" width="78" height="45" rx="6" fill="var(--card)" stroke="var(--border)"/>
+    <text x="267" y="72" text-anchor="middle">Chat A</text>
+    <rect x="316" y="45" width="78" height="45" rx="6" fill="var(--card)" stroke="var(--border)"/>
+    <text x="355" y="72" text-anchor="middle">Chat B</text>
+    <rect x="404" y="45" width="78" height="45" rx="6" fill="var(--card)" stroke="var(--border)"/>
+    <text x="443" y="72" text-anchor="middle">Chat C</text>
+    <rect x="492" y="45" width="78" height="45" rx="6" fill="var(--card)" stroke="var(--border)"/>
+    <text x="531" y="72" text-anchor="middle">Chat D</text>
   </g>
   <text x="400" y="107" text-anchor="middle" font-size="9" fill="var(--destructive)">no lines between them — each call forgets the others completely</text>
   <text x="300" y="150" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Inference never changes the weights — "memory" is a separate re-send trick (see E3)</text>
@@ -1091,7 +1091,6 @@ export const NODES: NodeContent[] = [
     <circle cx="245" cy="170" r="4"/>
   </g>
   <text x="230" y="190" font-size="11" fill="var(--warning)">happy · joyful · glad</text>
-  <text x="300" y="210" text-anchor="middle" font-size="11" fill="var(--muted-foreground)" opacity="0">spacer</text>
 </svg>`,
     quiz: {
       prompt: "What does an embedding actually capture about a piece of text?",
@@ -1120,20 +1119,20 @@ export const NODES: NodeContent[] = [
       "Look at the URL of this exact app. It ends in vercel.app. This means the code was pushed to a GitHub repository, and Vercel automatically grabbed it, built it, and hosted it. If you change a file locally, the live site won't change until you push it to GitHub again.",
     diagram: `<svg viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
   <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">AI-WRITTEN CODE DOESN'T GO LIVE ON ITS OWN</text>
-  <rect x="10" y="55" width="115" height="45" rx="8" fill="var(--card)" stroke="var(--border)"/>
-  <text x="67" y="82" text-anchor="middle" font-size="9" fill="var(--foreground)">Local machine</text>
-  <path d="M125 77 L163 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#c6a)"/>
-  <text x="144" y="68" text-anchor="middle" font-size="8" fill="var(--muted-foreground)">git push</text>
-  <rect x="168" y="55" width="115" height="45" rx="8" fill="var(--chart-1)" fill-opacity="0.1" stroke="var(--chart-1)"/>
-  <text x="225" y="82" text-anchor="middle" font-size="9" fill="var(--chart-1)">GitHub</text>
-  <path d="M283 77 L321 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#c6a)"/>
-  <text x="302" y="68" text-anchor="middle" font-size="8" fill="var(--muted-foreground)">auto-detect</text>
-  <rect x="326" y="55" width="130" height="45" rx="8" fill="var(--chart-2)" fill-opacity="0.1" stroke="var(--chart-2)"/>
-  <text x="391" y="76" text-anchor="middle" font-size="9" fill="var(--chart-2)">Hosting builds</text>
-  <text x="391" y="90" text-anchor="middle" font-size="8" fill="var(--chart-2)">(e.g. Vercel)</text>
-  <path d="M456 77 L494 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#c6a)"/>
-  <rect x="499" y="55" width="90" height="45" rx="8" fill="var(--warning)" fill-opacity="0.14" stroke="var(--warning)"/>
-  <text x="544" y="82" text-anchor="middle" font-size="9" fill="var(--warning)">Live URL</text>
+  <rect x="10" y="55" width="105" height="45" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="62" y="82" text-anchor="middle" font-size="9" fill="var(--foreground)">Local machine</text>
+  <path d="M118 77 L157 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#c6a)"/>
+  <text x="137" y="65" text-anchor="middle" font-size="8" fill="var(--muted-foreground)">git push</text>
+  <rect x="160" y="55" width="105" height="45" rx="8" fill="var(--chart-1)" fill-opacity="0.1" stroke="var(--chart-1)"/>
+  <text x="212" y="82" text-anchor="middle" font-size="9" fill="var(--chart-1)">GitHub</text>
+  <path d="M268 77 L317 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#c6a)"/>
+  <text x="293" y="65" text-anchor="middle" font-size="8" fill="var(--muted-foreground)">auto-detect</text>
+  <rect x="320" y="55" width="125" height="45" rx="8" fill="var(--chart-2)" fill-opacity="0.1" stroke="var(--chart-2)"/>
+  <text x="383" y="76" text-anchor="middle" font-size="9" fill="var(--chart-2)">Hosting builds</text>
+  <text x="383" y="90" text-anchor="middle" font-size="8" fill="var(--chart-2)">(e.g. Vercel)</text>
+  <path d="M448 77 L487 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#c6a)"/>
+  <rect x="490" y="55" width="95" height="45" rx="8" fill="var(--warning)" fill-opacity="0.14" stroke="var(--warning)"/>
+  <text x="538" y="82" text-anchor="middle" font-size="9" fill="var(--warning)">Live URL</text>
   <text x="300" y="130" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">Change a file locally and nothing happens live until it's pushed again</text>
   <defs><marker id="c6a" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
@@ -1464,10 +1463,8 @@ export const NODES: NodeContent[] = [
   <text x="155" y="104" text-anchor="middle" font-size="9" fill="var(--chart-1)">no round trip needed</text>
   <rect x="320" y="50" width="250" height="75" rx="8" fill="var(--card)" stroke="var(--border)"/>
   <text x="445" y="72" text-anchor="middle" font-size="11" fill="var(--foreground)">Cloud model</text>
-  <path d="M400 90 Q445 75 490 90" stroke="var(--muted-foreground)" stroke-width="1.2" fill="none" marker-end="url(#d7a)"/>
   <text x="445" y="112" text-anchor="middle" font-size="9" fill="var(--muted-foreground)">needs network, more capable</text>
   <text x="300" y="150" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">Trades deep reasoning for zero latency, zero cost, absolute privacy</text>
-  <defs><marker id="d7a" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--muted-foreground)"/></marker></defs>
 </svg>`,
     quiz: {
       prompt: "What's the real tradeoff with running a small local model (SLM) on your own device?",
