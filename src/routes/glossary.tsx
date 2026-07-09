@@ -85,14 +85,16 @@ function Glossary() {
       </header>
 
       <div className="mb-4 flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2">
+        <label htmlFor="glossary-search" className="sr-only">Search glossary terms</label>
         <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
         <input
+          id="glossary-search"
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search terms..."
           aria-label="Search glossary terms"
-          className="w-full bg-transparent text-[13px] text-foreground outline-none placeholder:text-muted-foreground/60"
+          className="w-full bg-transparent text-[13px] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded-sm placeholder:text-muted-foreground/60"
         />
       </div>
 

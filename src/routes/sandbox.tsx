@@ -55,6 +55,48 @@ function Sandbox() {
           <button
             type="button"
             onClick={() => {
+              const data = window.localStorage.getItem("novibe-state");
+              if (!data) return;
+              const blob = new Blob([data], { type: "application/json" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `novibe-backup-${new Date().toISOString().slice(0, 10)}.json`;
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+            className="rounded border border-border px-2 py-0.5 font-mono text-[10px] text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+          >
+            export
+          </button>
+          <label className="cursor-pointer rounded border border-border px-2 py-0.5 font-mono text-[10px] text-muted-foreground hover:bg-muted/50 hover:text-foreground">
+            import
+            <input
+              type="file"
+              accept=".json"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                  try {
+                    const content = event.target?.result as string;
+                    const parsed = JSON.parse(content);
+                    if (!parsed.gotIt || typeof parsed.notes !== "string") throw new Error();
+                    window.localStorage.setItem("novibe-state", content);
+                    window.location.reload();
+                  } catch (err) {
+                    alert("Invalid backup file.");
+                  }
+                };
+                reader.readAsText(file);
+              }}
+            />
+          </label>
+          <button
+            type="button"
+            onClick={() => {
               if (window.confirm("Clear scratchpad?")) setText("");
             }}
             className="rounded border border-border px-2 py-0.5 font-mono text-[10px] text-muted-foreground hover:border-destructive hover:text-destructive"

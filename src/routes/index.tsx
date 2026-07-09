@@ -89,7 +89,7 @@ function Home() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search the whole map..."
           aria-label="Search the whole map"
-          className="w-full bg-transparent text-[13px] text-foreground outline-none placeholder:text-muted-foreground/60"
+          className="w-full bg-transparent text-[13px] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded-sm placeholder:text-muted-foreground/60"
         />
       </div>
 

@@ -15,11 +15,6 @@ import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NodeNodeIdRouteImport } from './routes/node.$nodeId'
 
-const GlossaryRoute = GlossaryRouteImport.update({
-  id: '/glossary',
-  path: '/glossary',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const StatsRoute = StatsRouteImport.update({
   id: '/stats',
   path: '/stats',
@@ -28,6 +23,11 @@ const StatsRoute = StatsRouteImport.update({
 const SandboxRoute = SandboxRouteImport.update({
   id: '/sandbox',
   path: '/sandbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GlossaryRoute = GlossaryRouteImport.update({
+  id: '/glossary',
+  path: '/glossary',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -43,38 +43,38 @@ const NodeNodeIdRoute = NodeNodeIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/sandbox': typeof SandboxRoute
   '/glossary': typeof GlossaryRoute
+  '/sandbox': typeof SandboxRoute
   '/stats': typeof StatsRoute
   '/node/$nodeId': typeof NodeNodeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/sandbox': typeof SandboxRoute
   '/glossary': typeof GlossaryRoute
+  '/sandbox': typeof SandboxRoute
   '/stats': typeof StatsRoute
   '/node/$nodeId': typeof NodeNodeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/sandbox': typeof SandboxRoute
   '/glossary': typeof GlossaryRoute
+  '/sandbox': typeof SandboxRoute
   '/stats': typeof StatsRoute
   '/node/$nodeId': typeof NodeNodeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sandbox' | '/glossary' | '/stats' | '/node/$nodeId'
+  fullPaths: '/' | '/glossary' | '/sandbox' | '/stats' | '/node/$nodeId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sandbox' | '/glossary' | '/stats' | '/node/$nodeId'
-  id: '__root__' | '/' | '/sandbox' | '/glossary' | '/stats' | '/node/$nodeId'
+  to: '/' | '/glossary' | '/sandbox' | '/stats' | '/node/$nodeId'
+  id: '__root__' | '/' | '/glossary' | '/sandbox' | '/stats' | '/node/$nodeId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  SandboxRoute: typeof SandboxRoute
   GlossaryRoute: typeof GlossaryRoute
+  SandboxRoute: typeof SandboxRoute
   StatsRoute: typeof StatsRoute
   NodeNodeIdRoute: typeof NodeNodeIdRoute
 }
@@ -121,11 +121,21 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  SandboxRoute: SandboxRoute,
   GlossaryRoute: GlossaryRoute,
+  SandboxRoute: SandboxRoute,
   StatsRoute: StatsRoute,
   NodeNodeIdRoute: NodeNodeIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
