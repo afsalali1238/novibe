@@ -9,6 +9,13 @@ export type NodeResource = {
   type: ResourceType;
 };
 
+export type QuizQuestion = {
+  prompt: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string; // shown after answering, whether right or wrong
+};
+
 export type NodeContent = {
   id: string;
   cluster: ClusterId;
@@ -20,6 +27,7 @@ export type NodeContent = {
   layer2: string;
   diagram?: string; // raw inline SVG markup, rendered directly on node page
   resources?: NodeResource[]; // vetted external links - articles, tools, papers, videos
+  quiz?: QuizQuestion; // optional one-question self-check, independent of "got it"
 };
 
 export type Cluster = {

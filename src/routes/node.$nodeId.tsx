@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { CLUSTERS, NODES, findNode, type NodeContent, type ResourceType } from "../data/nodes";
 import { useMapState } from "../hooks/useMapState";
 import { truncateToWord } from "../lib/utils";
+import { QuizCheck } from "../components/app/QuizCheck";
 
 const RESOURCE_VERB: Record<ResourceType, string> = {
   video: "watch",
@@ -158,6 +159,7 @@ function NodePage() {
         tone="warning"
         body={node.layer2}
       />
+      {node.quiz && <QuizCheck key={node.id} nodeId={node.id} quiz={node.quiz} />}
       {node.resources && node.resources.length > 0 && (
         <div className="mt-1 flex flex-col gap-1.5">
           {node.resources.map((r) => (

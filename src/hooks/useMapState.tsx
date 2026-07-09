@@ -10,12 +10,18 @@ import {
 
 const STORAGE_KEY = "novibe-map-v1";
 
+export type QuizAnswer = {
+  selectedIndex: number;
+  correct: boolean;
+};
+
 export type MapState = {
   gotIt: string[];
   activityDates: string[]; // YYYY-MM-DD, unique, unsorted
   notes: string;
   reflections: Record<string, string>;
   reflectionOrder: string[]; // node ids, most-recently-edited first
+  quizAnswers: Record<string, QuizAnswer>; // node id -> last self-check answer, purely informational
 };
 
 const initialState: MapState = {
@@ -24,6 +30,7 @@ const initialState: MapState = {
   notes: "",
   reflections: {},
   reflectionOrder: [],
+  quizAnswers: {},
 };
 
 function today(): string {
@@ -91,6 +98,7 @@ type Ctx = {
   toggleGot: (id: string) => void;
   saveNotes: (t: string) => void;
   saveReflection: (nodeId: string, t: string) => void;
+  answerQuiz: (nodeId: string, selectedIndex: number, correct: boolean) => void;
   resetAll: () => void;
   exportState: () => string;
   importState: (raw: string) => ImportResult;
@@ -108,6 +116,17 @@ function isStringRecord(v: unknown): v is Record<string, string> {
     v !== null &&
     !Array.isArray(v) &&
     Object.values(v as Record<string, unknown>).every((x) => typeof x === "string")
+  );
+}
+
+function isQuizAnswerRecord(v: unknown): v is Record<string, QuizAnswer> {
+  if (typeof v !== "object" || v === null || Array.isArray(v)) return false;
+  return Object.values(v as Record<string, unknown>).every(
+    (x) =>
+      typeof x === "object" &&
+      x !== null &&
+      typeof (x as QuizAnswer).selectedIndex === "number" &&
+      typeof (x as QuizAnswer).correct === "boolean",
   );
 }
 
@@ -131,12 +150,16 @@ function parseBackup(raw: string): MapState | null {
   if (typeof c.notes !== "string") return null;
   if (!isStringRecord(c.reflections)) return null;
   if (!isStringArray(c.reflectionOrder)) return null;
+  // quizAnswers is newer than the original backup format - accept its absence
+  // from older backups and default to empty rather than rejecting the import.
+  if (c.quizAnswers !== undefined && !isQuizAnswerRecord(c.quizAnswers)) return null;
   return {
     gotIt: c.gotIt,
     activityDates: c.activityDates,
     notes: c.notes,
     reflections: c.reflections,
     reflectionOrder: c.reflectionOrder,
+    quizAnswers: isQuizAnswerRecord(c.quizAnswers) ? c.quizAnswers : {},
   };
 }
 
@@ -202,6 +225,14 @@ export function MapStateProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  // Purely informational self-check - never touches gotIt, streak, or activityDates.
+  const answerQuiz = useCallback((nodeId: string, selectedIndex: number, correct: boolean) => {
+    setState((s) => ({
+      ...s,
+      quizAnswers: { ...s.quizAnswers, [nodeId]: { selectedIndex, correct } },
+    }));
+  }, []);
+
   const resetAll = useCallback(() => setState(initialState), []);
 
   const exportState = useCallback(() => {
@@ -235,6 +266,7 @@ export function MapStateProvider({ children }: { children: ReactNode }) {
       toggleGot,
       saveNotes,
       saveReflection,
+      answerQuiz,
       resetAll,
       exportState,
       importState,
@@ -246,6 +278,7 @@ export function MapStateProvider({ children }: { children: ReactNode }) {
       toggleGot,
       saveNotes,
       saveReflection,
+      answerQuiz,
       resetAll,
       exportState,
       importState,
