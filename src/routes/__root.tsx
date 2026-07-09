@@ -104,6 +104,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:image", content: "https://novibecode.vercel.app/novibe-icon-512.png" },
     ],
     links: [
+      { rel: "canonical", href: "https://novibecode.vercel.app/" },
       {
         rel: "stylesheet",
         href: appCss,
