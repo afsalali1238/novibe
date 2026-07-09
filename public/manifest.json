@@ -10,6 +10,18 @@
   "orientation": "portrait",
   "icons": [
     {
+      "src": "/novibe-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/novibe-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "/novibe-icon.png",
       "sizes": "816x816",
       "type": "image/png",
