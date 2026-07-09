@@ -289,6 +289,15 @@ export const NODES: NodeContent[] = [
       "During training, the model reads enormous amounts of text and adjusts billions of internal numbers (parameters) so that its next-word predictions get statistically closer to real text. It never \"understands\" in a human sense - it's compressed statistical structure over language. At inference (when you chat with it), those learned weights are frozen; the model just runs prediction, one token at a time, using whatever text is in front of it (the prompt) as its only source of \"memory.\"",
     layer2:
       "Open Claude or ChatGPT. Type one word, then keep hitting \"continue\" or asking \"what's the next most likely word\" mentally before reading the actual output. Notice: it's not \"thinking\" ahead - it's building the response piece by piece. Try asking it to write a sentence and then ask it \"why did you choose that specific next word\" - see how it explains its own pattern-following.",
+    diagram: `<svg viewBox="0 0 600 155" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">AI CONTAINS ML CONTAINS LLM — NOT THREE SEPARATE THINGS</text>
+  <rect x="40" y="35" width="520" height="105" rx="12" fill="var(--chart-1)" fill-opacity="0.06" stroke="var(--chart-1)"/>
+  <text x="60" y="55" font-size="11" fill="var(--chart-1)" letter-spacing="0.3">ARTIFICIAL INTELLIGENCE</text>
+  <rect x="110" y="62" width="380" height="70" rx="10" fill="var(--chart-2)" fill-opacity="0.08" stroke="var(--chart-2)"/>
+  <text x="130" y="80" font-size="11" fill="var(--chart-2)" letter-spacing="0.3">MACHINE LEARNING</text>
+  <rect x="190" y="88" width="220" height="36" rx="8" fill="var(--warning)" fill-opacity="0.14" stroke="var(--warning)"/>
+  <text x="300" y="110" text-anchor="middle" font-size="12" fill="var(--warning)">LLM — predicts the next token</text>
+</svg>`,
     quiz: {
       prompt: "What is an LLM literally doing, at each step, when it responds to you?",
       options: [
@@ -359,6 +368,27 @@ export const NODES: NodeContent[] = [
       "Training happens in massive data-center runs, often months long, producing a frozen set of weights that then gets deployed as \"the model\" (e.g. Claude Sonnet 5). Every time you send a message, that's a fresh inference call - the model reads your whole conversation as input text again from scratch, predicts a response, and forgets. This is why \"memory\" features in AI apps are really just re-inserting your past messages into the prompt every time, not the model actually learning.",
     layer2:
       "Have a long conversation with Claude about a fact you invented (e.g. \"my dog's name is Ziggy\"). Start a brand new chat and ask \"what's my dog's name?\" It won't know - proving the model itself didn't learn anything; the previous chat's context simply isn't there anymore.",
+    diagram: `<svg viewBox="0 0 600 175" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">ONE TRAINING RUN — MANY, ISOLATED INFERENCE CALLS</text>
+  <rect x="25" y="45" width="140" height="65" rx="10" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+  <text x="95" y="70" text-anchor="middle" font-size="12" fill="var(--chart-1)">Training</text>
+  <text x="95" y="86" text-anchor="middle" font-size="9" fill="var(--chart-1)">months — changes weights, once</text>
+  <path d="M170 77 L210 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a3a)"/>
+  <text x="190" y="68" text-anchor="middle" font-size="8" fill="var(--muted-foreground)">frozen model</text>
+  <g font-size="10" fill="var(--foreground)">
+    <rect x="215" y="45" width="82" height="45" rx="6" fill="var(--card)" stroke="var(--border)"/>
+    <text x="256" y="72" text-anchor="middle">Chat A</text>
+    <rect x="307" y="45" width="82" height="45" rx="6" fill="var(--card)" stroke="var(--border)"/>
+    <text x="348" y="72" text-anchor="middle">Chat B</text>
+    <rect x="399" y="45" width="82" height="45" rx="6" fill="var(--card)" stroke="var(--border)"/>
+    <text x="440" y="72" text-anchor="middle">Chat C</text>
+    <rect x="491" y="45" width="82" height="45" rx="6" fill="var(--card)" stroke="var(--border)"/>
+    <text x="532" y="72" text-anchor="middle">Chat D</text>
+  </g>
+  <text x="400" y="107" text-anchor="middle" font-size="9" fill="var(--destructive)">no lines between them — each call forgets the others completely</text>
+  <text x="300" y="150" text-anchor="middle" font-size="11" fill="var(--muted-foreground)">Inference never changes the weights — "memory" is a separate re-send trick (see E3)</text>
+  <defs><marker id="a3a" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
+</svg>`,
     quiz: {
       prompt: "You tell Claude your dog's name mid-chat, then open a brand new chat and ask again. What happens?",
       options: [
@@ -429,6 +459,20 @@ export const NODES: NodeContent[] = [
       "The model has no built-in fact-checking step - it doesn't distinguish between \"I recall this precisely\" and \"this pattern feels right.\" Hallucination rates go up with obscure facts, exact numbers, quotes, and citations - anything requiring precision rather than pattern completion. This is exactly why tools like web search or RAG (Cluster C) exist: to give the model real, current text to ground its answer in, instead of relying purely on memorized patterns.",
     layer2:
       "Ask Claude or ChatGPT (without web search enabled) for \"the exact publication date and page number of a specific quote\" from an obscure book. Then ask it to search the web for the same thing. Compare confidence and accuracy - a direct feel for grounded vs. ungrounded answers.",
+    diagram: `<svg viewBox="0 0 600 195" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">TO THE MODEL, BOTH PATHS FEEL EQUALLY CONFIDENT</text>
+  <rect x="250" y="45" width="100" height="40" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="300" y="70" text-anchor="middle" font-size="11" fill="var(--foreground)">Question</text>
+  <path d="M290 85 L180 122" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a5a)"/>
+  <path d="M310 85 L420 122" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a5a)"/>
+  <rect x="100" y="125" width="160" height="40" rx="8" fill="var(--chart-1)" fill-opacity="0.1" stroke="var(--chart-1)"/>
+  <text x="180" y="150" text-anchor="middle" font-size="11" fill="var(--chart-1)">"most plausible answer"</text>
+  <text x="180" y="180" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">turns out true</text>
+  <rect x="340" y="125" width="160" height="40" rx="8" fill="var(--chart-1)" fill-opacity="0.1" stroke="var(--chart-1)"/>
+  <text x="420" y="150" text-anchor="middle" font-size="11" fill="var(--chart-1)">"most plausible answer"</text>
+  <text x="420" y="180" text-anchor="middle" font-size="10" fill="var(--destructive)">turns out false — hallucination</text>
+  <defs><marker id="a5a" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
+</svg>`,
     quiz: {
       prompt: "Why do models hallucinate?",
       options: [
@@ -454,6 +498,24 @@ export const NODES: NodeContent[] = [
       "Providers layer safety training (RLHF, constitutional AI, red-teaming) on top of raw next-token prediction to reduce harmful, biased, or dangerous outputs. Each major lab publishes its own version of this as policy - Anthropic's Responsible Scaling Policy, OpenAI's Preparedness Framework, Google DeepMind's Frontier Safety Framework - all trying to tie a model's real-world autonomy to proportionally stronger safeguards. That training is shaped by imperfect human judgment calls, so it's never airtight - clever rephrasing, role-play framing, or multi-step prompts can sometimes get a model to produce something it would normally refuse. \"Alignment\" spans this narrow \"don't say bad things\" layer all the way up to much harder questions about whether increasingly capable, autonomous systems reliably pursue the goals we actually intend once they're taking real-world actions (see autonomy levels, E4) rather than just talking.",
     layer2:
       "Ask a model to explain the reasoning behind one of its own refusals - \"why did you decline that specific request?\" - and notice it can usually articulate the actual safety principle involved, rather than giving a generic canned response. That's a direct, honest look at how alignment training shows up in a real conversation.",
+    diagram: `<svg viewBox="0 0 600 190" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">SAFETY TRAINING IS A LAYER, NOT A GUARANTEE</text>
+  <rect x="30" y="65" width="90" height="45" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="75" y="92" text-anchor="middle" font-size="10" fill="var(--foreground)">Raw model</text>
+  <rect x="250" y="50" width="150" height="75" rx="10" fill="var(--chart-2)" fill-opacity="0.12" stroke="var(--chart-2)"/>
+  <text x="325" y="83" text-anchor="middle" font-size="11" fill="var(--chart-2)">Safety training</text>
+  <text x="325" y="98" text-anchor="middle" font-size="10" fill="var(--chart-2)">(RLHF, red-teaming)</text>
+  <rect x="480" y="65" width="100" height="45" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="530" y="92" text-anchor="middle" font-size="10" fill="var(--foreground)">Response</text>
+  <path d="M120 87 L245 87" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a6a)"/>
+  <path d="M400 87 L475 87" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#a6a)"/>
+  <path d="M75 110 Q150 160 325 160 Q470 160 525 113" stroke="var(--destructive)" stroke-width="1.5" fill="none" stroke-dasharray="4 3" marker-end="url(#a6b)"/>
+  <text x="300" y="177" text-anchor="middle" font-size="10" fill="var(--destructive)">jailbreak: clever framing sneaks around the filter</text>
+  <defs>
+    <marker id="a6a" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker>
+    <marker id="a6b" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--destructive)"/></marker>
+  </defs>
+</svg>`,
     quiz: {
       prompt: "In plain terms, what is a \"jailbreak\"?",
       options: [
@@ -478,6 +540,25 @@ export const NODES: NodeContent[] = [
       "This shifts compute from training to inference. Instead of needing a massively smarter base model, you just give the model more time to think. It's the AI equivalent of System 1 (fast, instinctive) vs System 2 (slow, deliberate) thinking.",
     layer2:
       "Ask a standard model (like GPT-4o or Claude 3.5 Sonnet) a tricky logic puzzle. Then ask a reasoning model (o1 or R1) the exact same puzzle. Notice how the reasoning model outputs a \"thought process\" block that takes 10-20 seconds before giving the right answer.",
+    diagram: `<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">STANDARD MODEL VS. REASONING MODEL</text>
+  <text x="30" y="55" font-size="11" fill="var(--chart-1)">Standard</text>
+  <rect x="30" y="65" width="90" height="40" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="75" y="89" text-anchor="middle" font-size="10" fill="var(--foreground)">Prompt</text>
+  <path d="M120 85 L280 85" stroke="var(--chart-1)" stroke-width="1.5" marker-end="url(#a7a)"/>
+  <rect x="285" y="65" width="120" height="40" rx="6" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+  <text x="345" y="89" text-anchor="middle" font-size="10" fill="var(--chart-1)">Answer (instant)</text>
+  <text x="30" y="140" font-size="11" fill="var(--warning)">Reasoning model</text>
+  <rect x="30" y="150" width="90" height="40" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="75" y="174" text-anchor="middle" font-size="10" fill="var(--foreground)">Prompt</text>
+  <path d="M120 170 L165 170" stroke="var(--warning)" stroke-width="1.5" marker-end="url(#a7a)"/>
+  <rect x="170" y="150" width="180" height="40" rx="6" fill="var(--warning)" fill-opacity="0.1" stroke="var(--warning)" stroke-dasharray="3 3"/>
+  <text x="260" y="174" text-anchor="middle" font-size="10" fill="var(--warning)">hidden thinking loop (~10-20s)</text>
+  <path d="M350 170 L400 170" stroke="var(--warning)" stroke-width="1.5" marker-end="url(#a7a)"/>
+  <rect x="405" y="150" width="120" height="40" rx="6" fill="var(--warning)" fill-opacity="0.12" stroke="var(--warning)"/>
+  <text x="465" y="174" text-anchor="middle" font-size="10" fill="var(--warning)">Answer (checked)</text>
+  <defs><marker id="a7a" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--muted-foreground)"/></marker></defs>
+</svg>`,
     quiz: {
       prompt: "What actually makes a \"reasoning model\" like o1 or DeepSeek R1 different from a standard model?",
       options: [
@@ -502,6 +583,25 @@ export const NODES: NodeContent[] = [
       "Effective prompts usually specify: the task, the context/audience, the format of the output, and any constraints (length, tone, things to avoid). The model treats all of this as \"more pattern to match\" - so specificity narrows the space of plausible next-tokens toward what you actually want.",
     layer2:
       "Take one task you do for Kasper (e.g. drafting an operator outreach message). Write it two ways: (1) \"write an outreach message\" and (2) a fully specified version with audience, tone, length, and one example of good vs bad. Compare the two outputs side by side.",
+    diagram: `<svg viewBox="0 0 600 175" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">SPECIFICITY NARROWS WHAT THE MODEL CAN GUESS</text>
+  <rect x="30" y="55" width="150" height="34" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="105" y="77" text-anchor="middle" font-size="9" fill="var(--foreground)">"write an outreach msg"</text>
+  <path d="M105 89 L60 130" stroke="var(--destructive)" stroke-width="1.2" marker-end="url(#b1a)"/>
+  <path d="M105 89 L105 130" stroke="var(--destructive)" stroke-width="1.2" marker-end="url(#b1a)"/>
+  <path d="M105 89 L150 130" stroke="var(--destructive)" stroke-width="1.2" marker-end="url(#b1a)"/>
+  <text x="105" y="150" text-anchor="middle" font-size="9" fill="var(--destructive)">generic, unpredictable</text>
+  <rect x="400" y="45" width="180" height="44" rx="6" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+  <text x="490" y="62" text-anchor="middle" font-size="9" fill="var(--chart-1)">task + audience +</text>
+  <text x="490" y="76" text-anchor="middle" font-size="9" fill="var(--chart-1)">format + constraints</text>
+  <path d="M490 89 L490 128" stroke="var(--chart-1)" stroke-width="1.5" marker-end="url(#b1b)"/>
+  <rect x="440" y="131" width="100" height="30" rx="6" fill="var(--chart-1)" fill-opacity="0.2" stroke="var(--chart-1)"/>
+  <text x="490" y="151" text-anchor="middle" font-size="9" fill="var(--chart-1)">sharp draft</text>
+  <defs>
+    <marker id="b1a" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--destructive)"/></marker>
+    <marker id="b1b" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--chart-1)"/></marker>
+  </defs>
+</svg>`,
     quiz: {
       prompt: "Why does a vague prompt tend to produce a vague, generic answer?",
       options: [
@@ -526,6 +626,18 @@ export const NODES: NodeContent[] = [
       "In apps built on the API, developers set the system prompt invisibly; the end user never sees or edits it. It's used to lock in persona, tone, safety rules, and constraints that should hold no matter what a user types. This is the mechanism behind \"Claude will always speak formally\" or \"this bot will never discuss competitor pricing\" behaviors you see in production AI products.",
     layer2:
       "In Claude's API or console (or even by prefacing a chat message with \"For this entire conversation, act as X and never do Y\"), set a strict role, then try to get the model to break it with a normal user message. Notice how much more it resists compared to no system prompt at all.",
+    diagram: `<svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">THE SYSTEM PROMPT SITS UNDER EVERY TURN OF THE CHAT</text>
+  <rect x="60" y="100" width="480" height="45" rx="8" fill="var(--chart-2)" fill-opacity="0.14" stroke="var(--chart-2)"/>
+  <text x="300" y="126" text-anchor="middle" font-size="11" fill="var(--chart-2)">System prompt — role, rules, boundaries (set before chat starts)</text>
+  <rect x="120" y="55" width="140" height="35" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="190" y="77" text-anchor="middle" font-size="9" fill="var(--foreground)">user message 1</text>
+  <rect x="340" y="55" width="140" height="35" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="410" y="77" text-anchor="middle" font-size="9" fill="var(--foreground)">"ignore your rules"</text>
+  <path d="M410 90 L410 98" stroke="var(--destructive)" stroke-width="1.5" marker-end="url(#b2a)"/>
+  <text x="410" y="160" text-anchor="middle" font-size="9" fill="var(--destructive)">bounces off — system prompt still governs</text>
+  <defs><marker id="b2a" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--destructive)"/></marker></defs>
+</svg>`,
     quiz: {
       prompt: "What makes a system prompt different from a regular user message?",
       options: [
@@ -550,6 +662,36 @@ export const NODES: NodeContent[] = [
       "This works because the model is a pattern-completer at its core - giving it several input→output pairs strongly conditions what \"the next output\" should look like, often more reliably than lengthy instructions. It's especially powerful for consistent formatting, tone-matching, or classification tasks where the \"shape\" of the output matters more than creative variation.",
     layer2:
       "Ask the model to write a one-line product description with no examples first. Then give it 3 examples of the exact style/length you want and ask for a 4th. Compare consistency.",
+    diagram: `<svg viewBox="0 0 600 170" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">SHOW THE PATTERN, THE MODEL COMPLETES IT</text>
+  <g font-size="9">
+    <rect x="30" y="45" width="80" height="30" rx="5" fill="var(--card)" stroke="var(--border)"/>
+    <text x="70" y="64" text-anchor="middle" fill="var(--foreground)">input 1</text>
+    <path d="M110 60 L140 60" stroke="var(--muted-foreground)" marker-end="url(#b3a)"/>
+    <rect x="145" y="45" width="80" height="30" rx="5" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+    <text x="185" y="64" text-anchor="middle" fill="var(--chart-1)">output 1</text>
+    <rect x="30" y="85" width="80" height="30" rx="5" fill="var(--card)" stroke="var(--border)"/>
+    <text x="70" y="104" text-anchor="middle" fill="var(--foreground)">input 2</text>
+    <path d="M110 100 L140 100" stroke="var(--muted-foreground)" marker-end="url(#b3a)"/>
+    <rect x="145" y="85" width="80" height="30" rx="5" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+    <text x="185" y="104" text-anchor="middle" fill="var(--chart-1)">output 2</text>
+    <rect x="30" y="125" width="80" height="30" rx="5" fill="var(--card)" stroke="var(--border)"/>
+    <text x="70" y="144" text-anchor="middle" fill="var(--foreground)">input 3</text>
+    <path d="M110 140 L140 140" stroke="var(--muted-foreground)" marker-end="url(#b3a)"/>
+    <rect x="145" y="125" width="80" height="30" rx="5" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+    <text x="185" y="144" text-anchor="middle" fill="var(--chart-1)">output 3</text>
+  </g>
+  <path d="M240 100 L280 100" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#b3a)"/>
+  <rect x="290" y="70" width="90" height="60" rx="6" fill="var(--card)" stroke="var(--border)" stroke-dasharray="3 3"/>
+  <text x="335" y="105" text-anchor="middle" font-size="14" fill="var(--muted-foreground)">input 4</text>
+  <path d="M380 100 L420 100" stroke="var(--warning)" stroke-width="1.5" marker-end="url(#b3b)"/>
+  <rect x="430" y="70" width="140" height="60" rx="6" fill="var(--warning)" fill-opacity="0.14" stroke="var(--warning)"/>
+  <text x="500" y="105" text-anchor="middle" font-size="11" fill="var(--warning)">output 4 — same shape</text>
+  <defs>
+    <marker id="b3a" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--muted-foreground)"/></marker>
+    <marker id="b3b" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--warning)"/></marker>
+  </defs>
+</svg>`,
     quiz: {
       prompt: "Why does showing a model 2-5 examples (few-shot) often work better than describing what you want?",
       options: [
@@ -574,6 +716,21 @@ export const NODES: NodeContent[] = [
       "XML tags are especially useful inside prompts themselves - wrapping instructions, examples, and data in distinct tags (e.g. <instructions>, <document>) removes ambiguity about which part of a huge prompt is \"the rule\" vs. \"the content to act on.\" JSON output is used when the model's response needs to plug directly into other software - an app can't safely parse a conversational paragraph, but it can parse a JSON object with fixed fields.",
     layer2:
       "Ask Claude to output a movie recommendation as a JSON object with fields \"title,\" \"genre,\" \"one_line_reason.\" Then try asking without specifying a format and see how much messier and harder-to-reuse the plain-text version is.",
+    diagram: `<svg viewBox="0 0 600 175" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">FREE TEXT VS. STRUCTURED OUTPUT A PROGRAM CAN PARSE</text>
+  <rect x="30" y="45" width="230" height="100" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="145" y="65" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">"I'd recommend Inception,</text>
+  <text x="145" y="80" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">a mind-bending sci-fi film</text>
+  <text x="145" y="95" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">about dreams within..."</text>
+  <text x="145" y="120" text-anchor="middle" font-size="9" fill="var(--destructive)">messy — how does code use this?</text>
+  <path d="M270 95 L330 95" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#b4a)"/>
+  <rect x="335" y="45" width="235" height="100" rx="8" fill="var(--chart-1)" fill-opacity="0.1" stroke="var(--chart-1)"/>
+  <text x="355" y="65" font-size="10" font-family="ui-monospace, monospace" fill="var(--chart-1)">{ "title": "Inception",</text>
+  <text x="355" y="80" font-size="10" font-family="ui-monospace, monospace" fill="var(--chart-1)">  "genre": "sci-fi",</text>
+  <text x="355" y="95" font-size="10" font-family="ui-monospace, monospace" fill="var(--chart-1)">  "one_line_reason": "..." }</text>
+  <text x="450" y="120" text-anchor="middle" font-size="9" fill="var(--chart-1)">fixed fields — code parses it safely</text>
+  <defs><marker id="b4a" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--muted-foreground)"/></marker></defs>
+</svg>`,
     quiz: {
       prompt: "Why ask a model to output JSON instead of a free-flowing paragraph?",
       options: [
@@ -598,6 +755,24 @@ export const NODES: NodeContent[] = [
       "This matters at the product-building level, not casual chat use - if you're building an app that sends the same 5,000-word system prompt with every single user message, caching that static prefix can cut cost and latency dramatically at volume. Anthropic, OpenAI, and Google all ship this natively in their APIs (usually called \"prompt caching\" or \"context caching\") - it's a lever specifically for people building AI products/agents, not something an individual chatting occasionally needs to think about.",
     layer2:
       "No hands-on task needed here - this is a \"know it exists\" node for when you're evaluating or building a product. Case in point: if you ever price out an AI feature for Kasper's platform, ask whichever provider/dev you're working with whether prompt caching is being used for the static parts of the prompt - it directly affects your running cost.",
+    diagram: `<svg viewBox="0 0 600 175" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">THE SAME STATIC PREFIX, CACHED AFTER CALL 1</text>
+  <g font-size="9" fill="var(--foreground)">
+    <rect x="30" y="45" width="120" height="30" rx="5" fill="var(--chart-1)" fill-opacity="0.3" stroke="var(--chart-1)"/>
+    <text x="90" y="64" text-anchor="middle">call 1 — full cost</text>
+    <rect x="170" y="45" width="120" height="30" rx="5" fill="var(--chart-1)" fill-opacity="0.08" stroke="var(--chart-1)"/>
+    <text x="230" y="64" text-anchor="middle" fill="var(--chart-1)">call 2 — cached</text>
+    <rect x="310" y="45" width="120" height="30" rx="5" fill="var(--chart-1)" fill-opacity="0.08" stroke="var(--chart-1)"/>
+    <text x="370" y="64" text-anchor="middle" fill="var(--chart-1)">call 3 — cached</text>
+    <rect x="450" y="45" width="120" height="30" rx="5" fill="var(--chart-1)" fill-opacity="0.08" stroke="var(--chart-1)"/>
+    <text x="510" y="64" text-anchor="middle" fill="var(--chart-1)">call 4 — cached</text>
+  </g>
+  <rect x="30" y="95" width="120" height="45" fill="var(--warning)" fill-opacity="0.6"/>
+  <rect x="170" y="120" width="120" height="20" fill="var(--warning)" fill-opacity="0.2"/>
+  <rect x="310" y="120" width="120" height="20" fill="var(--warning)" fill-opacity="0.2"/>
+  <rect x="450" y="120" width="120" height="20" fill="var(--warning)" fill-opacity="0.2"/>
+  <text x="300" y="160" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">Only the static prefix (system prompt / doc) is cached — matters at product scale, not casual chat</text>
+</svg>`,
     quiz: {
       prompt: "Who does prompt caching actually matter for?",
       options: [
@@ -622,6 +797,29 @@ export const NODES: NodeContent[] = [
       "This solves the 'blank page syndrome' of prompt engineering. By writing 'I want to build X. Ask me exactly 5 questions, one at a time, to gather all the context you need before you start drafting,' you force the model to build its own perfect prompt through you. It takes the burden of knowing what's important off your shoulders and puts it on the AI.",
     layer2:
       "Open ChatGPT or Claude and type: 'I need to write a difficult email to a client delaying a project. Do not write it yet. Interview me, asking one question at a time, until you have exactly what you need to write a perfect draft.' See how it guides you instead of the other way around.",
+    diagram: `<svg viewBox="0 0 600 195" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">NORMAL VS. INTERVIEW-STYLE PROMPTING</text>
+  <text x="30" y="55" font-size="11" fill="var(--destructive)">Normal</text>
+  <rect x="30" y="65" width="100" height="35" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="80" y="87" text-anchor="middle" font-size="9" fill="var(--foreground)">state goal</text>
+  <path d="M130 82 L250 82" stroke="var(--destructive)" stroke-width="1.5" marker-end="url(#b6a)"/>
+  <rect x="255" y="65" width="150" height="35" rx="6" fill="var(--destructive)" fill-opacity="0.1" stroke="var(--destructive)"/>
+  <text x="330" y="87" text-anchor="middle" font-size="9" fill="var(--destructive)">model guesses — weak draft</text>
+  <text x="30" y="135" font-size="11" fill="var(--chart-1)">Interview pattern</text>
+  <rect x="30" y="145" width="100" height="35" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="80" y="167" text-anchor="middle" font-size="9" fill="var(--foreground)">state goal</text>
+  <path d="M130 155 Q220 145 300 160" stroke="var(--chart-1)" stroke-width="1.5" fill="none" marker-end="url(#b6b)"/>
+  <rect x="305" y="140" width="150" height="45" rx="6" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+  <text x="380" y="158" text-anchor="middle" font-size="9" fill="var(--chart-1)">model asks Q1, Q2, Q3</text>
+  <text x="380" y="172" text-anchor="middle" font-size="9" fill="var(--chart-1)">(loops back to you)</text>
+  <path d="M456 155 Q490 130 545 155" stroke="var(--chart-1)" stroke-width="1.5" fill="none" marker-end="url(#b6b)"/>
+  <rect x="460" y="160" width="115" height="30" rx="6" fill="var(--chart-1)" fill-opacity="0.2" stroke="var(--chart-1)"/>
+  <text x="517" y="180" text-anchor="middle" font-size="9" fill="var(--chart-1)">strong draft</text>
+  <defs>
+    <marker id="b6a" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--destructive)"/></marker>
+    <marker id="b6b" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--chart-1)"/></marker>
+  </defs>
+</svg>`,
     quiz: {
       prompt: "What does the \"reverse prompting\" / interview pattern actually ask the model to do?",
       options: [
@@ -646,6 +844,26 @@ export const NODES: NodeContent[] = [
       "If you ask a model a complex math problem and demand just the final number, it will often guess wrong because it has to calculate everything in one \"token\" (prediction). By forcing it to write out its steps first, it uses the generated text as a scratchpad to \"show its work,\" increasing its accuracy exponentially.",
     layer2:
       "Ask Claude a complex word problem and tell it: \"Output ONLY the final answer, nothing else.\" Then ask it again, but tell it: \"Explain your reasoning step-by-step, then give the answer.\" Compare the results.",
+    diagram: `<svg viewBox="0 0 600 175" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">ONE JUMP VS. A SCRATCHPAD OF STEPS</text>
+  <rect x="30" y="55" width="120" height="35" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="90" y="77" text-anchor="middle" font-size="9" fill="var(--foreground)">complex problem</text>
+  <path d="M150 72 L300 72" stroke="var(--destructive)" stroke-width="1.5" marker-end="url(#b7a)"/>
+  <rect x="305" y="55" width="130" height="35" rx="6" fill="var(--destructive)" fill-opacity="0.12" stroke="var(--destructive)"/>
+  <text x="370" y="77" text-anchor="middle" font-size="9" fill="var(--destructive)">one jump — often wrong</text>
+  <rect x="30" y="115" width="120" height="35" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="90" y="137" text-anchor="middle" font-size="9" fill="var(--foreground)">complex problem</text>
+  <path d="M150 132 L190 132" stroke="var(--chart-1)" stroke-width="1.5" marker-end="url(#b7b)"/>
+  <rect x="195" y="115" width="215" height="35" rx="6" fill="var(--chart-1)" fill-opacity="0.1" stroke="var(--chart-1)" stroke-dasharray="3 3"/>
+  <text x="302" y="137" text-anchor="middle" font-size="9" fill="var(--chart-1)">step 1 → step 2 → step 3 (scratchpad)</text>
+  <path d="M410 132 L450 132" stroke="var(--chart-1)" stroke-width="1.5" marker-end="url(#b7b)"/>
+  <rect x="455" y="115" width="115" height="35" rx="6" fill="var(--chart-1)" fill-opacity="0.2" stroke="var(--chart-1)"/>
+  <text x="512" y="137" text-anchor="middle" font-size="9" fill="var(--chart-1)">correct answer</text>
+  <defs>
+    <marker id="b7a" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--destructive)"/></marker>
+    <marker id="b7b" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--chart-1)"/></marker>
+  </defs>
+</svg>`,
     quiz: {
       prompt: "Why does telling a model to \"think step by step\" often improve accuracy on math or logic?",
       options: [
@@ -719,6 +937,27 @@ export const NODES: NodeContent[] = [
       "Fine-tuning makes sense in narrow cases: you need a very specific consistent style/format at massive scale, you have thousands of high-quality labeled examples, and prompting genuinely can't achieve the consistency you need. It's expensive, slower to iterate (need to retrain to change behavior), and not reversible the way editing a prompt is. Most companies people assume are \"fine-tuning\" are actually just prompting well with RAG.",
     layer2:
       "Advisory exercise: next time you hear a startup claim \"we fine-tuned our own model,\" ask (mentally or literally) whether prompting + RAG could have achieved the same result cheaper - this is a genuinely useful skeptical instinct for evaluating AI product claims.",
+    diagram: `<svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">TWO WAYS TO CHANGE MODEL BEHAVIOR — TRACK LENGTH = REAL COST</text>
+  <text x="30" y="55" font-size="11" fill="var(--chart-1)">Prompting</text>
+  <rect x="30" y="63" width="120" height="30" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="90" y="82" text-anchor="middle" font-size="9" fill="var(--foreground)">edit the prompt</text>
+  <path d="M150 78 L280 78" stroke="var(--chart-1)" stroke-width="1.5" marker-end="url(#c2a)"/>
+  <text x="215" y="70" text-anchor="middle" font-size="8" fill="var(--chart-1)">seconds</text>
+  <rect x="285" y="63" width="150" height="30" rx="6" fill="var(--chart-1)" fill-opacity="0.14" stroke="var(--chart-1)"/>
+  <text x="360" y="82" text-anchor="middle" font-size="9" fill="var(--chart-1)">cheap, reversible</text>
+  <text x="30" y="125" font-size="11" fill="var(--warning)">Fine-tuning</text>
+  <rect x="30" y="133" width="120" height="30" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="90" y="152" text-anchor="middle" font-size="9" fill="var(--foreground)">gather examples</text>
+  <path d="M150 148 L460 148" stroke="var(--warning)" stroke-width="1.5" marker-end="url(#c2b)"/>
+  <text x="300" y="140" text-anchor="middle" font-size="8" fill="var(--warning)">days-weeks — retrain, redeploy</text>
+  <rect x="465" y="133" width="105" height="30" rx="6" fill="var(--warning)" fill-opacity="0.14" stroke="var(--warning)"/>
+  <text x="517" y="152" text-anchor="middle" font-size="9" fill="var(--warning)">hard to reverse</text>
+  <defs>
+    <marker id="c2a" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--chart-1)"/></marker>
+    <marker id="c2b" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--warning)"/></marker>
+  </defs>
+</svg>`,
     quiz: {
       prompt: "For most real product needs today, which usually wins?",
       options: [
@@ -743,6 +982,24 @@ export const NODES: NodeContent[] = [
       "Good evals matter more than picking the \"best\" model, because model quality varies wildly by task - a model great at coding might be mediocre at your specific classification task. Serious AI teams build a private eval set from real examples of their use case, then measure any prompt/model change against it before shipping, the same way software teams use test suites - tools like LangSmith, Braintrust, and OpenAI's own Evals framework exist specifically to run and track this.",
     layer2:
       "Advisory case: if you're ever hiring someone to build an AI feature, one strong question is \"how will we know if this is actually working well, beyond it looking fine in a demo?\" - the answer should involve some form of eval set, not just \"we tried it and it seemed good.\"",
+    diagram: `<svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">EVALS: STRUCTURED TESTING, NOT A VIBES-CHECK</text>
+  <rect x="30" y="45" width="180" height="40" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="120" y="68" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">"looked fine in the demo"</text>
+  <line x1="45" y1="80" x2="195" y2="50" stroke="var(--destructive)" stroke-width="2"/>
+  <g font-size="9" fill="var(--foreground)">
+    <rect x="260" y="45" width="310" height="24" rx="4" fill="var(--card)" stroke="var(--border)"/>
+    <text x="270" y="61" fill="var(--foreground)">case 1 — expected X</text>
+    <text x="460" y="61" fill="var(--chart-1)">✓ pass</text>
+    <rect x="260" y="73" width="310" height="24" rx="4" fill="var(--card)" stroke="var(--border)"/>
+    <text x="270" y="89" fill="var(--foreground)">case 2 — expected Y</text>
+    <text x="460" y="89" fill="var(--destructive)">✗ fail</text>
+    <rect x="260" y="101" width="310" height="24" rx="4" fill="var(--card)" stroke="var(--border)"/>
+    <text x="270" y="117" fill="var(--foreground)">case 3 — expected Z</text>
+    <text x="460" y="117" fill="var(--chart-1)">✓ pass</text>
+  </g>
+  <text x="300" y="150" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">A fixed test set with known-correct outputs, run automatically before shipping any change</text>
+</svg>`,
     quiz: {
       prompt: "What is an \"eval,\" in plain terms?",
       options: [
@@ -767,6 +1024,27 @@ export const NODES: NodeContent[] = [
       "Every API call is a fresh, stateless request (see A3) - the app itself is responsible for storing conversation history and re-sending it each time to fake \"memory.\" This is exactly the layer you already work in when building things like Kasper Trips or ProvaCV - the model call is just one component in a larger app doing auth, storage, and UI around it.",
     layer2:
       "Skip the hands-on task - you already do this. Instead: the next time you're specifying a feature to a dev (or reviewing a quote), notice whether they talk about \"which model/API and what it costs per call\" - that's a sign they actually understand the layer, not just gluing a chatbot widget on top.",
+    diagram: `<svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">AN APP TALKS TO THE MODEL DIRECTLY — NO HUMAN TYPING</text>
+  <rect x="30" y="60" width="110" height="45" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="85" y="87" text-anchor="middle" font-size="10" fill="var(--foreground)">Your app</text>
+  <path d="M140 75 L210 75" stroke="var(--chart-1)" stroke-width="1.5" marker-end="url(#c4a)"/>
+  <text x="175" y="67" text-anchor="middle" font-size="8" fill="var(--chart-1)">request</text>
+  <rect x="215" y="45" width="170" height="80" rx="8" fill="var(--chart-1)" fill-opacity="0.1" stroke="var(--chart-1)"/>
+  <text x="300" y="70" text-anchor="middle" font-size="10" fill="var(--chart-1)">Model API</text>
+  <text x="300" y="86" text-anchor="middle" font-size="8" fill="var(--chart-1)">fresh, stateless call</text>
+  <text x="300" y="100" text-anchor="middle" font-size="8" fill="var(--chart-1)">every single time</text>
+  <path d="M215 100 L145 100" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#c4b)"/>
+  <text x="180" y="115" text-anchor="middle" font-size="8" fill="var(--muted-foreground)">response</text>
+  <rect x="420" y="60" width="150" height="45" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="495" y="80" text-anchor="middle" font-size="9" fill="var(--foreground)">app stores + resends</text>
+  <text x="495" y="94" text-anchor="middle" font-size="9" fill="var(--foreground)">history to fake memory</text>
+  <path d="M385 82 L415 82" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#c4b)"/>
+  <defs>
+    <marker id="c4a" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--chart-1)"/></marker>
+    <marker id="c4b" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--muted-foreground)"/></marker>
+  </defs>
+</svg>`,
     quiz: {
       prompt: "When an app \"uses AI\" behind the scenes, what's actually happening?",
       options: [
@@ -840,6 +1118,25 @@ export const NODES: NodeContent[] = [
       "A huge hurdle for non-technical founders is realizing that AI doesn't \"deploy\" itself by default. When an AI writes code, it sits locally on your machine (or in a sandbox). You have to \"git commit\" (save) and \"git push\" (upload to GitHub). Once pushed, modern hosting platforms automatically detect the new code and build a live website from it. This entire flow is called CI/CD (Continuous Integration/Continuous Deployment).",
     layer2:
       "Look at the URL of this exact app. It ends in vercel.app. This means the code was pushed to a GitHub repository, and Vercel automatically grabbed it, built it, and hosted it. If you change a file locally, the live site won't change until you push it to GitHub again.",
+    diagram: `<svg viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">AI-WRITTEN CODE DOESN'T GO LIVE ON ITS OWN</text>
+  <rect x="10" y="55" width="115" height="45" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="67" y="82" text-anchor="middle" font-size="9" fill="var(--foreground)">Local machine</text>
+  <path d="M125 77 L163 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#c6a)"/>
+  <text x="144" y="68" text-anchor="middle" font-size="8" fill="var(--muted-foreground)">git push</text>
+  <rect x="168" y="55" width="115" height="45" rx="8" fill="var(--chart-1)" fill-opacity="0.1" stroke="var(--chart-1)"/>
+  <text x="225" y="82" text-anchor="middle" font-size="9" fill="var(--chart-1)">GitHub</text>
+  <path d="M283 77 L321 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#c6a)"/>
+  <text x="302" y="68" text-anchor="middle" font-size="8" fill="var(--muted-foreground)">auto-detect</text>
+  <rect x="326" y="55" width="130" height="45" rx="8" fill="var(--chart-2)" fill-opacity="0.1" stroke="var(--chart-2)"/>
+  <text x="391" y="76" text-anchor="middle" font-size="9" fill="var(--chart-2)">Hosting builds</text>
+  <text x="391" y="90" text-anchor="middle" font-size="8" fill="var(--chart-2)">(e.g. Vercel)</text>
+  <path d="M456 77 L494 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#c6a)"/>
+  <rect x="499" y="55" width="90" height="45" rx="8" fill="var(--warning)" fill-opacity="0.14" stroke="var(--warning)"/>
+  <text x="544" y="82" text-anchor="middle" font-size="9" fill="var(--warning)">Live URL</text>
+  <text x="300" y="130" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">Change a file locally and nothing happens live until it's pushed again</text>
+  <defs><marker id="c6a" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--muted-foreground)"/></marker></defs>
+</svg>`,
     quiz: {
       prompt: "Why doesn't an AI-generated app go live on the internet automatically?",
       options: [
@@ -865,6 +1162,20 @@ export const NODES: NodeContent[] = [
       "\"Streaming\" means showing the text typing out in real-time as the model generates it. A newer trend is \"Generative UI\"—instead of just streaming text, the model streams raw data (like JSON), and the app uses that data to instantly build native buttons, charts, or components on the screen on the fly (like Vercel's v0 does).",
     layer2:
       "Notice how ChatGPT types its answers out letter-by-letter instead of making you wait. If you ever build a user-facing AI tool, explicitly ask your developer to \"enable streaming\"—it is the single biggest upgrade to perceived performance.",
+    diagram: `<svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">SAME TOTAL TIME, VERY DIFFERENT FEEL</text>
+  <text x="30" y="55" font-size="11" fill="var(--destructive)">Wait for full response</text>
+  <rect x="30" y="63" width="500" height="18" rx="4" fill="var(--card)" stroke="var(--border)"/>
+  <rect x="480" y="63" width="50" height="18" rx="4" fill="var(--destructive)" fill-opacity="0.3"/>
+  <text x="505" y="76" text-anchor="middle" font-size="8" fill="var(--destructive)">all at once</text>
+  <text x="30" y="110" font-size="11" fill="var(--chart-1)">Streaming</text>
+  <rect x="30" y="118" width="500" height="18" rx="4" fill="var(--chart-1)" fill-opacity="0.08"/>
+  <rect x="30" y="118" width="70" height="18" rx="4" fill="var(--chart-1)" fill-opacity="0.35"/>
+  <rect x="105" y="118" width="70" height="18" rx="4" fill="var(--chart-1)" fill-opacity="0.35"/>
+  <rect x="180" y="118" width="70" height="18" rx="4" fill="var(--chart-1)" fill-opacity="0.35"/>
+  <rect x="255" y="118" width="70" height="18" rx="4" fill="var(--chart-1)" fill-opacity="0.35"/>
+  <text x="300" y="150" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">Text appears token by token as it's generated — the single biggest upgrade to perceived speed</text>
+</svg>`,
     quiz: {
       prompt: "Why does ChatGPT's answer type out letter by letter instead of appearing all at once?",
       options: [
@@ -889,6 +1200,22 @@ export const NODES: NodeContent[] = [
       "Anthropic (Claude) has generally been strong on careful reasoning, longer context handling, and safety-conscious behavior; OpenAI (GPT/ChatGPT) has the broadest ecosystem and plugin/tool integrations; Google (Gemini) integrates tightly with Google's own data/products and offers very large context windows. These positions shift with every release, so \"which is best\" is a moving target, not a fixed fact.",
     layer2:
       "Run the exact same real task (e.g. an actual Kasper document draft) through Claude, ChatGPT, and Gemini and compare outputs side by side - the fastest way to form your own informed opinion instead of repeating marketing claims.",
+    diagram: `<svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">DIFFERENT STRENGTHS, NOT A FIXED RANKING</text>
+  <rect x="30" y="45" width="170" height="95" rx="8" fill="var(--chart-1)" fill-opacity="0.1" stroke="var(--chart-1)"/>
+  <text x="115" y="65" text-anchor="middle" font-size="11" fill="var(--chart-1)">Claude</text>
+  <text x="115" y="83" text-anchor="middle" font-size="9" fill="var(--chart-1)">careful reasoning,</text>
+  <text x="115" y="97" text-anchor="middle" font-size="9" fill="var(--chart-1)">long context</text>
+  <rect x="215" y="45" width="170" height="95" rx="8" fill="var(--chart-2)" fill-opacity="0.1" stroke="var(--chart-2)"/>
+  <text x="300" y="65" text-anchor="middle" font-size="11" fill="var(--chart-2)">GPT</text>
+  <text x="300" y="83" text-anchor="middle" font-size="9" fill="var(--chart-2)">broadest ecosystem,</text>
+  <text x="300" y="97" text-anchor="middle" font-size="9" fill="var(--chart-2)">plugins/tools</text>
+  <rect x="400" y="45" width="170" height="95" rx="8" fill="var(--warning)" fill-opacity="0.12" stroke="var(--warning)"/>
+  <text x="485" y="65" text-anchor="middle" font-size="11" fill="var(--warning)">Gemini</text>
+  <text x="485" y="83" text-anchor="middle" font-size="9" fill="var(--warning)">Google integration,</text>
+  <text x="485" y="97" text-anchor="middle" font-size="9" fill="var(--warning)">huge context</text>
+  <text x="300" y="160" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">Positions shift with every release — run your real task through each to decide</text>
+</svg>`,
     quiz: {
       prompt: "What's the best way to decide which model (Claude, GPT, Gemini) is \"best\" for you?",
       options: [
@@ -914,6 +1241,26 @@ export const NODES: NodeContent[] = [
       "n8n and Make are more flexible/powerful (support branching logic, loops, self-hosting for n8n) and popular for building \"agentic\" workflows; Zapier is simpler and more mainstream but less flexible for complex logic. Each node in these tools is usually either an app action (send email, add row) or an AI call (classify, summarize, generate) - meaning everything from Cluster B (prompting) applies directly inside these tools.",
     layer2:
       "Build one tiny real workflow in n8n or Make: a new email triggers a 'Reading Agent' that classifies it. If it's a sales lead, it triggers a 'Research Agent' to scrape the sender's website, which then hands off to a 'Drafting Agent' to write a customized reply. Even building this 3-step loop makes the \"automation glue\" concept concrete.",
+    diagram: `<svg viewBox="0 0 600 145" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">VISUAL BLOCKS — EACH NODE IS AN APP ACTION OR AN AI CALL</text>
+  <rect x="20" y="55" width="100" height="45" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="70" y="75" text-anchor="middle" font-size="9" fill="var(--foreground)">Trigger:</text>
+  <text x="70" y="89" text-anchor="middle" font-size="9" fill="var(--foreground)">new email</text>
+  <path d="M120 77 L155 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#d2a)"/>
+  <rect x="160" y="55" width="110" height="45" rx="8" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+  <text x="215" y="75" text-anchor="middle" font-size="9" fill="var(--chart-1)">AI call:</text>
+  <text x="215" y="89" text-anchor="middle" font-size="9" fill="var(--chart-1)">classify lead</text>
+  <path d="M270 77 L305 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#d2a)"/>
+  <rect x="310" y="55" width="120" height="45" rx="8" fill="var(--chart-2)" fill-opacity="0.12" stroke="var(--chart-2)"/>
+  <text x="370" y="75" text-anchor="middle" font-size="9" fill="var(--chart-2)">App action:</text>
+  <text x="370" y="89" text-anchor="middle" font-size="9" fill="var(--chart-2)">scrape website</text>
+  <path d="M430 77 L465 77" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#d2a)"/>
+  <rect x="470" y="55" width="110" height="45" rx="8" fill="var(--warning)" fill-opacity="0.12" stroke="var(--warning)"/>
+  <text x="525" y="75" text-anchor="middle" font-size="9" fill="var(--warning)">AI call:</text>
+  <text x="525" y="89" text-anchor="middle" font-size="9" fill="var(--warning)">draft reply</text>
+  <text x="300" y="125" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">The glue layer between AI models and the rest of your business tools</text>
+  <defs><marker id="d2a" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--muted-foreground)"/></marker></defs>
+</svg>`,
     quiz: {
       prompt: "What's the core idea behind tools like n8n, Make, and Zapier?",
       options: [
@@ -939,6 +1286,25 @@ export const NODES: NodeContent[] = [
       "Cursor is an AI-native code editor (a modified VS Code) where you chat with AI that has full context of your open project. Claude Code is a command-line/agentic tool that can autonomously read files, write code, run tests, and iterate - closer to \"delegate a coding task\" than \"autocomplete.\" Lovable, Replit, bolt.new, and v0 are the most popular \"prompt-to-app\" builders right now - each turns a plain-English description into a deployed app, which is often called \"vibe coding.\" Both categories are dramatically changing how fast solo builders (like you, with Kasper Trips and this very Novibe app) can ship.",
     layer2:
       "You already have real experience across both camps (Kasper Trips built with a copilot, Novibe built with Lovable) - the useful exercise is comparing: what did you delegate fully vs. review carefully in each? That distinction (autonomy level) previews Cluster E's \"agent loop\" concept directly.",
+    diagram: `<svg viewBox="0 0 600 175" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">WORK INSIDE THE CODE VS. DESCRIBE THE APP</text>
+  <text x="30" y="55" font-size="11" fill="var(--chart-1)">Copilot (Cursor, Claude Code)</text>
+  <rect x="30" y="63" width="160" height="40" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="110" y="87" text-anchor="middle" font-size="9" fill="var(--foreground)">existing codebase</text>
+  <path d="M195 83 L235 83" stroke="var(--chart-1)" stroke-width="1.5" marker-end="url(#d3a)"/>
+  <rect x="240" y="63" width="180" height="40" rx="6" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+  <text x="330" y="87" text-anchor="middle" font-size="9" fill="var(--chart-1)">edits you approve</text>
+  <text x="30" y="135" font-size="11" fill="var(--warning)">App builder (Lovable, v0)</text>
+  <rect x="30" y="143" width="160" height="30" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="110" y="162" text-anchor="middle" font-size="9" fill="var(--foreground)">plain-English description</text>
+  <path d="M195 158 L235 158" stroke="var(--warning)" stroke-width="1.5" marker-end="url(#d3b)"/>
+  <rect x="240" y="143" width="180" height="30" rx="6" fill="var(--warning)" fill-opacity="0.14" stroke="var(--warning)"/>
+  <text x="330" y="162" text-anchor="middle" font-size="9" fill="var(--warning)">deployed app, keep refining</text>
+  <defs>
+    <marker id="d3a" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--chart-1)"/></marker>
+    <marker id="d3b" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--warning)"/></marker>
+  </defs>
+</svg>`,
     quiz: {
       prompt: "What's the key difference between a coding copilot (Cursor, Claude Code) and an app builder (Lovable, Replit, v0)?",
       options: [
@@ -964,6 +1330,25 @@ export const NODES: NodeContent[] = [
       "Popular options range from fully-managed (Pinecone) to open-source/self-hosted (Chroma, Weaviate) to \"bolt-on\" features inside existing databases (Supabase's pgvector, which you've already used). Choosing one is mostly about scale, hosting preference, and whether you want it bundled with a database you already run.",
     layer2:
       "Advisory-only node - if a dev ever proposes \"we'll build a RAG feature,\" ask what vector store they're planning to use and why; a vague answer is a signal of inexperience with this layer.",
+    diagram: `<svg viewBox="0 0 600 175" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">STORES EMBEDDINGS, SEARCHES BY CLOSENESS OF MEANING</text>
+  <path d="M120 50 a80 16 0 0 1 160 0 v70 a80 16 0 0 1 -160 0 z" fill="var(--chart-1)" fill-opacity="0.08" stroke="var(--chart-1)"/>
+  <ellipse cx="200" cy="50" rx="80" ry="16" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+  <g fill="var(--chart-2)">
+    <circle cx="160" cy="75" r="4"/>
+    <circle cx="180" cy="95" r="4"/>
+    <circle cx="150" cy="105" r="4"/>
+    <circle cx="230" cy="80" r="4"/>
+    <circle cx="250" cy="100" r="4"/>
+  </g>
+  <text x="200" y="135" text-anchor="middle" font-size="9" fill="var(--muted-foreground)">vector database</text>
+  <path d="M400 90 L340 90" stroke="var(--warning)" stroke-width="1.5" stroke-dasharray="3 3" marker-end="url(#d4a)"/>
+  <rect x="405" y="65" width="150" height="50" rx="8" fill="var(--warning)" fill-opacity="0.1" stroke="var(--warning)"/>
+  <text x="480" y="86" text-anchor="middle" font-size="9" fill="var(--warning)">your query</text>
+  <text x="480" y="100" text-anchor="middle" font-size="9" fill="var(--warning)">finds nearest dots</text>
+  <text x="300" y="160" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">The infrastructure piece that makes RAG work at scale (C1, C5)</text>
+  <defs><marker id="d4a" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--warning)"/></marker></defs>
+</svg>`,
     quiz: {
       prompt: "What is a vector database actually for?",
       options: [
@@ -988,6 +1373,18 @@ export const NODES: NodeContent[] = [
       "Running an open model yourself means you own infrastructure costs (GPUs, hosting) and lose the \"it just works\" reliability of a managed API - a real tradeoff, not a free lunch. Companies choose open-source mainly for data sovereignty (nothing leaves their servers), predictable fixed cost at extreme scale, or the ability to fine-tune deeply for a narrow task.",
     layer2:
       "Advisory case: if a healthcare-AI conversation ever raises \"patient data can't leave our servers,\" that's exactly the scenario where open-source/self-hosted becomes the right call over a closed API - a good real test of whether you can apply this distinction correctly.",
+    diagram: `<svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">CLOSED API VS. OPEN-WEIGHT — WHO OWNS THE INFRASTRUCTURE</text>
+  <rect x="30" y="50" width="250" height="80" rx="8" fill="var(--chart-1)" fill-opacity="0.1" stroke="var(--chart-1)"/>
+  <text x="155" y="72" text-anchor="middle" font-size="11" fill="var(--chart-1)">Closed API</text>
+  <text x="155" y="90" text-anchor="middle" font-size="9" fill="var(--chart-1)">call the cloud, pay per use</text>
+  <text x="155" y="104" text-anchor="middle" font-size="9" fill="var(--chart-1)">zero infra to manage</text>
+  <rect x="320" y="50" width="250" height="80" rx="8" fill="var(--warning)" fill-opacity="0.12" stroke="var(--warning)"/>
+  <text x="445" y="72" text-anchor="middle" font-size="11" fill="var(--warning)">Open-weight</text>
+  <text x="445" y="90" text-anchor="middle" font-size="9" fill="var(--warning)">download weights, run</text>
+  <text x="445" y="104" text-anchor="middle" font-size="9" fill="var(--warning)">on your own GPU — you pay infra</text>
+  <text x="300" y="150" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">Matters for privacy, cost at huge scale, or deep customization — not usually raw quality</text>
+</svg>`,
     quiz: {
       prompt: "When do open-source (open-weight) models matter most?",
       options: [
@@ -1013,6 +1410,28 @@ export const NODES: NodeContent[] = [
       "Under the hood these aren't fundamentally different from LLMs - many use the same transformer architecture, just trained on tokenized pixels, audio waveforms, or video frames instead of (or alongside) text; newer \"world models\" go further, learning to predict how a whole scene evolves over time rather than generating one static image. General-purpose multimodal models (recent Claude, GPT, and Gemini versions) can take an image or audio clip as input and reason about it inside the same conversation as text; dedicated generation tools like Runway or ElevenLabs are usually narrower, tuned specifically for output quality in one modality rather than general reasoning.",
     layer2:
       "Take a real Kasper or Provia asset - a photo, or a short script - and run it through two paths: describe it in words to a text-only model, versus feeding the actual image or audio directly to a multimodal model. Notice how much nuance your text description loses compared to the model reasoning over the real file.",
+    diagram: `<svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">SAME "PREDICT THE NEXT CHUNK" IDEA, MORE FORMATS</text>
+  <g font-size="9" fill="var(--foreground)">
+    <rect x="20" y="45" width="90" height="30" rx="5" fill="var(--card)" stroke="var(--border)"/>
+    <text x="65" y="64" text-anchor="middle">Text</text>
+    <rect x="20" y="85" width="90" height="30" rx="5" fill="var(--card)" stroke="var(--border)"/>
+    <text x="65" y="104" text-anchor="middle">Image</text>
+    <rect x="20" y="125" width="90" height="30" rx="5" fill="var(--card)" stroke="var(--border)"/>
+    <text x="65" y="144" text-anchor="middle">Audio/Video</text>
+  </g>
+  <path d="M110 60 L235 85" stroke="var(--muted-foreground)" stroke-width="1.2" marker-end="url(#d6a)"/>
+  <path d="M110 100 L235 100" stroke="var(--muted-foreground)" stroke-width="1.2" marker-end="url(#d6a)"/>
+  <path d="M110 140 L235 115" stroke="var(--muted-foreground)" stroke-width="1.2" marker-end="url(#d6a)"/>
+  <rect x="240" y="70" width="130" height="60" rx="10" fill="var(--chart-1)" fill-opacity="0.14" stroke="var(--chart-1)"/>
+  <text x="305" y="105" text-anchor="middle" font-size="11" fill="var(--chart-1)">Multimodal model</text>
+  <path d="M370 100 L490 100" stroke="var(--chart-1)" stroke-width="1.5" marker-end="url(#d6b)"/>
+  <text x="530" y="104" text-anchor="middle" font-size="9" fill="var(--chart-1)">any format out</text>
+  <defs>
+    <marker id="d6a" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--muted-foreground)"/></marker>
+    <marker id="d6b" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--chart-1)"/></marker>
+  </defs>
+</svg>`,
     quiz: {
       prompt: "What makes a model \"multimodal\"?",
       options: [
@@ -1037,6 +1456,19 @@ export const NODES: NodeContent[] = [
       "SLMs aren't smart enough to write a complex app, but they are perfect for fast, frequent tasks on your device—like summarizing a notification, formatting text, or basic extraction. They trade deep reasoning for zero latency, zero cloud cost, and absolute privacy. This is why Apple and Google are pushing SLMs to run entirely on-device for consumer features.",
     layer2:
       "Download an app like LM Studio or Ollama on your computer. Download a small open-source model (like Llama 3 8B) and turn off your wifi. Chat with the model. Experiencing an LLM run offline on your own hardware completely demystifies the \"magic\" of the cloud.",
+    diagram: `<svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">ON-DEVICE VS. CLOUD — SPEED/PRIVACY VS. CAPABILITY</text>
+  <rect x="30" y="50" width="250" height="75" rx="8" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+  <text x="155" y="72" text-anchor="middle" font-size="11" fill="var(--chart-1)">Small local model (SLM)</text>
+  <text x="155" y="90" text-anchor="middle" font-size="9" fill="var(--chart-1)">offline, private, instant</text>
+  <text x="155" y="104" text-anchor="middle" font-size="9" fill="var(--chart-1)">no round trip needed</text>
+  <rect x="320" y="50" width="250" height="75" rx="8" fill="var(--card)" stroke="var(--border)"/>
+  <text x="445" y="72" text-anchor="middle" font-size="11" fill="var(--foreground)">Cloud model</text>
+  <path d="M400 90 Q445 75 490 90" stroke="var(--muted-foreground)" stroke-width="1.2" fill="none" marker-end="url(#d7a)"/>
+  <text x="445" y="112" text-anchor="middle" font-size="9" fill="var(--muted-foreground)">needs network, more capable</text>
+  <text x="300" y="150" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">Trades deep reasoning for zero latency, zero cost, absolute privacy</text>
+  <defs><marker id="d7a" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--muted-foreground)"/></marker></defs>
+</svg>`,
     quiz: {
       prompt: "What's the real tradeoff with running a small local model (SLM) on your own device?",
       options: [
@@ -1267,6 +1699,23 @@ export const NODES: NodeContent[] = [
       "This becomes a real risk specifically once a model has tool use (E2) or reads content it didn't generate itself - an AI agent that reads emails, browses the web, or opens documents on your behalf can be quietly told, by the content itself, to exfiltrate data, take unintended actions, or ignore its real instructions. Defenses are still evolving: treating fetched content as data rather than commands, requiring human approval before irreversible actions (tying back to the autonomy ladder, E4), and sandboxing what tools an agent is allowed to call are the main mitigations today - there's no fully solved fix yet.",
     layer2:
       "Directly relevant to what you build: next time you design or evaluate a feature where an AI reads content from outside the user (an inbox, a scraped webpage, an uploaded document), ask explicitly - \"if this content contained hidden instructions, what's the worst it could make the AI do, and what actually stops that?\" That single question is most of what security-conscious AI product design really is.",
+    diagram: `<svg viewBox="0 0 600 175" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">THE MODEL CAN'T TELL YOUR INSTRUCTION FROM A HIDDEN ONE</text>
+  <rect x="20" y="45" width="180" height="40" rx="8" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+  <text x="110" y="70" text-anchor="middle" font-size="10" fill="var(--chart-1)">Your real instruction</text>
+  <rect x="20" y="100" width="180" height="40" rx="8" fill="var(--destructive)" fill-opacity="0.12" stroke="var(--destructive)"/>
+  <text x="110" y="118" text-anchor="middle" font-size="9" fill="var(--destructive)">Hidden instruction in a</text>
+  <text x="110" y="132" text-anchor="middle" font-size="9" fill="var(--destructive)">scraped webpage/email</text>
+  <path d="M200 65 L260 90" stroke="var(--chart-1)" stroke-width="1.3" marker-end="url(#e6a)"/>
+  <path d="M200 120 L260 95" stroke="var(--destructive)" stroke-width="1.3" marker-end="url(#e6a)"/>
+  <rect x="265" y="70" width="150" height="50" rx="10" fill="var(--card)" stroke="var(--border)"/>
+  <text x="340" y="90" text-anchor="middle" font-size="10" fill="var(--foreground)">Model context</text>
+  <text x="340" y="104" text-anchor="middle" font-size="8" fill="var(--muted-foreground)">— same door in, no ID check</text>
+  <path d="M415 95 L455 95" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#e6a)"/>
+  <rect x="460" y="72" width="120" height="46" rx="8" fill="var(--warning)" fill-opacity="0.12" stroke="var(--warning)"/>
+  <text x="520" y="99" text-anchor="middle" font-size="9" fill="var(--warning)">follows either one</text>
+  <defs><marker id="e6a" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--muted-foreground)"/></marker></defs>
+</svg>`,
     quiz: {
       prompt: "What is prompt injection?",
       options: [
@@ -1291,6 +1740,27 @@ export const NODES: NodeContent[] = [
       "This mirrors human corporate structure. If an agent tries to be a researcher, writer, and editor all at once, it loses focus (context window limits, A4) and fails. If you explicitly wire an \"Editor\" agent to review the \"Writer\" agent's output before passing it to the \"Manager,\" quality skyrockets. Tools like CrewAI and AutoGen exist specifically to build these digital coworker teams.",
     layer2:
       "Think about your internal tools (like Cowork or Clawbot). Sketch a 3-agent team for a real Kasper workflow. For example: a 'Scraping Agent' pulls data from a URL, hands it to a 'Validation Agent' to check for missing fields, which then hands it to a 'Formatting Agent' to output pure JSON. How does the Manager Agent verify the final work before a human ever sees it?",
+    diagram: `<svg viewBox="0 0 600 225" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">A TEAM OF NARROW SPECIALISTS, NOT ONE GENERALIST</text>
+  <rect x="250" y="35" width="100" height="40" rx="8" fill="var(--chart-1)" fill-opacity="0.14" stroke="var(--chart-1)"/>
+  <text x="300" y="59" text-anchor="middle" font-size="11" fill="var(--chart-1)">Manager</text>
+  <path d="M280 75 L130 118" stroke="var(--muted-foreground)" stroke-width="1.3" marker-end="url(#e7a)"/>
+  <path d="M300 75 L300 118" stroke="var(--muted-foreground)" stroke-width="1.3" marker-end="url(#e7a)"/>
+  <path d="M320 75 L470 118" stroke="var(--muted-foreground)" stroke-width="1.3" marker-end="url(#e7a)"/>
+  <rect x="70" y="121" width="120" height="40" rx="8" fill="var(--chart-2)" fill-opacity="0.12" stroke="var(--chart-2)"/>
+  <text x="130" y="145" text-anchor="middle" font-size="10" fill="var(--chart-2)">Researcher</text>
+  <rect x="240" y="121" width="120" height="40" rx="8" fill="var(--warning)" fill-opacity="0.12" stroke="var(--warning)"/>
+  <text x="300" y="145" text-anchor="middle" font-size="10" fill="var(--warning)">Coder</text>
+  <rect x="410" y="121" width="120" height="40" rx="8" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+  <text x="470" y="145" text-anchor="middle" font-size="10" fill="var(--chart-1)">Writer</text>
+  <path d="M470 161 L470 178" stroke="var(--destructive)" stroke-width="1.3" marker-end="url(#e7b)"/>
+  <rect x="410" y="181" width="120" height="35" rx="8" fill="var(--destructive)" fill-opacity="0.12" stroke="var(--destructive)"/>
+  <text x="470" y="203" text-anchor="middle" font-size="10" fill="var(--destructive)">Editor reviews</text>
+  <defs>
+    <marker id="e7a" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--muted-foreground)"/></marker>
+    <marker id="e7b" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--destructive)"/></marker>
+  </defs>
+</svg>`,
     quiz: {
       prompt: "Why split work across a team of specialized agents instead of one agent doing everything?",
       options: [
@@ -1360,6 +1830,18 @@ export const NODES: NodeContent[] = [
       "A common real pattern: use a small, cheap, fast model for simple tasks (classification, extraction) and reserve the expensive, slow, capable model only for the hard reasoning step - exactly mirroring the \"orchestration\" idea (E5). Latency also compounds in agent loops - five sequential model calls each taking 2 seconds is a 10-second wait, which matters hugely for user-facing products vs. background jobs.",
     layer2:
       "Advisory exercise: for any AI feature proposal (yours or a vendor's), ask \"which parts genuinely need the most capable model, and which are simple enough for something cheaper and faster?\" - a question that immediately signals sophistication in a vendor conversation.",
+    diagram: `<svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">MATCH MODEL CAPABILITY TO TASK DIFFICULTY</text>
+  <rect x="30" y="50" width="230" height="70" rx="8" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+  <text x="145" y="72" text-anchor="middle" font-size="10" fill="var(--chart-1)">Small, cheap, fast model</text>
+  <text x="145" y="88" text-anchor="middle" font-size="9" fill="var(--chart-1)">simple step — classify, extract</text>
+  <rect x="30" y="128" width="90" height="14" rx="3" fill="var(--chart-1)" fill-opacity="0.4"/>
+  <rect x="320" y="50" width="250" height="70" rx="8" fill="var(--warning)" fill-opacity="0.12" stroke="var(--warning)"/>
+  <text x="445" y="72" text-anchor="middle" font-size="10" fill="var(--warning)">Large, capable, slow model</text>
+  <text x="445" y="88" text-anchor="middle" font-size="9" fill="var(--warning)">reserved for the hard reasoning step</text>
+  <rect x="320" y="128" width="220" height="14" rx="3" fill="var(--warning)" fill-opacity="0.5"/>
+  <text x="30" y="150" font-size="8" fill="var(--muted-foreground)">latency/cost →</text>
+</svg>`,
     quiz: {
       prompt: "What's a common, smart pattern for managing AI cost and latency?",
       options: [
@@ -1384,6 +1866,15 @@ export const NODES: NodeContent[] = [
       "Common failure modes: hallucination on rare/specific facts (A5), inconsistent output format breaking downstream code, silent failures when a tool call errors out, and cost blowing up at scale in ways that weren't visible in testing. Serious teams stress-test with adversarial and edge-case inputs, not just happy-path demos - this is what evals (C3) are actually for.",
     layer2:
       "Advisory habit: whenever you see an impressive AI demo (a pitch, a competitor's feature), ask yourself \"what messy real-world input would break this?\" - practicing this instinct is most of what \"advisory-level literacy\" actually is.",
+    diagram: `<svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">THE DEMO/PRODUCTION GAP</text>
+  <rect x="30" y="45" width="540" height="40" rx="8" fill="var(--chart-1)" fill-opacity="0.1" stroke="var(--chart-1)"/>
+  <text x="300" y="70" text-anchor="middle" font-size="10" fill="var(--chart-1)">Demo — one clean happy path → ✓</text>
+  <rect x="30" y="100" width="540" height="40" rx="8" fill="var(--destructive)" fill-opacity="0.1" stroke="var(--destructive)"/>
+  <text x="300" y="118" text-anchor="middle" font-size="10" fill="var(--destructive)">Production — weird input, adversarial users, real scale</text>
+  <text x="300" y="132" text-anchor="middle" font-size="9" fill="var(--destructive)">✓  ✗  ✓  ✗  ✗  ✓</text>
+  <text x="300" y="158" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">A few clean demo examples never test what breaks a real product</text>
+</svg>`,
     quiz: {
       prompt: "Why can an AI feature look flawless in a demo but break in production?",
       options: [
@@ -1408,6 +1899,22 @@ export const NODES: NodeContent[] = [
       "Most day-to-day AI feature work (like most of what you already build) sits in the \"full-stack AI engineer\" or \"no-code automation builder\" bands - API integration, prompting, some RAG, some agent orchestration - not deep ML research. Genuine ML/fine-tuning specialists are needed far less often than the market suggests, and are usually overkill (and overpriced) for typical product needs.",
     layer2:
       "Advisory case: next time you're scoping a hire or vendor for Kasper or Realla.AI, write down (before talking to them) which of the four hats you actually need - then see whether their pitch matches that, or tries to upsell you into a fancier (unnecessary) category.",
+    diagram: `<svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">FOUR DIFFERENT HATS — SIZED BY HOW OFTEN YOU ACTUALLY NEED THEM</text>
+  <rect x="20" y="80" width="90" height="45" rx="6" fill="var(--card)" stroke="var(--border)"/>
+  <text x="65" y="98" text-anchor="middle" font-size="8" fill="var(--foreground)">Prompt</text>
+  <text x="65" y="110" text-anchor="middle" font-size="8" fill="var(--foreground)">engineer</text>
+  <rect x="120" y="65" width="120" height="60" rx="6" fill="var(--chart-2)" fill-opacity="0.12" stroke="var(--chart-2)"/>
+  <text x="180" y="90" text-anchor="middle" font-size="9" fill="var(--chart-2)">No-code</text>
+  <text x="180" y="103" text-anchor="middle" font-size="9" fill="var(--chart-2)">automation</text>
+  <text x="180" y="116" text-anchor="middle" font-size="9" fill="var(--chart-2)">builder</text>
+  <rect x="250" y="45" width="220" height="80" rx="8" fill="var(--chart-1)" fill-opacity="0.14" stroke="var(--chart-1)"/>
+  <text x="360" y="80" text-anchor="middle" font-size="12" fill="var(--chart-1)">Full-stack AI engineer</text>
+  <text x="360" y="98" text-anchor="middle" font-size="9" fill="var(--chart-1)">— most common real need</text>
+  <rect x="480" y="95" width="95" height="30" rx="6" fill="var(--warning)" fill-opacity="0.14" stroke="var(--warning)"/>
+  <text x="527" y="114" text-anchor="middle" font-size="8" fill="var(--warning)">ML/fine-tune</text>
+  <text x="300" y="148" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">Genuine ML specialists are needed far less often than the market suggests</text>
+</svg>`,
     quiz: {
       prompt: "Why does hiring the wrong \"AI person\" happen so often?",
       options: [
@@ -1433,6 +1940,21 @@ export const NODES: NodeContent[] = [
       "A useful mental checklist when evaluating any AI claim: What model is actually underneath this (D1)? Is this really fine-tuned or just well-prompted (C2)? Is \"agent\" here doing multi-step autonomous work, or is it a single chatbot call (E1)? Has this been tested beyond a demo (F3)? Running any pitch through these five questions cuts through most hype fast.",
     layer2:
       "Pick one AI product or startup pitch you've seen recently (Realla.AI's own materials are a good real example) and run it through the checklist above - write down your honest guess at what's actually happening underneath, then see if you can find out how close you were.",
+    diagram: `<svg viewBox="0 0 600 175" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">RUN ANY PITCH THROUGH THIS FILTER</text>
+  <rect x="200" y="35" width="200" height="30" rx="6" fill="var(--destructive)" fill-opacity="0.12" stroke="var(--destructive)"/>
+  <text x="300" y="55" text-anchor="middle" font-size="10" fill="var(--destructive)">"we built our own AI"</text>
+  <path d="M300 65 L300 85" stroke="var(--muted-foreground)" stroke-width="1.3" marker-end="url(#f5a)"/>
+  <rect x="150" y="88" width="300" height="20" rx="4" fill="var(--card)" stroke="var(--border)"/>
+  <text x="300" y="102" text-anchor="middle" font-size="8" fill="var(--muted-foreground)">What model is really underneath?</text>
+  <path d="M300 108 L300 118" stroke="var(--muted-foreground)" stroke-width="1.3" marker-end="url(#f5a)"/>
+  <rect x="170" y="121" width="260" height="18" rx="4" fill="var(--card)" stroke="var(--border)"/>
+  <text x="300" y="134" text-anchor="middle" font-size="8" fill="var(--muted-foreground)">Fine-tuned, or just well-prompted?</text>
+  <path d="M300 139 L300 149" stroke="var(--muted-foreground)" stroke-width="1.3" marker-end="url(#f5a)"/>
+  <rect x="220" y="152" width="160" height="20" rx="6" fill="var(--chart-1)" fill-opacity="0.14" stroke="var(--chart-1)"/>
+  <text x="300" y="166" text-anchor="middle" font-size="9" fill="var(--chart-1)">what's actually happening</text>
+  <defs><marker id="f5a" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--muted-foreground)"/></marker></defs>
+</svg>`,
     quiz: {
       prompt: "What's the fastest way to cut through an AI hype claim?",
       options: [
@@ -1458,6 +1980,18 @@ export const NODES: NodeContent[] = [
       "Most non-technical founders accidentally ban AI out of fear, without realizing that plugging into an API is exactly as secure as using AWS or Stripe. The rule of thumb: Consumer Chat UI = potentially used for training. Developer API = private and safe. If extreme privacy is required, open-source models (D5) or local SLMs (D7) are the only way to ensure data physically never leaves your hardware.",
     layer2:
       "Go to your personal ChatGPT or Claude settings right now and find the \"Data Controls\" or \"Improve the Model for Everyone\" toggle. Turn it off. You've just switched from the consumer default to a private tier manually.",
+    diagram: `<svg viewBox="0 0 600 165" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="20" text-anchor="middle" font-size="12" fill="var(--muted-foreground)" letter-spacing="0.5">CONSUMER CHAT UI VS. DEVELOPER API / ENTERPRISE</text>
+  <rect x="30" y="50" width="250" height="75" rx="8" fill="var(--destructive)" fill-opacity="0.1" stroke="var(--destructive)"/>
+  <text x="155" y="72" text-anchor="middle" font-size="11" fill="var(--destructive)">Consumer chat UI</text>
+  <text x="155" y="90" text-anchor="middle" font-size="9" fill="var(--destructive)">open lock — may train on</text>
+  <text x="155" y="104" text-anchor="middle" font-size="9" fill="var(--destructive)">your input by default</text>
+  <rect x="320" y="50" width="250" height="75" rx="8" fill="var(--chart-1)" fill-opacity="0.12" stroke="var(--chart-1)"/>
+  <text x="445" y="72" text-anchor="middle" font-size="11" fill="var(--chart-1)">Developer API / Enterprise</text>
+  <text x="445" y="90" text-anchor="middle" font-size="9" fill="var(--chart-1)">closed lock — zero-retention,</text>
+  <text x="445" y="104" text-anchor="middle" font-size="9" fill="var(--chart-1)">contractually</text>
+  <text x="300" y="150" text-anchor="middle" font-size="10" fill="var(--muted-foreground)">Plugging into an API is exactly as secure as using AWS or Stripe</text>
+</svg>`,
     quiz: {
       prompt: "What's the key privacy difference between a consumer chat app and the developer API?",
       options: [
