@@ -45,6 +45,10 @@ function Home() {
 
   const touchedClusters = clustersTouched(state.gotIt);
   const activeDaysThisWeek = activeThisWeek(state.activityDates);
+  // Cold-start anchor: pulse + badge on A1 until the user marks it "got it",
+  // so a first-time visitor has one obvious place to click instead of facing
+  // 41 equally-weighted nodes at once.
+  const showStartHere = hydrated && !state.gotIt.includes("a1");
 
   return (
     <div>
@@ -160,6 +164,7 @@ function Home() {
               <ul className="divide-y divide-border/70">
                 {nodes.map((n) => {
                   const got = state.gotIt.includes(n.id);
+                  const isStartHere = showStartHere && n.id === "a1";
                   return (
                     <li key={n.id}>
                       <Link
@@ -172,7 +177,9 @@ function Home() {
                             "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border font-mono text-[10px] " +
                             (got
                               ? "border-primary bg-primary text-primary-foreground"
-                              : "border-border text-muted-foreground")
+                              : isStartHere
+                                ? "border-primary text-primary shadow-[0_0_12px_-3px_hsl(var(--primary))] animate-[pulse_2s_ease-in-out_infinite]"
+                                : "border-border text-muted-foreground")
                           }
                         >
                           {got ? <Check className="h-3.5 w-3.5" /> : n.id.toUpperCase()}
@@ -185,6 +192,11 @@ function Home() {
                         >
                           {n.title}
                         </span>
+                        {isStartHere && (
+                          <span className="shrink-0 rounded-full border border-primary bg-primary/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-primary">
+                            Start Here
+                          </span>
+                        )}
                       </Link>
                     </li>
                   );

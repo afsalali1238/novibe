@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { useMapState } from "../hooks/useMapState";
 
 export const Route = createFileRoute("/sandbox")({
@@ -13,8 +13,9 @@ export const Route = createFileRoute("/sandbox")({
 });
 
 function Sandbox() {
-  const { state, saveNotes, hydrated } = useMapState();
+  const { state, saveNotes, hydrated, exportState, importState } = useMapState();
   const [text, setText] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (hydrated) setText(state.notes);
@@ -26,6 +27,41 @@ function Sandbox() {
     const t = window.setTimeout(() => saveNotes(text), 250);
     return () => window.clearTimeout(t);
   }, [text, hydrated, saveNotes]);
+
+  const handleExport = () => {
+    const json = exportState();
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `novibe-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportClick = () => fileInputRef.current?.click();
+
+  const handleImportFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-selecting the same file later
+    if (!file) return;
+    if (
+      !window.confirm(
+        "Importing will replace your current progress, streak, and reflections with the backup file. Continue?",
+      )
+    ) {
+      return;
+    }
+    file
+      .text()
+      .then((text) => {
+        const result = importState(text);
+        if (!result.ok) alert(result.error);
+      })
+      .catch(() => alert("Couldn't read that file."));
+  };
 
   return (
     <div>
@@ -54,46 +90,25 @@ function Sandbox() {
           </span>
           <button
             type="button"
-            onClick={() => {
-              const data = window.localStorage.getItem("novibe-state");
-              if (!data) return;
-              const blob = new Blob([data], { type: "application/json" });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement("a");
-              a.href = url;
-              a.download = `novibe-backup-${new Date().toISOString().slice(0, 10)}.json`;
-              a.click();
-              URL.revokeObjectURL(url);
-            }}
+            onClick={handleExport}
             className="rounded border border-border px-2 py-0.5 font-mono text-[10px] text-muted-foreground hover:bg-muted/50 hover:text-foreground"
           >
             export
           </button>
-          <label className="cursor-pointer rounded border border-border px-2 py-0.5 font-mono text-[10px] text-muted-foreground hover:bg-muted/50 hover:text-foreground">
+          <button
+            type="button"
+            onClick={handleImportClick}
+            className="rounded border border-border px-2 py-0.5 font-mono text-[10px] text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+          >
             import
-            <input
-              type="file"
-              accept=".json"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                  try {
-                    const content = event.target?.result as string;
-                    const parsed = JSON.parse(content);
-                    if (!parsed.gotIt || typeof parsed.notes !== "string") throw new Error();
-                    window.localStorage.setItem("novibe-state", content);
-                    window.location.reload();
-                  } catch (err) {
-                    alert("Invalid backup file.");
-                  }
-                };
-                reader.readAsText(file);
-              }}
-            />
-          </label>
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json"
+            onChange={handleImportFile}
+            className="hidden"
+          />
           <button
             type="button"
             onClick={() => {
