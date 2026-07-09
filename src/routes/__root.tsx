@@ -95,10 +95,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Novibe - The Map" },
       { property: "og:description", content: "AI, explained simply. Pick a topic, get the plain-English version, go deeper if you're curious." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://novibecode.vercel.app/" },
+      { property: "og:image", content: "https://novibecode.vercel.app/novibe-icon-512.png" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "Novibe - The Map" },
       { name: "twitter:description", content: "AI, explained simply - pick a topic, get the plain-English version." },
+      { name: "twitter:image", content: "https://novibecode.vercel.app/novibe-icon-512.png" },
     ],
     links: [
       {

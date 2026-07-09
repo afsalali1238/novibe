@@ -35,6 +35,12 @@ export const Route = createFileRoute("/node/$nodeId")({
         { name: "description", content: description },
         { property: "og:title", content: `${node.title} - Novibe` },
         { property: "og:description", content: description },
+        { property: "og:url", content: `https://novibecode.vercel.app/node/${node.id}` },
+        { property: "og:image", content: "https://novibecode.vercel.app/novibe-icon-512.png" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: `${node.title} - Novibe` },
+        { name: "twitter:description", content: description },
+        { name: "twitter:image", content: "https://novibecode.vercel.app/novibe-icon-512.png" },
       ],
     };
   },

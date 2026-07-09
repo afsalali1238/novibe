@@ -157,6 +157,15 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @utility glow-primary {
   box-shadow: 0 0 0 1px color-mix(in oklab, var(--primary) 40%, transparent),
     0 8px 32px -8px color-mix(in oklab, var(--primary) 45%, transparent);
