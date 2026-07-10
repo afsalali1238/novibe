@@ -1,8 +1,21 @@
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { BottomNav } from "./BottomNav";
 import { TopBar } from "./TopBar";
+import { useOfflineWarmup } from "../../hooks/useOfflineWarmup";
 
 export function AppShell({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {
+        /* offline/install support is a nice-to-have, not critical */
+      });
+    }
+  }, []);
+
+  // Silently preloads every route's code so the installed app works fully
+  // offline, not just the pages the user happened to open first.
+  useOfflineWarmup();
+
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <a

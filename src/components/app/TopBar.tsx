@@ -3,6 +3,7 @@ import { Flame, Moon, Sun } from "lucide-react";
 import { TOTAL_NODES } from "../../data/nodes";
 import { useMapState } from "../../hooks/useMapState";
 import { useTheme } from "../../hooks/useTheme";
+import { InstallAppButton } from "./InstallAppButton";
 
 export function TopBar() {
   const { state, streak, hydrated } = useMapState();
@@ -45,6 +46,7 @@ export function TopBar() {
             </div>
           </>
         )}
+        <InstallAppButton />
         <button
           type="button"
           onClick={toggleTheme}
