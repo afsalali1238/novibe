@@ -4,7 +4,7 @@
 //
 // Bump CACHE_NAME whenever this file changes so installed/offline clients
 // pick up the new logic instead of running a stale, possibly-broken worker.
-const CACHE_NAME = "novibe-shell-v2";
+const CACHE_NAME = "novibe-shell-v3";
 const APP_SHELL = [
   "/",
   "/manifest.json",
@@ -55,11 +55,6 @@ self.addEventListener("fetch", (event) => {
           .catch(() => {});
         return response;
       })
-      .catch(
-        () =>
-          caches.match(event.request).then((cached) => cached || caches.match("/")) as Promise<
-            Response | undefined
-          >,
-      ),
+      .catch(() => caches.match(event.request).then((cached) => cached || caches.match("/"))),
   );
 });
